@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
-class NotificationsPage extends StatelessWidget {
+class TeamsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Favourites'),
+          title: Text('Teams'),
           centerTitle: true,
           backgroundColor: Colors.blue,
         ),

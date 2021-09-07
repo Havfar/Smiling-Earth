@@ -5,7 +5,7 @@ class LeaderboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Favourites'),
+          title: Text('Leaderboard'),
           centerTitle: true,
           backgroundColor: Colors.blue,
         ),

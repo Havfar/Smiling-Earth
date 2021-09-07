@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/page/challenges_page.dart';
-import 'package:smiling_earth_frontend/page/favourites_page.dart';
-import 'package:smiling_earth_frontend/page/find_people_page.dart';
-import 'package:smiling_earth_frontend/page/leaderboards_page.dart';
-import 'package:smiling_earth_frontend/page/notification_page.dart';
-import 'package:smiling_earth_frontend/page/profile_page.dart';
-import 'package:smiling_earth_frontend/page/settings_page.dart';
-import 'package:smiling_earth_frontend/page/teams_page.dart';
+import 'package:smiling_earth_frontend/pages/challenges_page.dart';
+import 'package:smiling_earth_frontend/pages/favourites_page.dart';
+import 'package:smiling_earth_frontend/pages/find_people_page.dart';
+import 'package:smiling_earth_frontend/pages/history_page.dart';
+import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
+import 'package:smiling_earth_frontend/pages/notification_page.dart';
+import 'package:smiling_earth_frontend/pages/profile_page.dart';
+import 'package:smiling_earth_frontend/pages/settings_page.dart';
+import 'package:smiling_earth_frontend/pages/teams_page.dart';
+
+import '../main.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -178,12 +181,12 @@ class NavigationDrawerWidget extends StatelessWidget {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProfilePage(),
+          builder: (context) => SmilingEarthHome(),
         ));
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FavouritesPage(),
+          builder: (context) => HistoryPage(),
         ));
         break;
       case 2:

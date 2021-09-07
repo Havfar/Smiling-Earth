@@ -1,56 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:smiling_earth_frontend/widgets/button_widget.dart';
+import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
+import 'package:smiling_earth_frontend/utils/services/database.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
-Future main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  runApp(MyApp());
+  runApp(new SmilingEarthHome());
 }
 
-class MyApp extends StatelessWidget {
-  static final String title = 'Navigation Drawer';
-
+class SmilingEarthHome extends StatefulWidget {
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: title,
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: MainPage(),
-      );
+  _SmilingEarthHomeState createState() => new _SmilingEarthHomeState();
 }
 
-class MainPage extends StatefulWidget {
+class _SmilingEarthHomeState extends State<SmilingEarthHome> {
   @override
-  _MainPageState createState() => _MainPageState();
-}
+  void initState() {
+    super.initState();
+    startActivityMonitor();
+  }
 
-class _MainPageState extends State<MainPage> {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        drawer: NavigationDrawerWidget(),
-        // endDrawer: NavigationDrawerWidget(),
-        appBar: AppBar(
-          title: Text(MyApp.title),
-        ),
-        body: Builder(
-          builder: (context) => Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 32),
-            child: ButtonWidget(
-              icon: Icons.open_in_new,
-              text: 'Open Drawer',
-              onClicked: () {
-                Scaffold.of(context).openDrawer();
-                // Scaffold.of(context).openEndDrawer();
-              },
-            ),
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      home: new Scaffold(
+          appBar: AppBar(
+            title: Text('Home'),
+            centerTitle: true,
+            backgroundColor: Colors.blue,
           ),
-        ),
-      );
+          drawer: NavigationDrawerWidget(),
+          body: new Center(
+            child: FutureBuilder<List<Activity>>(
+                future: DatabaseHelper.instance.getActivities(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Activity>> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(child: Text('Loading...'));
+                  }
+                  return snapshot.data!.isEmpty
+                      ? Center(child: Text('No Activities in List.'))
+                      : ListView(
+                          children: snapshot.data!.map((activity) {
+                            return Card(
+                              child: ListTile(
+                                leading: Icon(activity.getIcon()),
+                                title: Text(activity.title),
+                                subtitle: Text(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                            activity.timestamp)
+                                        .toString()),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                }),
+          )),
+    );
+  }
 }
