@@ -27,18 +27,74 @@ Future<void> startActivityMonitor() async {
 }
 
 void _startTracking() async {
-  print("Start tracking");
   activityStream = activityRecognition.startStream(runForegroundService: true);
   await activityStream.listen(_onData);
 }
 
 void _onData(ActivityEvent activityEvent) async {
-  print("onData");
-  print(activityEvent.toString());
+  //TODO: Må slik at starttime blir
+
   if (activityEvent.type != latestActivity.type) {
-    await DatabaseHelper.instance.add(Activity(
-        title: activityEvent.type.toString(),
-        type: activityEvent.type.index,
-        timestamp: activityEvent.timeStamp.millisecondsSinceEpoch));
+    // SJekk om startime er satt
+    if (latestActivity != ActivityEvent.empty()) {
+      if (![
+        ActivityType.INVALID.index,
+        ActivityType.STILL.index,
+        ActivityType.TILTING.index,
+        ActivityType.UNKNOWN.index,
+      ].contains(activityEvent.type.index)) {
+        await DatabaseHelper.instance.add(Activity(
+            title: generateTitle(activityEvent),
+            type: activityEvent.type.index,
+            start_timestamp: latestActivity.timeStamp.millisecondsSinceEpoch,
+            end_timestamp: activityEvent.timeStamp.millisecondsSinceEpoch));
+      }
+    }
+    latestActivity = activityEvent;
+  }
+}
+
+String generateTitle(ActivityEvent event) {
+  return getTimeName(event.timeStamp) +
+      " " +
+      getActivityNameByActivityType(event.type);
+}
+
+String getTimeName(DateTime time) {
+  int hour = time.hour;
+
+  if (hour > 6 && hour < 12) {
+    return "Morning";
+  } else if (hour >= 12 && hour < 18) {
+    return "Day";
+  } else if (hour >= 18 && hour < 22) {
+    return "Evening";
+  } else {
+    return 'Nigth';
+  }
+}
+
+String getActivityNameByActivityType(ActivityType type) {
+  switch (type) {
+    case ActivityType.IN_VEHICLE:
+      return "Drive";
+    case ActivityType.WALKING:
+      return "Walk";
+    case ActivityType.RUNNING:
+      return "Run";
+    case ActivityType.ON_BICYCLE:
+      return "Bicycle";
+    case ActivityType.ON_FOOT:
+      return "Walk";
+    case ActivityType.INVALID:
+      return 'Invalid';
+    case ActivityType.UNKNOWN:
+      return 'UNKOWN';
+    case ActivityType.STILL:
+      return 'Still';
+    case ActivityType.TILTING:
+      return 'tilt';
+    default:
+      return "Other";
   }
 }
