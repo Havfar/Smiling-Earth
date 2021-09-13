@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smiling_earth_frontend/models/Activity.dart';
@@ -50,25 +51,62 @@ class DatabaseHelper {
       CREATE TABLE activities(
           id INTEGER PRIMARY KEY,
           title TEXT,
-          start_timestamp INTEGER,
-          end_timestamp INTEGER,
-          type INTEGER
+          start_date TEXT,
+          start_time TEXT,
+          end_date TEXT,
+          end_time TEXT,
+          type INTEGER,
+          tag TEXT
       )
       ''');
   }
 
-  Future<List<Activity>> getActivities() async {
+  Future<List<ActivityGroupedByDate>> getActivities() async {
     Database db = await instance.database;
-    var activities = await db.query('activities', orderBy: 'id');
-    List<Activity> activitiesList = activities.isNotEmpty
-        ? activities.map((c) => Activity.fromMap(c)).toList()
+    var activitiesQuery = await db.query('activities', orderBy: 'id');
+    // var activityGroupQuery =
+    //     await db.query('activities', groupBy: 'start_date');
+    // List<ActivityGroupedByDate> activityGroups = activityGroupQuery.isNotEmpty
+    //     ? activityGroupQuery
+    //         .map((group) => ActivityGroupedByDate.fromMap(group))
+    //         .toList()
+    //     : [];
+
+    //   activityGroupQuery.isNotEmpty
+    // ? activityGroupQuery.map((group) => ( activityGroups.add(new ActivityGroupedByDate(date: "123",activities: getActivities("123"))))
+    // : [];
+
+    List<Activity> activitiesList = activitiesQuery.isNotEmpty
+        ? activitiesQuery.map((c) => Activity.fromMap(c)).toList()
+        : [];
+
+    var groupedBy = groupBy(activitiesList, (Activity obj) => obj.start_date);
+    List<ActivityGroupedByDate> activitesGroups =
+        _parseActivtityGroup(groupedBy);
+    return activitesGroups;
+  }
+
+  List<ActivityGroupedByDate> _parseActivtityGroup(
+      Map<String, List<Activity>> groupedBy) {
+    List<ActivityGroupedByDate> activity = [];
+    for (var key in groupedBy.keys) {
+      activity.add(new ActivityGroupedByDate(
+          date: key, activities: groupedBy[key]!.toList()));
+    }
+    // ignore: deprecated_member_use
+    return activity;
+  }
+
+  Future<List<Activity>> getActivitiesByDate(String date) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query('activities',
+        orderBy: 'id', where: 'start_date=' + date);
+
+    List<Activity> activitiesList = activitiesQuery.isNotEmpty
+        ? activitiesQuery.map((c) => Activity.fromMap(c)).toList()
         : [];
     return activitiesList;
   }
-
-  // Future<List<Activity>> getActivitiesGroupedByDate async{
-  //   return new List<Activity>;
-  // }
 
   Future<int> add(Activity activity) async {
     Database db = await instance.database;

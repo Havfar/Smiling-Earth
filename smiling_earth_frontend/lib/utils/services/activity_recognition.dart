@@ -46,8 +46,20 @@ void _onData(ActivityEvent activityEvent) async {
         await DatabaseHelper.instance.add(Activity(
             title: generateTitle(activityEvent),
             type: activityEvent.type.index,
-            start_timestamp: latestActivity.timeStamp.millisecondsSinceEpoch,
-            end_timestamp: activityEvent.timeStamp.millisecondsSinceEpoch));
+            start_time: latestActivity.timeStamp.hour.toString() +
+                latestActivity.timeStamp.minute.toString(),
+            start_date: activityEvent.timeStamp.year.toString() +
+                "-" +
+                activityEvent.timeStamp.month.toString() +
+                "-" +
+                activityEvent.timeStamp.day.toString(),
+            end_time: activityEvent.timeStamp.hour.toString() +
+                activityEvent.timeStamp.minute.toString(),
+            end_date: activityEvent.timeStamp.year.toString() +
+                "-" +
+                activityEvent.timeStamp.month.toString() +
+                "-" +
+                activityEvent.timeStamp.day.toString()));
       }
     }
     latestActivity = activityEvent;

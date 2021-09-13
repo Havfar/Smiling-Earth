@@ -172,8 +172,8 @@ class _editActivityState extends State<EditActivity> {
   Widget buildDatePicker() => InputDatePickerFormField(
         firstDate: DateTime(2020),
         lastDate: DateTime(2022),
-        initialDate: DateTime.fromMillisecondsSinceEpoch(
-            widget.activity.start_timestamp),
+        //TODO legg inn korrekt initialdate
+        initialDate: new DateTime(2021),
         onDateSaved: (value) =>
             setState(() => dateInt = value.millisecondsSinceEpoch.toString()),
       );
@@ -211,8 +211,10 @@ class _editActivityState extends State<EditActivity> {
               var c = type;
               Activity act = new Activity(
                   title: title,
-                  start_timestamp: widget.activity.start_timestamp,
-                  end_timestamp: widget.activity.end_timestamp,
+                  start_date: widget.activity.start_date,
+                  end_date: widget.activity.end_date,
+                  start_time: widget.activity.start_time,
+                  end_time: widget.activity.end_time,
                   type: type.indexValue,
                   id: widget.activity.id);
               // act.title = title;

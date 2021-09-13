@@ -111,9 +111,7 @@ class _publishState extends State<PublishActivity> {
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  Text(DateTime.fromMillisecondsSinceEpoch(
-                                          widget.activity.start_timestamp)
-                                      .toString())
+                                  Text(widget.activity.start_date)
                                 ]),
                           )
                         ],

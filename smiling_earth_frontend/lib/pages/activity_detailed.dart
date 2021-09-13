@@ -86,12 +86,7 @@ class EndTimeWidget extends StatelessWidget {
           border: Border(bottom: BorderSide(color: Colors.black12))),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text('End time: '),
-          Text(
-              DateTime.fromMillisecondsSinceEpoch(widget.activity.end_timestamp)
-                  .toString())
-        ],
+        children: [Text('End time: '), Text(widget.activity.end_date)],
       ),
     );
   }
@@ -116,12 +111,7 @@ class StartTimeWidget extends StatelessWidget {
           border: Border(bottom: BorderSide(color: Colors.black12))),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text('Start time: '),
-          Text(DateTime.fromMillisecondsSinceEpoch(
-                  widget.activity.start_timestamp)
-              .toString())
-        ],
+        children: [Text('Start time: '), Text(widget.activity.start_date)],
       ),
     );
   }

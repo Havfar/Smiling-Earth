@@ -4,30 +4,42 @@ import 'package:flutter/material.dart';
 class Activity {
   final int? id;
   final String title;
-  final int start_timestamp;
-  final int end_timestamp;
+  final String start_date;
+  final String start_time;
+  final String end_date;
+  final String end_time;
+  final String? tag;
   final int type;
 
   Activity(
       {this.id,
       required this.title,
-      required this.start_timestamp,
-      required this.end_timestamp,
-      required this.type});
+      required this.start_date,
+      required this.start_time,
+      required this.end_date,
+      required this.end_time,
+      required this.type,
+      this.tag});
 
   factory Activity.fromMap(Map<String, dynamic> json) => new Activity(
       id: json['id'],
       title: json['title'],
-      start_timestamp: json['start_timestamp'],
-      end_timestamp: json['end_timestamp'],
-      type: json['type']);
+      start_date: json['start_date'],
+      start_time: json['start_time'],
+      end_date: json['end_date'],
+      end_time: json['end_time'],
+      type: json['type'],
+      tag: json['tag']);
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'start_timestamp': start_timestamp,
-      'end_timestamp': end_timestamp,
+      'start_date': start_date,
+      'start_time': start_time,
+      'end_date': end_date,
+      'end_time': end_time,
+      'tag': tag,
       'type': type
     };
   }
@@ -50,3 +62,11 @@ class Activity {
     }
   }
 }
+
+class ActivityGroupedByDate {
+  final String date;
+  final List<Activity> activities;
+
+  ActivityGroupedByDate({required this.date, required this.activities});
+}
+// activities: DatabaseHelper.instance.getActivitiesByDate(json['start_date'])

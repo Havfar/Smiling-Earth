@@ -149,10 +149,11 @@ class _newActivityState extends State<NewActivity> {
               var c = type;
               Activity act = new Activity(
                   title: title,
-                  start_timestamp: DateTime.now().millisecondsSinceEpoch,
-                  end_timestamp: DateTime.now().millisecondsSinceEpoch + 10000,
+                  start_time: "1909",
+                  start_date: "2021-09-11",
+                  end_time: "2209",
+                  end_date: "2021-09-11",
                   type: type.indexValue);
-              // act.title = title;
 
               DatabaseHelper.instance.add(act);
               Navigator.of(context).push(
