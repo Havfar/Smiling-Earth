@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/home_page.dart';
+import 'package:smiling_earth_frontend/pages/log_in_page.dart';
 
 class SplashPage extends StatelessWidget {
   @override
@@ -28,7 +29,8 @@ class SplashPage extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => LogInPage()),
                           ),
                       child: Text("Log in")),
                 ),
