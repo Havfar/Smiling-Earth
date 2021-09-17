@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/pages/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/favourites_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
@@ -87,11 +89,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     onClicked: () => selectedItem(context, 7),
                   ),
                   const SizedBox(height: 12),
-                  buildMenuItem(
-                    text: 'Sign out',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 8),
-                  ),
+                  SignOut(),
                 ],
               ),
             ),
@@ -224,5 +222,40 @@ class NavigationDrawerWidget extends StatelessWidget {
         ));
         break;
     }
+  }
+}
+
+class SignOut extends StatelessWidget {
+  const SignOut({Key? key}) : super(key: key);
+
+  Widget buildMenuItem({
+    required String text,
+    required IconData icon,
+    VoidCallback? onClicked,
+  }) {
+    final color = Colors.white;
+    final hoverColor = Colors.white70;
+
+    return ListTile(
+      leading: Icon(icon, color: color),
+      title: Text(text, style: TextStyle(color: color)),
+      hoverColor: hoverColor,
+      onTap: onClicked,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _onLogoutButtonPressed() {
+      BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+    }
+
+    final color = Colors.white;
+    return Container(
+        child: ListTile(
+      leading: Icon(Icons.logout, color: color),
+      title: Text('Sign out', style: TextStyle(color: color)),
+      onTap: () => _onLogoutButtonPressed(),
+    ));
   }
 }

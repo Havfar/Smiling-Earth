@@ -39,14 +39,23 @@ class _LoginFormState extends State<LoginForm> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: 'username', icon: Icon(Icons.person)),
-                      controller: _usernameController,
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'username',
+                          icon: Icon(Icons.person),
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: _usernameController,
+                      ),
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: 'password', icon: Icon(Icons.security)),
+                        labelText: 'password',
+                        icon: Icon(Icons.security),
+                        border: OutlineInputBorder(),
+                      ),
                       controller: _passwordController,
                       obscureText: true,
                     ),
