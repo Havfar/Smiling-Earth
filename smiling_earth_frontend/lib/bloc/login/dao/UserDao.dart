@@ -31,4 +31,13 @@ class UserDao {
       return false;
     }
   }
+
+  Future<User?> getUser() async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> data = await db.query(userTable);
+    if (data.isNotEmpty) {
+      return User.fromDatabaseJson(data.first);
+    }
+    return null;
+  }
 }

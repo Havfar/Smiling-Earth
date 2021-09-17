@@ -24,4 +24,6 @@ class User {
 
   Map<String, dynamic> toDatabaseJson() =>
       {"id": this.id, "username": this.username, "token": this.token};
+
+  // static Future<User> fromJson(Map elementAt) {}
 }
