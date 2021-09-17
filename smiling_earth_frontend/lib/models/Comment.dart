@@ -7,7 +7,7 @@ Comment mockComment = Comment(
     dateTime: DateTime.now());
 
 class Comment {
-  final User user;
+  final UserProfile user;
   final String comment;
   final DateTime dateTime;
 

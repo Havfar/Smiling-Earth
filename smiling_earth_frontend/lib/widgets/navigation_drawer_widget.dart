@@ -3,13 +3,12 @@ import 'package:smiling_earth_frontend/pages/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/favourites_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
 import 'package:smiling_earth_frontend/pages/history_page.dart';
+import 'package:smiling_earth_frontend/pages/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/profile_page.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams_page.dart';
-
-import '../main.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -181,7 +180,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SmilingEarthHome(),
+          builder: (context) => HomePage(),
         ));
         break;
       case 1:

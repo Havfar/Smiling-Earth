@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/main.dart';
 import 'package:smiling_earth_frontend/models/Activity.dart';
 import 'package:smiling_earth_frontend/pages/actiivity_publish.dart';
 import 'package:smiling_earth_frontend/pages/activity_edit.dart';
@@ -257,8 +256,8 @@ class AppbarActivityWidget extends StatelessWidget with PreferredSizeWidget {
           color: Colors.black87,
           onPressed: () {
             DatabaseHelper.instance.remove(widget.activity.id!);
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SmilingEarthHome()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => HistoryPage()));
           },
         ),
       ],

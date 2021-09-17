@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post.dart';
@@ -12,6 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _homeState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    startActivityMonitor();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(

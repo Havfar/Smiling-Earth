@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/main.dart';
 import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/pages/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/database.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
@@ -156,8 +156,8 @@ class _newActivityState extends State<NewActivity> {
                   type: type.indexValue);
 
               DatabaseHelper.instance.add(act);
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SmilingEarthHome()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HistoryPage()));
             }
           },
         ),
