@@ -111,4 +111,24 @@ class PostClient {
       throw e;
     }
   }
+
+  Future<PostDto> newPost(PostDto post) async {
+    String endpoint = '/posts/';
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response = await http.post(uri,
+          headers: {"Authorization": "Token " + token}, body: post.toJson());
+      print(response.statusCode);
+
+      // if(response.statusCode = 200){
+
+      // }
+      final json = jsonDecode(response.body);
+
+      final newPost = PostDto.fromJson(json);
+      return newPost;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

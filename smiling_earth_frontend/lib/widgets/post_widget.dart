@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/posts/like_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
-import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/post_detailed.dart';
 
 class PostWidget extends StatefulWidget {
   const PostWidget(
       {Key? key,
+      this.isPreview = false,
       required this.post,
       required this.liked,
-      required this.author,
       required this.clickable})
       : super(key: key);
 
   final PostDto post;
-  final UserProfileDto author;
   final bool liked;
   final bool clickable;
+  final bool isPreview;
 
   @override
   _PostWidgetState createState() => _PostWidgetState(this.liked);
@@ -52,16 +51,16 @@ class _PostWidgetState extends State<PostWidget> {
                   children: [
                     CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(widget.author.image)),
+                        backgroundImage: NetworkImage(widget.post.user!.image)),
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.author.first_name +
+                              widget.post.user!.first_name +
                                   " " +
-                                  widget.author.last_name,
+                                  widget.post.user!.last_name,
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -80,19 +79,21 @@ class _PostWidgetState extends State<PostWidget> {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  BlocProvider(
-                    create: (context) =>
-                        LikeCubit()..getLiked(this.widget.post.id),
-                    child: buildLikeButton(post: this.widget.post),
-                  ),
-                  IconButton(
-                      onPressed: () => print(this.liked.toString()),
-                      icon: Icon(Icons.comment))
-                ],
-              )
+              this.widget.isPreview
+                  ? Text("")
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        BlocProvider(
+                          create: (context) =>
+                              LikeCubit()..getLiked(this.widget.post.id),
+                          child: buildLikeButton(post: this.widget.post),
+                        ),
+                        IconButton(
+                            onPressed: () => print(this.liked.toString()),
+                            icon: Icon(Icons.comment))
+                      ],
+                    )
             ],
           ),
         ),

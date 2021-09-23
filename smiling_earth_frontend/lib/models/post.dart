@@ -9,7 +9,7 @@ class Post {
 
 class PostDto {
   final int id;
-  final UserProfileDto user;
+  final UserProfileDto? user;
   final String content;
   final String timestamp;
   final int likes_count;
@@ -19,12 +19,12 @@ class PostDto {
     required this.likes_count,
     required this.comments_count,
     required this.id,
-    required this.user,
+    this.user,
     required this.content,
     required this.timestamp,
   });
 
-  // Map<String, dynamic> toJson() => {"id": this.id, 'user': this.user.id,};
+  Map<String, dynamic> toJson() => {"content": this.content};
 
   factory PostDto.fromJson(Map<String, dynamic> json) => new PostDto(
       id: json['id'],

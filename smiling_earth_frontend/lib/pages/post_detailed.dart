@@ -46,7 +46,6 @@ class _detailedPostPageState extends State<DetailedPostPage> {
                       child: PostWidget(
                         clickable: false,
                         post: posts.first.toPostDto(),
-                        author: posts.first.user,
                         liked: false,
                       ),
                     ),
@@ -86,7 +85,6 @@ class buildCommentField extends StatelessWidget {
           IconButton(
               onPressed: () {
                 final comment = _controller.text;
-                print(comment);
                 BlocProvider.of<NewcommentCubit>(context)
                     .newComment(CommentDto(comment: comment, post: this.post));
 

@@ -5,6 +5,7 @@ import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation.dart';
+import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -107,7 +108,6 @@ class _buildFeedState extends State<buildFeed> {
   List<PostWidget> posts = [];
   @override
   Widget build(BuildContext context) {
-    // posts.addAll(demoPosts());
     return Container(
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -116,7 +116,10 @@ class _buildFeedState extends State<buildFeed> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           TextButton.icon(
-              onPressed: () => (print("add")),
+              onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NewPostPage()),
+                  ),
               icon: Icon(Icons.add),
               label: Text("Add"))
         ]),
@@ -147,10 +150,7 @@ class buildPostsFeed extends StatelessWidget {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return PostWidget(
-                  clickable: true,
-                  liked: false,
-                  author: posts[index].user,
-                  post: posts[index]);
+                  clickable: true, liked: false, post: posts[index]);
             });
       }),
     );
