@@ -37,8 +37,7 @@ class _PostWidgetState extends State<PostWidget> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      DetailedPostPage(post: widget.post, user: widget.author)),
+                  builder: (context) => DetailedPostPage(post: widget.post)),
             );
           }
         },

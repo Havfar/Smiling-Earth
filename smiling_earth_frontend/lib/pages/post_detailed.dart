@@ -4,14 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/posts/newcomment_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
-import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class DetailedPostPage extends StatefulWidget {
   final PostDto post;
-  final UserProfileDto user;
-  DetailedPostPage({Key? key, required this.post, required this.user})
-      : super(key: key);
+  DetailedPostPage({Key? key, required this.post}) : super(key: key);
 
   @override
   _detailedPostPageState createState() => _detailedPostPageState();
@@ -42,7 +39,7 @@ class _detailedPostPageState extends State<DetailedPostPage> {
                 if (posts.isEmpty) {
                   return Text('loading');
                 }
-                return Column(
+                return ListView(
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 8, right: 8),
@@ -73,29 +70,37 @@ class buildCommentField extends StatelessWidget {
   Widget build(BuildContext context) {
     final _controller = TextEditingController();
 
-    return Row(
-      children: [
-        Flexible(
-            child: TextField(
-          controller: _controller,
-          decoration: InputDecoration(hintText: "Write a comment..."),
-        )),
-        IconButton(
-            onPressed: () {
-              final comment = _controller.text;
-              print(comment);
-              return BlocProvider.of<NewcommentCubit>(context)
-                  .newComment(CommentDto(comment: comment, post: this.post));
+    return Container(
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.black38)),
+          color: Colors.white70),
+      height: 70,
+      padding: EdgeInsets.only(left: 10),
+      child: Row(
+        children: [
+          Flexible(
+              child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(hintText: "Write a comment..."),
+          )),
+          IconButton(
+              onPressed: () {
+                final comment = _controller.text;
+                print(comment);
+                BlocProvider.of<NewcommentCubit>(context)
+                    .newComment(CommentDto(comment: comment, post: this.post));
 
-              // BlocProvider<NewcommentCubit>(
-              //   create: (context) => NewcommentCubit()
-              //     ..newComment(CommentDto(comment: comment, post: this.post)),
-              // );
-              // BlocProvider<NewcommentCubit>(create(context))
-              //   ..newComment(CommentDto(comment: comment, post: this.post));
-            },
-            icon: Icon(Icons.send))
-      ],
+                // used to reload current page
+                Navigator.pop(context); // pop current page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailedPostPage(post: this.post)),
+                ); // push it back in
+              },
+              icon: Icon(Icons.send))
+        ],
+      ),
     );
   }
 }
