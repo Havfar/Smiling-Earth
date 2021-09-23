@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/pages/actiivity_publish.dart';
 import 'package:smiling_earth_frontend/pages/activity_edit.dart';
 import 'package:smiling_earth_frontend/pages/history_page.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 
 String getActivityNameByActivity(Activity activity) {
   var activityType = ActivityType.values[activity.type];

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {

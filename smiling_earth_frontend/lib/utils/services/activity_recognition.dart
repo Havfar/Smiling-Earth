@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/utils/services/database.dart';
 
 ActivityEvent latestActivity = ActivityEvent.empty();
