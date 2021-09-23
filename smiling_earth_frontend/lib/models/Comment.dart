@@ -1,4 +1,4 @@
-import 'package:smiling_earth_frontend/models/User.dart';
+import 'package:smiling_earth_frontend/models/user.dart';
 
 Comment mockComment = Comment(
     comment:

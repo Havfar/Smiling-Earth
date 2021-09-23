@@ -1,5 +1,5 @@
 import 'package:smiling_earth_frontend/bloc/login/database/user_database.dart';
-import 'package:smiling_earth_frontend/models/User.dart';
+import 'package:smiling_earth_frontend/models/user.dart';
 
 class UserDao {
   final dbProvider = DatabaseProvider.dbProvider;

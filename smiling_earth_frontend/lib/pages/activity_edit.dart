@@ -208,7 +208,6 @@ class _editActivityState extends State<EditActivity> {
                 backgroundColor: Colors.green,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              var c = type;
               Activity act = new Activity(
                   title: title,
                   start_date: widget.activity.start_date,

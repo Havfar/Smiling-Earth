@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^7.2.0
   meta: ^1.7.0
   equatable: ^2.0.3
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:

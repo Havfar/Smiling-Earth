@@ -146,7 +146,6 @@ class _newActivityState extends State<NewActivity> {
                 backgroundColor: Colors.green,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              var c = type;
               Activity act = new Activity(
                   title: title,
                   start_time: "1909",

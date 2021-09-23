@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:smiling_earth_frontend/bloc/login/api_connection/api_connection.dart';
 import 'package:smiling_earth_frontend/bloc/login/dao/UserDao.dart';
 import 'package:smiling_earth_frontend/bloc/login/model/ApiUserLogin.dart';
-import 'package:smiling_earth_frontend/models/User.dart';
+import 'package:smiling_earth_frontend/models/user.dart';
 
 class UserRepository {
   final userDao = UserDao();

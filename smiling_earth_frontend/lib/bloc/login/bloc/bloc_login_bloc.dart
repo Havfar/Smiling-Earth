@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:smiling_earth_frontend/bloc/login/repository/user_repository.dart';
-import 'package:smiling_earth_frontend/models/User.dart';
+import 'package:smiling_earth_frontend/models/user.dart';
 
 part 'bloc_login_event.dart';
 part 'bloc_login_state.dart';

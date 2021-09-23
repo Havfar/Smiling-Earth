@@ -1,0 +1,114 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:smiling_earth_frontend/config/web_config.dart';
+import 'package:smiling_earth_frontend/models/post.dart';
+
+class PostClient {
+  final _url = WebConfig.baseUrl;
+  final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
+
+  Future<List<PostDto>> getPosts() async {
+    String endpoint = '/posts';
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json = jsonDecode(response.body)["results"] as List;
+      final posts = json.map((postJson) => PostDto.fromJson(postJson)).toList();
+      return posts;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<DetailedPostDto>> getPost(int id) async {
+    String endpoint = '/posts/' + id.toString();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json = jsonDecode(response.body);
+      final post = DetailedPostDto.fromJson(json);
+      return [post];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<CommentDto> postComment(CommentDto comment) async {
+    String endpoint = '/comment';
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response = await http.post(uri,
+          headers: {"Authorization": "Token " + token}, body: comment.toJson());
+      print(response.statusCode);
+
+      // if(response.statusCode = 200){
+
+      // }
+      final json = jsonDecode(response.body);
+
+      final newComment = CommentDto.fromJson(json);
+      return newComment;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<int> postLike(int postId) async {
+    String endpoint = '/likes';
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final data = {'post': postId.toString()};
+      final response = await http.post(uri,
+          headers: {"Authorization": "Token " + token}, body: data);
+      print(response.body);
+
+      final Map<String, dynamic> json = jsonDecode(response.body);
+      return json['id'] as int;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<bool> deleteLike(int likeId) async {
+    String endpoint = '/likes/' + likeId.toString();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.delete(uri, headers: {"Authorization": "Token " + token});
+      print(response.body);
+
+      // final Map<String, dynamic> json = jsonDecode(response.body);
+      return response.statusCode == 204;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<int> getLike(int postId) async {
+    String endpoint = '/liked/' + postId.toString();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      print(response.body);
+
+      final Map<String, dynamic> json = jsonDecode(response.body);
+
+      var results = json['results'] as List;
+      if (results.isEmpty) {
+        return -1;
+      }
+      return results.first['id'];
+    } catch (e) {
+      throw e;
+    }
+  }
+}

@@ -1,11 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/models/Comment.dart';
-import 'package:smiling_earth_frontend/widgets/post.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/posts/newcomment_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
+import 'package:smiling_earth_frontend/models/post.dart';
+import 'package:smiling_earth_frontend/models/user.dart';
+import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class DetailedPostPage extends StatefulWidget {
-  final Post post;
-  DetailedPostPage({Key? key, required this.post}) : super(key: key);
+  final PostDto post;
+  final UserProfileDto user;
+  DetailedPostPage({Key? key, required this.post, required this.user})
+      : super(key: key);
 
   @override
   _detailedPostPageState createState() => _detailedPostPageState();
@@ -15,55 +21,94 @@ class _detailedPostPageState extends State<DetailedPostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Container(
-              margin: EdgeInsets.only(left: 8, right: 8),
-              child: PostWidget(post: widget.post, liked: true)),
-          buildLikes(),
-          buildComments(),
-          buildCommentField()
-        ],
-      ),
-    );
+        bottomNavigationBar: Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: BlocProvider<NewcommentCubit>(
+                create: (context) => NewcommentCubit(),
+                child: buildCommentField(post: widget.post))),
+        body: BlocProvider<PostDetailedCubit>(
+            create: (context) => PostDetailedCubit()..getPost(widget.post.id),
+            child: Container(
+              child: BlocBuilder<PostDetailedCubit, List<DetailedPostDto>>(
+                  builder: (context, posts) {
+                if (posts.isEmpty) {
+                  return Text('loading');
+                }
+                return Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 8, right: 8),
+                      child: PostWidget(
+                        clickable: false,
+                        post: posts.first.toPostDto(),
+                        author: posts.first.user,
+                        liked: false,
+                      ),
+                    ),
+                    buildLikes(likes: posts.first.likes),
+                    buildComments(comments: posts.first.comments),
+                  ],
+                );
+              }),
+            )));
   }
 }
 
 class buildCommentField extends StatelessWidget {
+  final PostDto post;
   const buildCommentField({
     Key? key,
+    required PostDto this.post,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Flexible(child: TextField()),
-          IconButton(onPressed: () => print("comment"), icon: Icon(Icons.send))
-        ],
-      ),
+    final _controller = TextEditingController();
+
+    return Row(
+      children: [
+        Flexible(
+            child: TextField(
+          controller: _controller,
+          decoration: InputDecoration(hintText: "Write a comment..."),
+        )),
+        IconButton(
+            onPressed: () {
+              final comment = _controller.text;
+              print(comment);
+              return BlocProvider.of<NewcommentCubit>(context)
+                  .newComment(CommentDto(comment: comment, post: this.post));
+
+              // BlocProvider<NewcommentCubit>(
+              //   create: (context) => NewcommentCubit()
+              //     ..newComment(CommentDto(comment: comment, post: this.post)),
+              // );
+              // BlocProvider<NewcommentCubit>(create(context))
+              //   ..newComment(CommentDto(comment: comment, post: this.post));
+            },
+            icon: Icon(Icons.send))
+      ],
     );
   }
 }
 
 class buildLikes extends StatelessWidget {
+  final List<LikeDto> likes;
   const buildLikes({
+    required this.likes,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String Imgurl =
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
     return Container(
         margin: EdgeInsets.only(left: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -74,35 +119,21 @@ class buildLikes extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               )),
           Row(
-            children: [
-              Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: CircleAvatar(
-                      radius: 15, backgroundImage: NetworkImage(Imgurl))),
-              Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: CircleAvatar(
-                      radius: 15, backgroundImage: NetworkImage(Imgurl))),
-              Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: CircleAvatar(
-                      radius: 15, backgroundImage: NetworkImage(Imgurl))),
-              Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: CircleAvatar(
-                      radius: 15, backgroundImage: NetworkImage(Imgurl))),
-              Container(
-                  margin: EdgeInsets.only(right: 5),
-                  child: CircleAvatar(
-                      radius: 15, backgroundImage: NetworkImage(Imgurl))),
-            ],
+            children: likes
+                .map((like) => Container(
+                    child: CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(like.user!.image))))
+                .toList(),
           )
         ]));
   }
 }
 
 class buildComments extends StatelessWidget {
+  final List<CommentDto> comments;
   const buildComments({
+    required this.comments,
     Key? key,
   }) : super(key: key);
 
@@ -119,11 +150,11 @@ class buildComments extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               )),
           Column(
-            children: [
-              CommentWidget(
-                comment: mockComment,
-              )
-            ],
+            children: comments
+                .map((comment) => CommentWidget(
+                      comment: comment,
+                    ))
+                .toList(),
           )
         ],
       ),
@@ -132,7 +163,7 @@ class buildComments extends StatelessWidget {
 }
 
 class CommentWidget extends StatelessWidget {
-  final Comment comment;
+  final CommentDto comment;
 
   const CommentWidget({Key? key, required this.comment}) : super(key: key);
 
@@ -149,14 +180,14 @@ class CommentWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CircleAvatar(
-              radius: 20, backgroundImage: NetworkImage(comment.user.image)),
+              radius: 20, backgroundImage: NetworkImage(comment.user!.image)),
           Container(
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  comment.user.name,
+                  comment.user!.first_name,
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Text(comment.comment)

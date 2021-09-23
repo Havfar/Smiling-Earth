@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/bloc/login/dao/UserDao.dart';
+import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
+import 'package:smiling_earth_frontend/models/post.dart';
+import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
-import 'package:smiling_earth_frontend/widgets/post.dart';
+import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -79,13 +84,30 @@ class buildChart extends StatelessWidget {
   }
 }
 
-class buildFeed extends StatelessWidget {
+class buildFeed extends StatefulWidget {
   const buildFeed({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<buildFeed> createState() => _buildFeedState();
+}
+
+class _buildFeedState extends State<buildFeed> {
+  late Future<User?> user;
+  late Future<PostDto> postsdto;
+
+  @override
+  void initState() {
+    super.initState();
+    this.user = UserDao().getUser();
+    // this.postsdto = fetchPosts();
+  }
+
+  List<PostWidget> posts = [];
+  @override
   Widget build(BuildContext context) {
+    // posts.addAll(demoPosts());
     return Container(
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -98,26 +120,59 @@ class buildFeed extends StatelessWidget {
               icon: Icon(Icons.add),
               label: Text("Add"))
         ]),
-        Column(children: demoPosts())
+        BlocProvider<PostsCubit>(
+            create: (context) => PostsCubit()..getPosts(),
+            child: buildPostsFeed()),
+        Column(children: posts)
       ]),
     );
   }
+}
 
-  List<PostWidget> demoPosts() {
-    var output = <PostWidget>[];
-    for (var i = 0; i < 20; i++) {
-      String url =
-          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
-      Post post = new Post(url,
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam libero neque ultrices praesent purus varius curabitur. ");
-      output.add(PostWidget(
-        post: post,
-        liked: false,
-      ));
-    }
-    return output;
+class buildPostsFeed extends StatelessWidget {
+  const buildPostsFeed({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: 100000,
+      child: BlocBuilder<PostsCubit, List<PostDto>>(builder: (context, posts) {
+        if (posts.isEmpty) {
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+        return ListView.builder(
+            itemCount: 2,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return PostWidget(
+                  clickable: true,
+                  liked: false,
+                  author: posts[index].user,
+                  post: posts[index]);
+            });
+      }),
+    );
   }
 }
+
+// Future<PostDto> fetchPosts() async {
+//   String token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
+//   Uri uri = Uri.parse('http://10.0.2.2:8000/posts');
+//   final response =
+//       await http.get(uri, headers: {"Authorization": "Token " + token});
+
+//   if (response.statusCode == 200) {
+//     // If the server did return a 200 OK response,
+//     // then parse the JSON.
+//     return PostDto.fromJson(jsonDecode(response.body));
+//   } else {
+//     // If the server did not return a 200 OK response,
+//     // then throw an exception.
+//     throw Exception('Failed to load album');
+//   }
+// }
 
 class buildEmissionEstimation extends StatelessWidget {
   const buildEmissionEstimation({
