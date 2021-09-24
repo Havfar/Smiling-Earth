@@ -79,6 +79,15 @@ class _PostWidgetState extends State<PostWidget> {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ),
+              this.widget.post.activity != null
+                  ? Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Text(widget.post.activity!.title,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w400)),
+                    )
+                  : Text(""),
               this.widget.isPreview
                   ? Text("")
                   : Row(

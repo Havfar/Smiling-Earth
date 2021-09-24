@@ -105,7 +105,6 @@ class _buildFeedState extends State<buildFeed> {
     // this.postsdto = fetchPosts();
   }
 
-  List<PostWidget> posts = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -126,7 +125,6 @@ class _buildFeedState extends State<buildFeed> {
         BlocProvider<PostsCubit>(
             create: (context) => PostsCubit()..getPosts(),
             child: buildPostsFeed()),
-        Column(children: posts)
       ]),
     );
   }
@@ -146,7 +144,7 @@ class buildPostsFeed extends StatelessWidget {
           );
         }
         return ListView.builder(
-            itemCount: 2,
+            itemCount: posts.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return PostWidget(

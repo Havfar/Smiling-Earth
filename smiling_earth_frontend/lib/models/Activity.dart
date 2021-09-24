@@ -31,6 +31,11 @@ class Activity {
       type: json['type'],
       tag: json['tag']);
 
+  ActivityDto toDto() {
+    return ActivityDto(
+        title: this.title, description: '', activity_enum_value: this.type);
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -77,9 +82,9 @@ class ActivityDto {
   final int? id;
   final String? user;
   final String title;
-  final String description;
-  final String start_time;
-  final String end_time;
+  final String? description;
+  final String? start_time;
+  final String? end_time;
   final int? tag;
   final int activity_enum_value;
 
@@ -87,19 +92,19 @@ class ActivityDto {
       {this.id,
       this.user,
       required this.title,
-      required this.description,
-      required this.start_time,
-      required this.end_time,
+      this.description,
+      this.start_time,
+      this.end_time,
       this.tag,
       required this.activity_enum_value});
 
   Map<String, dynamic> toJson() => {
         "title": this.title,
         "description": this.description,
-        "start_time": this.start_time,
-        "end_time": this.end_time,
-        "tag": this.tag,
-        "activity_enum_value": this.activity_enum_value
+        "start_time": "2021-09-23 08:54:22.987273",
+        "end_time": "2021-09-23 09:54:22.987273",
+        // "tag": this.tag,
+        "activity_enum_value": this.activity_enum_value.toString()
       };
 
   factory ActivityDto.fromJson(Map<String, dynamic> json) => new ActivityDto(
@@ -107,8 +112,8 @@ class ActivityDto {
       user: json["user"],
       title: json["title"],
       description: json["description"],
-      start_time: json["start_time"],
-      end_time: json["end_time"],
+      // start_time: json["start_time"],
+      // end_time: json["end_time"],
       tag: json["tag"],
       activity_enum_value: json["activity_enum_value"]);
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 
 class PostClient {
@@ -15,7 +16,14 @@ class PostClient {
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
       final json = jsonDecode(response.body)["results"] as List;
-      final posts = json.map((postJson) => PostDto.fromJson(postJson)).toList();
+      final posts = json.map((postJson) {
+        if (postJson['activity'] != null) {
+          var x = postJson['activity'];
+          var y = ActivityDto.fromJson(x);
+          var z = 2;
+        }
+        return PostDto.fromJson(postJson);
+      }).toList();
       return posts;
     } catch (e) {
       throw e;
@@ -118,6 +126,27 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token}, body: post.toJson());
+      print(response.statusCode);
+
+      // if(response.statusCode = 200){
+
+      // }
+      final json = jsonDecode(response.body);
+
+      final newPost = PostDto.fromJson(json);
+      return newPost;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<PostDto> newPostWithActivity(ActivityDto newActivity) async {
+    String endpoint = '/posts/';
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response = await http.post(uri,
+          headers: {"Authorization": "Token " + token},
+          body: {"content": "Activity", "activity": newActivity.id.toString()});
       print(response.statusCode);
 
       // if(response.statusCode = 200){
