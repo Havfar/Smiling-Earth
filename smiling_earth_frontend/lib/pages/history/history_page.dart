@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/pages/activity_detailed.dart';
-import 'package:smiling_earth_frontend/pages/activity_new.dart';
+import 'package:smiling_earth_frontend/pages/history/activity_detailed.dart';
+import 'package:smiling_earth_frontend/pages/history/activity_new.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/database.dart';
+import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -88,15 +90,20 @@ class buildActivityListWidget extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("Monday, " + group.date,
+                                          Text(
+                                              DateFormat('EEEE, d MMM').format(
+                                                  DateTime.parse(group.date)),
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600,
                                               )),
                                           Row(
                                             children: [
-                                              Icon(Icons.cloud),
                                               Text("1234,12 kgCO2"),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              SmilingEarthIcon.GetIcon(1234),
                                             ],
                                           )
                                         ],
@@ -122,9 +129,9 @@ class buildActivityListWidget extends StatelessWidget {
                                                       getIconByActivity(
                                                           activity)),
                                                   title: Text(activity.title),
-                                                  subtitle: Text("at " +
-                                                      activity.start_time +
-                                                      " for 22 minutes"),
+                                                  subtitle: Text(Activity
+                                                      .formatActivityForListTile(
+                                                          activity)),
                                                   trailing: Text(
                                                       getEmissions(activity)
                                                               .toString() +
@@ -144,19 +151,7 @@ class buildActivityListWidget extends StatelessWidget {
   }
 }
 
-int getDuration(Activity activity) {
-  // var from = DateTime(0);
-  // var startTime = activity.start_time.split(":");
-  // // from = startTime[0] as int;
-  // var endTime = activity.end_time.split(":");
-
-  // var to = DateTime.fromMillisecondsSinceEpoch(activity.start_timestamp);
-  // int duration = from.difference(to).inMinutes.round();
-
-  return 59;
-}
-
 double getEmissions(Activity activity) {
-  int duration = getDuration(activity);
+  int duration = activity.getTotalDurationInMinutes();
   return duration * 0.123;
 }

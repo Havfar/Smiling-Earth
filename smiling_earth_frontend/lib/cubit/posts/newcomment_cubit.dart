@@ -13,10 +13,7 @@ class NewcommentCubit extends Cubit<NewCommentState> {
     emit(AddingNewComment());
 
     _client.postComment(comment).then((newComment) {
-      if (newComment != null) {
-        // todosCubit.addTodo(todo);
-        emit(NewCommentAdded());
-      }
+      emit(NewCommentAdded());
     });
   }
 }

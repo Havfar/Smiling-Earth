@@ -24,11 +24,6 @@ class UserProfileDto {
       required this.user_id});
 
   factory UserProfileDto.fromJson(Map<String, dynamic> json) {
-    int id = json['id'];
-    String first_name = json['first_name'];
-    String last_name = json['last_name'];
-    int usser_id = json['user'];
-
     return new UserProfileDto(
         id: json['id'],
         first_name: json['first_name'],
@@ -39,13 +34,6 @@ class UserProfileDto {
   String getName() {
     return first_name + " " + last_name;
   }
-
-  //       factory UserProfileDto.fromJson(Map<String, dynamic> json) =>
-  // new UserProfileDto(
-  //     id: json['id'],
-  //     first_name: json['first_name'],
-  //     last_name: json['last_name'],
-  //     user_id: json['user_id']);v
 }
 
 class UserProfileDetailedDto {

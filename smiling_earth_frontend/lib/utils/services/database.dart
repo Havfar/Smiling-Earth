@@ -17,23 +17,6 @@ class DatabaseHelper {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'history.db');
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
-    // add(new Activity(
-    //     title: "Test1",
-    //     start_timestamp: 1631083067,
-    //     end_timestamp: 1631083167,
-    //     type: ActivityType.IN_VEHICLE.index));
-
-    // add(new Activity(
-    //     title: "Test2",
-    //     start_timestamp: 1631083167,
-    //     end_timestamp: 1631083267,
-    //     type: ActivityType.ON_BICYCLE.index));
-
-    // add(new Activity(
-    //     title: "Test3",
-    //     start_timestamp: 1631083267,
-    //     end_timestamp: 1631083367,
-    //     type: ActivityType.ON_FOOT.index));
     return db;
   }
 
@@ -52,9 +35,7 @@ class DatabaseHelper {
           id INTEGER PRIMARY KEY,
           title TEXT,
           start_date TEXT,
-          start_time TEXT,
           end_date TEXT,
-          end_time TEXT,
           type INTEGER,
           tag TEXT
       )
@@ -64,23 +45,13 @@ class DatabaseHelper {
   Future<List<ActivityGroupedByDate>> getActivities() async {
     Database db = await instance.database;
     var activitiesQuery = await db.query('activities', orderBy: 'id');
-    // var activityGroupQuery =
-    //     await db.query('activities', groupBy: 'start_date');
-    // List<ActivityGroupedByDate> activityGroups = activityGroupQuery.isNotEmpty
-    //     ? activityGroupQuery
-    //         .map((group) => ActivityGroupedByDate.fromMap(group))
-    //         .toList()
-    //     : [];
-
-    //   activityGroupQuery.isNotEmpty
-    // ? activityGroupQuery.map((group) => ( activityGroups.add(new ActivityGroupedByDate(date: "123",activities: getActivities("123"))))
-    // : [];
 
     List<Activity> activitiesList = activitiesQuery.isNotEmpty
         ? activitiesQuery.map((c) => Activity.fromMap(c)).toList()
         : [];
 
-    var groupedBy = groupBy(activitiesList, (Activity obj) => obj.start_date);
+    var groupedBy = groupBy(activitiesList,
+        (Activity obj) => obj.start_date!.toString().substring(0, 10));
     List<ActivityGroupedByDate> activitesGroups =
         _parseActivtityGroup(groupedBy);
     return activitesGroups;

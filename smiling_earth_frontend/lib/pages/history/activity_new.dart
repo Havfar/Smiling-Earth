@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/pages/activity_detailed.dart';
+import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/database.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
 import 'package:smiling_earth_frontend/widgets/dropdown_select.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
-class EditActivity extends StatefulWidget {
-  final Activity activity;
-
-  const EditActivity({required this.activity});
-
+class NewActivity extends StatefulWidget {
   @override
-  _editActivityState createState() => _editActivityState();
+  _newActivityState createState() => _newActivityState();
 }
 
 List<DropdownSelectElement> _createList() {
@@ -27,12 +23,13 @@ List<DropdownSelectElement> _createList() {
   return list;
 }
 
-class _editActivityState extends State<EditActivity> {
+class _newActivityState extends State<NewActivity> {
   final formKey = GlobalKey<FormState>();
-  String title = "123 ";
+  String title = "";
   DateTime date = DateTime.now();
   String dateInt = "0";
-  String duration = "0";
+  late String durationHours;
+  late String durationMinutes;
   List<DropdownSelectElement> items = _createList();
   DropdownSelectElement type = new DropdownSelectElement(
       title: getActivityNameByActivityType(ActivityType.IN_CAR),
@@ -47,61 +44,6 @@ class _editActivityState extends State<EditActivity> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.share),
-            color: Colors.black87,
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.edit),
-            tooltip: 'Go to the next page',
-            color: Colors.black87,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Next page'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            tooltip: 'Go to the next page',
-            color: Colors.black87,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Next page'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
-            },
-          ),
-        ],
       ),
       drawer: NavigationDrawerWidget(),
       body: Form(
@@ -111,7 +53,15 @@ class _editActivityState extends State<EditActivity> {
           const SizedBox(height: 16),
           buildActivityType(),
           const SizedBox(height: 16),
-          buildDuration(),
+          Row(
+            children: [
+              buildDurationHour(),
+              SizedBox(
+                width: 30,
+              ),
+              buildDurationMinutes()
+            ],
+          ),
           const SizedBox(height: 16),
           buildDatePicker(),
           const SizedBox(height: 16),
@@ -121,7 +71,6 @@ class _editActivityState extends State<EditActivity> {
       ));
 
   Widget buildTitle() => TextFormField(
-        initialValue: widget.activity.title.toString(),
         decoration: InputDecoration(
           labelText: 'Title',
           border: OutlineInputBorder(),
@@ -138,7 +87,6 @@ class _editActivityState extends State<EditActivity> {
       );
 
   Widget buildActivityType() => DropdownButtonFormField<DropdownSelectElement>(
-        value: items[widget.activity.type.toInt()],
         icon: const Icon(Icons.arrow_downward),
         iconSize: 24,
         elevation: 16,
@@ -172,21 +120,59 @@ class _editActivityState extends State<EditActivity> {
   Widget buildDatePicker() => InputDatePickerFormField(
         firstDate: DateTime(2020),
         lastDate: DateTime(2022),
-        //TODO legg inn korrekt initialdate
-        initialDate: new DateTime(2021),
-        onDateSaved: (value) =>
-            setState(() => dateInt = value.millisecondsSinceEpoch.toString()),
+        initialDate: DateTime.now(),
+        onDateSaved: (value) => setState(() => date = value),
       );
 
-  Widget buildDuration() => TextFormField(
-        initialValue: '22',
-        decoration: InputDecoration(
-          labelText: 'Duration',
-          border: OutlineInputBorder(),
+  Widget buildDurationHour() => Expanded(
+        child: TextFormField(
+          initialValue: "0",
+          decoration: InputDecoration(
+            labelText: 'Hours',
+            border: OutlineInputBorder(),
+          ),
+          keyboardType: TextInputType.number,
+          maxLength: 2,
+          validator: (value) {
+            int? valueInt = int.tryParse(value!);
+            if (value.length < 1) {
+              return 'Enter at least 1 characters';
+            } else if (valueInt == null) {
+              return 'Enter a number';
+            } else if (valueInt > 24) {
+              return 'Must be less than 24';
+            } else if (valueInt < 0) {
+              return 'Must be a positive number';
+            }
+          },
+          onSaved: (value) => setState(() => durationHours = value!),
         ),
-        keyboardType: TextInputType.number,
-        maxLength: 4,
-        onSaved: (value) => setState(() => duration = value!),
+      );
+
+  Widget buildDurationMinutes() => Expanded(
+        child: TextFormField(
+          initialValue: "0",
+          decoration: InputDecoration(
+            labelText: 'Minutes',
+            border: OutlineInputBorder(),
+          ),
+          keyboardType: TextInputType.number,
+          maxLength: 2,
+          validator: (value) {
+            print(value);
+            int? valueInt = int.tryParse(value!);
+            if (value.length < 1) {
+              return 'Enter at least 1 characters';
+            } else if (valueInt == null) {
+              return 'Enter a number';
+            } else if (valueInt > 59) {
+              return 'Must be less than 60';
+            } else if (valueInt < 0) {
+              return 'Must be a positive number';
+            }
+          },
+          onSaved: (value) => setState(() => durationMinutes = value!),
+        ),
       );
 
   Widget buildSubmit() => Builder(
@@ -210,18 +196,15 @@ class _editActivityState extends State<EditActivity> {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Activity act = new Activity(
                   title: title,
-                  start_date: widget.activity.start_date,
-                  end_date: widget.activity.end_date,
-                  start_time: widget.activity.start_time,
-                  end_time: widget.activity.end_time,
-                  type: type.indexValue,
-                  id: widget.activity.id);
-              // act.title = title;
+                  start_date: date,
+                  end_date: date.add(Duration(
+                      hours: int.tryParse(durationHours)!,
+                      minutes: int.tryParse(durationMinutes)!)),
+                  type: type.indexValue);
 
-              DatabaseHelper.instance.update(act);
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      DetailedActivity(activity: widget.activity)));
+              DatabaseHelper.instance.add(act);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HistoryPage()));
             }
           },
         ),

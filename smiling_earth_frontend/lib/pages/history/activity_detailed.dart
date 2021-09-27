@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/pages/actiivity_publish.dart';
-import 'package:smiling_earth_frontend/pages/activity_edit.dart';
-import 'package:smiling_earth_frontend/pages/history_page.dart';
+import 'package:smiling_earth_frontend/pages/history/actiivity_publish.dart';
+import 'package:smiling_earth_frontend/pages/history/activity_edit.dart';
+import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/database.dart';
 
@@ -58,8 +58,6 @@ class TagWidget extends StatelessWidget {
             selected: true,
             label: Text("Commute"),
             disabledColor: Colors.greenAccent,
-
-            // isEnabled: false
           ),
         ],
       ),
@@ -86,7 +84,10 @@ class EndTimeWidget extends StatelessWidget {
           border: Border(bottom: BorderSide(color: Colors.black12))),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [Text('End time: '), Text(widget.activity.end_date)],
+        children: [
+          Text('End time: '),
+          Text(Activity.formatDatetime(widget.activity.end_date))
+        ],
       ),
     );
   }
@@ -111,7 +112,10 @@ class StartTimeWidget extends StatelessWidget {
           border: Border(bottom: BorderSide(color: Colors.black12))),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [Text('Start time: '), Text(widget.activity.start_date)],
+        children: [
+          Text('Start time: '),
+          Text(Activity.formatDatetime(widget.activity.start_date))
+        ],
       ),
     );
   }
@@ -141,7 +145,7 @@ class KeyInformation extends StatelessWidget {
               Row(children: [
                 Icon(
                   Icons.filter_drama,
-                  size: 70,
+                  size: 40,
                 ),
                 Text(
                   getEmissions(widget.activity).toString() + ' kg Co2',
@@ -153,7 +157,7 @@ class KeyInformation extends StatelessWidget {
           Column(
             children: [
               Row(children: [
-                Icon(Icons.local_fire_department, size: 70, color: Colors.red),
+                Icon(Icons.local_fire_department, size: 40, color: Colors.red),
                 Text('300 kcals', style: TextStyle(fontSize: 18))
               ])
             ],
@@ -185,7 +189,7 @@ class HeaderWidget extends StatelessWidget {
               children: [
                 Row(children: [
                   Text(
-                    "Monday 01.02.2020 08:30",
+                    Activity.getDateWithDayOfWeek(widget.activity),
                     style: TextStyle(fontSize: 12),
                   )
                 ]),
@@ -265,6 +269,5 @@ class AppbarActivityWidget extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

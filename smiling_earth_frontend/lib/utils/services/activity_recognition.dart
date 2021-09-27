@@ -46,20 +46,8 @@ void _onData(ActivityEvent activityEvent) async {
         await DatabaseHelper.instance.add(Activity(
             title: generateTitle(activityEvent),
             type: activityEvent.type.index,
-            start_time: latestActivity.timeStamp.hour.toString() +
-                latestActivity.timeStamp.minute.toString(),
-            start_date: activityEvent.timeStamp.year.toString() +
-                "-" +
-                activityEvent.timeStamp.month.toString() +
-                "-" +
-                activityEvent.timeStamp.day.toString(),
-            end_time: activityEvent.timeStamp.hour.toString() +
-                activityEvent.timeStamp.minute.toString(),
-            end_date: activityEvent.timeStamp.year.toString() +
-                "-" +
-                activityEvent.timeStamp.month.toString() +
-                "-" +
-                activityEvent.timeStamp.day.toString()));
+            start_date: latestActivity.timeStamp,
+            end_date: activityEvent.timeStamp));
       }
     }
     latestActivity = activityEvent;
@@ -82,7 +70,7 @@ String getTimeName(DateTime time) {
   } else if (hour >= 18 && hour < 22) {
     return "Evening";
   } else {
-    return 'Nigth';
+    return 'Night';
   }
 }
 

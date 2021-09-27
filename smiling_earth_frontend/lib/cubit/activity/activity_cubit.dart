@@ -16,12 +16,6 @@ class ActivityCubit extends Cubit<ActivityState> {
     try {
       emit(CreatingActivity());
       _activityClient.newActivity(activity).then((newActivity) {
-        PostDto newPost = PostDto(
-            likes_count: 0,
-            comments_count: 0,
-            id: 0,
-            content: '',
-            timestamp: '');
         return _postClient
             .newPostWithActivity(newActivity)
             .then((post) => emit(ActivityPosted(post)));

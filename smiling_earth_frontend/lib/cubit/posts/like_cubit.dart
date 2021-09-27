@@ -25,6 +25,7 @@ class LikeCubit extends Cubit<LikeState> {
     emit(CreatingLike());
 
     _client.postLike(like.post!.id).then((likeId) {
+      // ignore: unnecessary_null_comparison
       if (likeId != null) {
         emit(HasLikedPost(likeId));
       } else {

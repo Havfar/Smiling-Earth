@@ -11,8 +11,6 @@ class PublishPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = TextEditingController();
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

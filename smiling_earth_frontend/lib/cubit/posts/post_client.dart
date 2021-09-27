@@ -17,11 +17,6 @@ class PostClient {
           await http.get(uri, headers: {"Authorization": "Token " + token});
       final json = jsonDecode(response.body)["results"] as List;
       final posts = json.map((postJson) {
-        if (postJson['activity'] != null) {
-          var x = postJson['activity'];
-          var y = ActivityDto.fromJson(x);
-          var z = 2;
-        }
         return PostDto.fromJson(postJson);
       }).toList();
       return posts;

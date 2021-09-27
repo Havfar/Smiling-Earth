@@ -102,7 +102,6 @@ class _buildFeedState extends State<buildFeed> {
   void initState() {
     super.initState();
     this.user = UserDao().getUser();
-    // this.postsdto = fetchPosts();
   }
 
   @override
@@ -154,23 +153,6 @@ class buildPostsFeed extends StatelessWidget {
     );
   }
 }
-
-// Future<PostDto> fetchPosts() async {
-//   String token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
-//   Uri uri = Uri.parse('http://10.0.2.2:8000/posts');
-//   final response =
-//       await http.get(uri, headers: {"Authorization": "Token " + token});
-
-//   if (response.statusCode == 200) {
-//     // If the server did return a 200 OK response,
-//     // then parse the JSON.
-//     return PostDto.fromJson(jsonDecode(response.body));
-//   } else {
-//     // If the server did not return a 200 OK response,
-//     // then throw an exception.
-//     throw Exception('Failed to load album');
-//   }
-// }
 
 class buildEmissionEstimation extends StatelessWidget {
   const buildEmissionEstimation({

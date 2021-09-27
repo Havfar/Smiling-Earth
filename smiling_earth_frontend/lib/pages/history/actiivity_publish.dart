@@ -90,7 +90,8 @@ class buildActivityCard extends StatelessWidget {
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      Text(widget.activity.start_date)
+                                      Text(Activity.formatDatetime(
+                                          widget.activity.start_date))
                                     ]),
                               )
                             ],
