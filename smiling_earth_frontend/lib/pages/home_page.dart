@@ -39,7 +39,7 @@ class _homeState extends State<HomePage> {
         height: 800,
         margin: EdgeInsets.all(10),
         child: ListView(
-          children: <Widget>[
+          children: [
             buildHeaderToolbar(),
             buildChart(),
             buildEmissionEstimation(),
@@ -142,13 +142,16 @@ class buildPostsFeed extends StatelessWidget {
             child: Text("Loading"),
           );
         }
-        return ListView.builder(
-            itemCount: posts.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return PostWidget(
-                  clickable: true, liked: false, post: posts[index]);
-            });
+        return SingleChildScrollView(
+          child: ListView.builder(
+              itemCount: posts.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return PostWidget(
+                    clickable: true, liked: false, post: posts[index]);
+              }),
+        );
       }),
     );
   }

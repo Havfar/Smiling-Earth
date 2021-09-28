@@ -19,10 +19,10 @@ class HistoryPage extends StatelessWidget {
         drawer: NavigationDrawerWidget(),
         body: Center(
           child: Container(
-            margin: EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+            padding: EdgeInsets.all(15),
+            child: ListView(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -38,13 +38,6 @@ class HistoryPage extends StatelessWidget {
                         child: Text('Add activity'))
                   ],
                 ),
-                // Expanded(
-                //   flex: 1,
-                //   child: Container(
-                //       margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                //       child: Text('Mulig graf')),
-                //   // child: new LineChartSample1()),
-                // ),
                 buildActivityListWidget(),
               ],
             ),
@@ -60,94 +53,82 @@ class buildActivityListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 8,
-      child: FutureBuilder<List<ActivityGroupedByDate>>(
-          future: DatabaseHelper.instance.getActivities(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<ActivityGroupedByDate>> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: Text('Loading...'));
-            }
-            return snapshot.data!.isEmpty
-                ? Center(child: Text('No Activities in List.'))
-                : ListView(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          children: snapshot.data!
-                              .map((group) => Card(
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  child: Column(children: [
-                                    Container(
-                                      // color: Colors.grey,
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  color: Colors.black12))),
-                                      padding: EdgeInsets.all(5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                              DateFormat('EEEE, d MMM').format(
-                                                  DateTime.parse(group.date)),
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                          Row(
-                                            children: [
-                                              Text("1234,12 kgCO2"),
-                                              SizedBox(
-                                                width: 15,
+    return FutureBuilder<List<ActivityGroupedByDate>>(
+        future: DatabaseHelper.instance.getActivities(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ActivityGroupedByDate>> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: Text('Loading...'));
+          }
+          return snapshot.data!.isEmpty
+              ? Center(child: Text('No Activities in List.'))
+              : Column(
+                  children: snapshot.data!
+                      .map((group) => Card(
+                          margin: EdgeInsets.only(bottom: 20),
+                          child: Column(children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom:
+                                          BorderSide(color: Colors.black12))),
+                              padding: EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      DateFormat('EEEE, d MMM')
+                                          .format(DateTime.parse(group.date)),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                  Row(
+                                    children: [
+                                      Text("1234,12 kgCO2"),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      SmilingEarthIcon.GetIcon(1234),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            Row(children: [
+                              Expanded(
+                                child: Column(
+                                  children: group.activities
+                                      .map((activity) => (ListTile(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DetailedActivity(
+                                                  activity: activity,
+                                                ),
                                               ),
-                                              SmilingEarthIcon.GetIcon(1234),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Row(children: <Widget>[
-                                      Expanded(
-                                        child: Column(
-                                          children: group.activities
-                                              .map((activity) => (ListTile(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DetailedActivity(
-                                                          activity: activity,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  leading: Icon(
-                                                      getIconByActivity(
-                                                          activity)),
-                                                  title: Text(activity.title),
-                                                  subtitle: Text(Activity
-                                                      .formatActivityForListTile(
-                                                          activity)),
-                                                  trailing: Text(
-                                                      getEmissions(activity)
-                                                              .toString() +
-                                                          " kgCO2"))))
-                                              .toList(),
-                                        ),
-                                      ),
-                                    ])
-                                  ])))
-                              .toList(),
-                        ),
-                      ),
-                    ],
-                  );
-          }),
-    );
+                                            );
+                                          },
+                                          leading:
+                                              Icon(getIconByActivity(activity)),
+                                          title: Text(activity.title),
+                                          subtitle: Text(Activity
+                                              .formatActivityForListTile(
+                                                  activity)),
+                                          trailing: Text(getEmissions(activity)
+                                                  .toString() +
+                                              " kgCO2"))))
+                                      .toList(),
+                                ),
+                              ),
+                            ])
+                          ])))
+                      .toList(),
+                );
+        });
   }
 }
 

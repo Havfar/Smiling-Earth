@@ -17,7 +17,6 @@ class ActivityClient {
           body: activityDto.toJson());
 
       final json = jsonDecode(response.body);
-      print(response.body);
 
       return ActivityDto.fromJson(json);
     } catch (e) {

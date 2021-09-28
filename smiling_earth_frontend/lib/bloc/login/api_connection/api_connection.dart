@@ -13,7 +13,6 @@ final _tokenEndpoint = "/api-token-auth/";
 final _tokenURL = WebConfig.baseUrl + _tokenEndpoint;
 
 Future<Token> getToken(UserLogin userLogin) async {
-  print(_tokenURL);
   final http.Response response = await http.post(
     Uri.parse(_tokenURL),
     headers: <String, String>{
@@ -24,7 +23,6 @@ Future<Token> getToken(UserLogin userLogin) async {
   if (response.statusCode == 200) {
     return Token.fromJson(json.decode(response.body));
   } else {
-    print(json.decode(response.body).toString());
     throw Exception(json.decode(response.body));
   }
 }

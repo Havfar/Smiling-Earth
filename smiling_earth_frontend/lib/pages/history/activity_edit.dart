@@ -156,8 +156,7 @@ class _editActivityState extends State<EditActivity> {
         onSaved: (value) => setState(() => type = value!),
         onChanged: (DropdownSelectElement? newValue) {
           setState(() {
-            print('2 stated changed ' + newValue!.indexValue.toString());
-            type = newValue;
+            type = newValue!;
           });
         },
         items: items.map<DropdownMenuItem<DropdownSelectElement>>(
@@ -222,7 +221,6 @@ class _editActivityState extends State<EditActivity> {
           keyboardType: TextInputType.number,
           maxLength: 2,
           validator: (value) {
-            print(value);
             int? valueInt = int.tryParse(value!);
             if (value.length < 1) {
               return 'Enter at least 1 characters';

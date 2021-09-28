@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/posts/newcomment_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
+import 'package:smiling_earth_frontend/pages/home_page.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class DetailedPostPage extends StatefulWidget {
@@ -21,7 +22,9 @@ class _detailedPostPageState extends State<DetailedPostPage> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HomePage(),
+            )),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,

@@ -47,7 +47,6 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token}, body: comment.toJson());
-      print(response.statusCode);
 
       // if(response.statusCode = 200){
 
@@ -69,8 +68,6 @@ class PostClient {
       final data = {'post': postId.toString()};
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token}, body: data);
-      print(response.body);
-
       final Map<String, dynamic> json = jsonDecode(response.body);
       return json['id'] as int;
     } catch (e) {
@@ -85,7 +82,6 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.delete(uri, headers: {"Authorization": "Token " + token});
-      print(response.body);
 
       // final Map<String, dynamic> json = jsonDecode(response.body);
       return response.statusCode == 204;
@@ -101,7 +97,6 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      print(response.body);
 
       final Map<String, dynamic> json = jsonDecode(response.body);
 
@@ -121,7 +116,6 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token}, body: post.toJson());
-      print(response.statusCode);
 
       // if(response.statusCode = 200){
 
@@ -142,8 +136,6 @@ class PostClient {
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token},
           body: {"content": "Activity", "activity": newActivity.id.toString()});
-      print(response.statusCode);
-
       // if(response.statusCode = 200){
 
       // }
