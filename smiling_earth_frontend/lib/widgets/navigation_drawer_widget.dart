@@ -10,7 +10,7 @@ import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/profile_page.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
-import 'package:smiling_earth_frontend/pages/teams_page.dart';
+import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
