@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 
 class TeamsDetailedPage extends StatelessWidget {
+  final int? id;
+  TeamsDetailedPage({required this.id});
+
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -16,7 +19,7 @@ class TeamsDetailedPage extends StatelessWidget {
       body: Container(
         margin: EdgeInsets.all(15),
         child: ListView(
-          children: [Text("Detailed")],
+          children: [Text("Detailed" + id.toString())],
         ),
       ));
 }

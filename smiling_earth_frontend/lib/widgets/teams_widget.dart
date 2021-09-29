@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
@@ -6,7 +7,9 @@ class teamWidget extends StatelessWidget {
   final String url =
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
   final bool showJoinButton;
-  const teamWidget({Key? key, required this.showJoinButton}) : super(key: key);
+  final TeamsDto team;
+  const teamWidget({Key? key, required this.showJoinButton, required this.team})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,8 @@ class teamWidget extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TeamsDetailedPage()),
+            MaterialPageRoute(
+                builder: (context) => TeamsDetailedPage(id: team.id)),
           );
         },
         child: Padding(
@@ -26,14 +30,14 @@ class teamWidget extends StatelessWidget {
                 Row(
                   children: [
                     circleIcon(
-                      emoji: "🌎",
+                      emoji: team.symbol,
                       backgroundColor: Colors.blueAccent.shade100,
                     ),
                     SizedBox(
                       width: 20,
                     ),
                     Text(
-                      "Save the planet",
+                      this.team.name,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
@@ -58,16 +62,8 @@ class teamWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  CircleAvatar(radius: 13, backgroundImage: NetworkImage(url)),
-                  CircleAvatar(radius: 13, backgroundImage: NetworkImage(url)),
-                  CircleAvatar(radius: 13, backgroundImage: NetworkImage(url)),
-                  CircleAvatar(radius: 13, backgroundImage: NetworkImage(url)),
-                  CircleAvatar(radius: 13, backgroundImage: NetworkImage(url)),
-                  CircleAvatar(radius: 13, backgroundImage: NetworkImage(url)),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(" has joined the team")
+                  Text(this.team.memeber_count.toString() +
+                      " people has joined the team")
                 ],
               )
             ],
