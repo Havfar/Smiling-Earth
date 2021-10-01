@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class circleIcon extends StatelessWidget {
+class CircleIcon extends StatelessWidget {
   final Color backgroundColor;
   final String emoji;
-  const circleIcon(
+  const CircleIcon(
       {Key? key, required this.backgroundColor, required this.emoji})
       : super(key: key);
 

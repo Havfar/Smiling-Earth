@@ -3,12 +3,12 @@ import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
-class teamWidget extends StatelessWidget {
+class TeamWidget extends StatelessWidget {
   final String url =
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
   final bool showJoinButton;
   final TeamsDto team;
-  const teamWidget({Key? key, required this.showJoinButton, required this.team})
+  const TeamWidget({Key? key, required this.showJoinButton, required this.team})
       : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class teamWidget extends StatelessWidget {
               Stack(children: [
                 Row(
                   children: [
-                    circleIcon(
+                    CircleIcon(
                       emoji: team.symbol,
                       backgroundColor: Colors.blueAccent.shade100,
                     ),
@@ -62,7 +62,7 @@ class teamWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text(this.team.memeber_count.toString() +
+                  Text(this.team.memeberCount.toString() +
                       " people has joined the team")
                 ],
               )

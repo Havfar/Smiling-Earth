@@ -46,8 +46,8 @@ void _onData(ActivityEvent activityEvent) async {
         await DatabaseHelper.instance.add(Activity(
             title: generateTitle(activityEvent),
             type: activityEvent.type.index,
-            start_date: latestActivity.timeStamp,
-            end_date: activityEvent.timeStamp));
+            startDate: latestActivity.timeStamp,
+            endDate: activityEvent.timeStamp));
       }
     }
     latestActivity = activityEvent;

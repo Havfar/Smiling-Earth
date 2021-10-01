@@ -9,8 +9,6 @@ class TeamPosts extends StatelessWidget {
   TeamPosts({required this.id});
 
   void _onTap(BuildContext context, int index) {
-    print(index);
-
     switch (index) {
       case 0:
         // builder: (BuildContext context) => TeamsDetailedPage(id: id),

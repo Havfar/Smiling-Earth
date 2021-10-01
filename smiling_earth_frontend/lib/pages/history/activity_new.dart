@@ -9,7 +9,7 @@ import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class NewActivity extends StatefulWidget {
   @override
-  _newActivityState createState() => _newActivityState();
+  NewActivityState createState() => NewActivityState();
 }
 
 List<DropdownSelectElement> _createList() {
@@ -23,7 +23,7 @@ List<DropdownSelectElement> _createList() {
   return list;
 }
 
-class _newActivityState extends State<NewActivity> {
+class NewActivityState extends State<NewActivity> {
   final formKey = GlobalKey<FormState>();
   String title = "";
   DateTime date = DateTime.now();
@@ -194,8 +194,8 @@ class _newActivityState extends State<NewActivity> {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Activity act = new Activity(
                   title: title,
-                  start_date: date,
-                  end_date: date.add(Duration(
+                  startDate: date,
+                  endDate: date.add(Duration(
                       hours: int.tryParse(durationHours)!,
                       minutes: int.tryParse(durationMinutes)!)),
                   type: type.indexValue);

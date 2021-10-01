@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SmilingEarthIcon {
-  static Image GetIcon(int emission) {
+  static Image getIcon(int emission) {
     return Image(
         height: 33,
         width: 33,

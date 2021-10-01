@@ -11,45 +11,45 @@ class UserProfile {
 
 class UserProfileDto {
   final int id;
-  final String first_name;
-  final String last_name;
-  final int user_id;
+  final String firstName;
+  final String lastName;
+  final int userId;
   String image =
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
 
   UserProfileDto(
       {required this.id,
-      required this.first_name,
-      required this.last_name,
-      required this.user_id});
+      required this.firstName,
+      required this.lastName,
+      required this.userId});
 
   factory UserProfileDto.fromJson(Map<String, dynamic> json) {
     return new UserProfileDto(
         id: json['id'],
-        first_name: json['first_name'],
-        last_name: json['last_name'],
-        user_id: json['user']);
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        userId: json['user']);
   }
 
   String getName() {
-    return first_name + " " + last_name;
+    return firstName + " " + lastName;
   }
 }
 
 class UserProfileDetailedDto {
   final String id;
-  final String first_name;
-  final String last_name;
-  final String user_id;
-  final int follower_count;
+  final String firstName;
+  final String lastName;
+  final String userId;
+  final int followerCount;
   final String email;
 
   UserProfileDetailedDto({
     required this.id,
-    required this.first_name,
-    required this.last_name,
-    required this.user_id,
-    required this.follower_count,
+    required this.firstName,
+    required this.lastName,
+    required this.userId,
+    required this.followerCount,
     required this.email,
   });
 }

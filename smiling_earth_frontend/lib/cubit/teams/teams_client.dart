@@ -16,7 +16,6 @@ class TeamsClient {
           await http.get(uri, headers: {"Authorization": "Token " + token});
       final json = jsonDecode(response.body)["results"] as List;
       final teams = json.map((teamJson) {
-        var x = teamJson;
         return TeamsDto.fromJson(teamJson);
       }).toList();
       return teams;
@@ -33,8 +32,6 @@ class TeamsClient {
           await http.get(uri, headers: {"Authorization": "Token " + token});
       final json = jsonDecode(response.body)["results"] as List;
       final teams = json.map((teamJson) {
-        print(teamJson);
-        var t = teamJson;
         return TeamsDto.fromJson(teamJson);
       }).toList();
       return teams;

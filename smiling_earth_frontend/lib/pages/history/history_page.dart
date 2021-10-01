@@ -38,7 +38,7 @@ class HistoryPage extends StatelessWidget {
                         child: Text('Add activity'))
                   ],
                 ),
-                buildActivityListWidget(),
+                BuildActivityListWidget(),
               ],
             ),
           ),
@@ -46,8 +46,8 @@ class HistoryPage extends StatelessWidget {
       );
 }
 
-class buildActivityListWidget extends StatelessWidget {
-  const buildActivityListWidget({
+class BuildActivityListWidget extends StatelessWidget {
+  const BuildActivityListWidget({
     Key? key,
   }) : super(key: key);
 
@@ -90,7 +90,7 @@ class buildActivityListWidget extends StatelessWidget {
                                       SizedBox(
                                         width: 15,
                                       ),
-                                      SmilingEarthIcon.GetIcon(1234),
+                                      SmilingEarthIcon.getIcon(1234),
                                     ],
                                   )
                                 ],

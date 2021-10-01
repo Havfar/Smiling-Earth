@@ -51,7 +51,7 @@ class DatabaseHelper {
         : [];
 
     var groupedBy = groupBy(activitiesList,
-        (Activity obj) => obj.start_date!.toString().substring(0, 10));
+        (Activity obj) => obj.startDate!.toString().substring(0, 10));
     List<ActivityGroupedByDate> activitesGroups =
         _parseActivtityGroup(groupedBy);
     return activitesGroups;

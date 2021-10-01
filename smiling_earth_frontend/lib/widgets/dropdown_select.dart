@@ -25,10 +25,10 @@ class DropdownSelect extends StatefulWidget {
       required void Function(int value) this.onSaved});
 
   @override
-  _dropdownState createState() => _dropdownState();
+  _DropdownState createState() => _DropdownState();
 }
 
-class _dropdownState extends State<DropdownSelect> {
+class _DropdownState extends State<DropdownSelect> {
   late DropdownSelectElement dropdownValue;
 
   @override

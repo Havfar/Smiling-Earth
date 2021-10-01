@@ -15,10 +15,10 @@ class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
   @override
-  _homeState createState() => _homeState();
+  _HomeState createState() => _HomeState();
 }
 
-class _homeState extends State<HomePage> {
+class _HomeState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
@@ -40,10 +40,10 @@ class _homeState extends State<HomePage> {
         margin: EdgeInsets.all(10),
         child: ListView(
           children: [
-            buildHeaderToolbar(),
-            buildChart(),
-            buildEmissionEstimation(),
-            buildFeed(),
+            BuildHeaderToolbar(),
+            BuildChart(),
+            BuildEmissionEstimation(),
+            BuildFeed(),
           ],
         ),
       ),
@@ -51,8 +51,8 @@ class _homeState extends State<HomePage> {
   }
 }
 
-class buildChart extends StatelessWidget {
-  const buildChart({
+class BuildChart extends StatelessWidget {
+  const BuildChart({
     Key? key,
   }) : super(key: key);
 
@@ -85,16 +85,16 @@ class buildChart extends StatelessWidget {
   }
 }
 
-class buildFeed extends StatefulWidget {
-  const buildFeed({
+class BuildFeed extends StatefulWidget {
+  const BuildFeed({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<buildFeed> createState() => _buildFeedState();
+  State<BuildFeed> createState() => _BuildFeedState();
 }
 
-class _buildFeedState extends State<buildFeed> {
+class _BuildFeedState extends State<BuildFeed> {
   late Future<User?> user;
   late Future<PostDto> postsdto;
 
@@ -123,14 +123,14 @@ class _buildFeedState extends State<buildFeed> {
         ]),
         BlocProvider<PostsCubit>(
             create: (context) => PostsCubit()..getPosts(),
-            child: buildPostsFeed()),
+            child: BuildPostsFeed()),
       ]),
     );
   }
 }
 
-class buildPostsFeed extends StatelessWidget {
-  const buildPostsFeed({Key? key}) : super(key: key);
+class BuildPostsFeed extends StatelessWidget {
+  const BuildPostsFeed({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +157,8 @@ class buildPostsFeed extends StatelessWidget {
   }
 }
 
-class buildEmissionEstimation extends StatelessWidget {
-  const buildEmissionEstimation({
+class BuildEmissionEstimation extends StatelessWidget {
+  const BuildEmissionEstimation({
     Key? key,
   }) : super(key: key);
 
@@ -182,8 +182,8 @@ class buildEmissionEstimation extends StatelessWidget {
   }
 }
 
-class buildHeaderToolbar extends StatelessWidget {
-  const buildHeaderToolbar({
+class BuildHeaderToolbar extends StatelessWidget {
+  const BuildHeaderToolbar({
     Key? key,
   }) : super(key: key);
 

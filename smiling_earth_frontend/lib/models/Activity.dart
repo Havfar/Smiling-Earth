@@ -5,16 +5,16 @@ import 'package:intl/intl.dart';
 class Activity {
   final int? id;
   final String title;
-  final DateTime? start_date;
-  final DateTime? end_date;
+  final DateTime? startDate;
+  final DateTime? endDate;
   final String? tag;
   final int type;
 
   Activity(
       {this.id,
       required this.title,
-      required this.start_date,
-      required this.end_date,
+      required this.startDate,
+      required this.endDate,
       required this.type,
       this.tag});
 
@@ -24,11 +24,11 @@ class Activity {
   }
 
   static int getDurationMinutes(Activity activity) {
-    return activity.end_date!.difference(activity.start_date!).inMinutes % 60;
+    return activity.endDate!.difference(activity.startDate!).inMinutes % 60;
   }
 
   static int getDurationHours(Activity activity) {
-    return activity.end_date!.difference(activity.start_date!).inHours;
+    return activity.endDate!.difference(activity.startDate!).inHours;
   }
 
   static String formatDatetime(DateTime? time) {
@@ -39,26 +39,26 @@ class Activity {
     int hours = getDurationHours(activity);
     int minutes = getDurationMinutes(activity);
 
-    String start_time = activity.start_date!.hour.toString() +
+    String startTime = activity.startDate!.hour.toString() +
         ":" +
-        activity.start_date!.minute.toString();
+        activity.startDate!.minute.toString();
 
     String duration = hours == 0
         ? minutes.toString() + "min"
         : hours.toString() + "hours " + minutes.toString() + "min";
 
-    return "at " + start_time + " for " + duration;
+    return "at " + startTime + " for " + duration;
   }
 
   static String getDateWithDayOfWeek(Activity activity) {
-    return DateFormat('EEEE, d MMM, yyyy').format(activity.start_date!);
+    return DateFormat('EEEE, d MMM, yyyy').format(activity.startDate!);
   }
 
   factory Activity.fromMap(Map<String, dynamic> json) => new Activity(
       id: json['id'],
       title: json['title'],
-      start_date: DateTime.tryParse(json['start_date']),
-      end_date: DateTime.tryParse(json['end_date']),
+      startDate: DateTime.tryParse(json['start_date']),
+      endDate: DateTime.tryParse(json['end_date']),
       type: json['type'],
       tag: json['tag']);
 
@@ -66,17 +66,17 @@ class Activity {
     return ActivityDto(
         title: this.title,
         description: '',
-        activity_enum_value: this.type,
-        start_time: this.start_date!.toIso8601String(),
-        end_time: end_date!.toIso8601String());
+        activityEnumValue: this.type,
+        startTime: this.startDate!.toIso8601String(),
+        endTime: endDate!.toIso8601String());
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'start_date': start_date!.toIso8601String(),
-      'end_date': end_date!.toIso8601String(),
+      'start_date': startDate!.toIso8601String(),
+      'end_date': endDate!.toIso8601String(),
       'tag': tag,
       'type': type
     };
@@ -101,7 +101,7 @@ class Activity {
   }
 
   int getTotalDurationInMinutes() {
-    return this.end_date!.difference(this.start_date!).inMinutes;
+    return this.endDate!.difference(this.startDate!).inMinutes;
   }
 }
 
@@ -117,28 +117,28 @@ class ActivityDto {
   final String? user;
   final String title;
   final String? description;
-  final String? start_time;
-  final String? end_time;
+  final String? startTime;
+  final String? endTime;
   final int? tag;
-  final int activity_enum_value;
+  final int activityEnumValue;
 
   ActivityDto(
       {this.id,
       this.user,
       required this.title,
       this.description,
-      this.start_time,
-      this.end_time,
+      this.startTime,
+      this.endTime,
       this.tag,
-      required this.activity_enum_value});
+      required this.activityEnumValue});
 
   Map<String, dynamic> toJson() => {
         "title": this.title,
         "description": this.description,
-        "start_time": this.start_time,
-        "end_time": this.end_time,
+        "start_time": this.startTime,
+        "end_time": this.endTime,
         // "tag": this.tag,
-        "activity_enum_value": this.activity_enum_value.toString()
+        "activity_enum_value": this.activityEnumValue.toString()
       };
 
   factory ActivityDto.fromJson(Map<String, dynamic> json) => new ActivityDto(
@@ -149,5 +149,5 @@ class ActivityDto {
       // start_time: json["start_time"],
       // end_time: json["end_time"],
       tag: json["tag"],
-      activity_enum_value: json["activity_enum_value"]);
+      activityEnumValue: json["activity_enum_value"]);
 }

@@ -9,7 +9,7 @@ class NewPostCubit extends Cubit<NewPostState> {
   final _client = PostClient();
   NewPostCubit() : super(NewPostInitial());
 
-  void NewPost(PostDto post) {
+  void newPost(PostDto post) {
     emit(CreatingNewPost());
 
     try {

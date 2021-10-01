@@ -12,10 +12,10 @@ class PublishActivity extends StatefulWidget {
   const PublishActivity({required this.activity});
 
   @override
-  _publishState createState() => _publishState();
+  PublishState createState() => PublishState();
 }
 
-class _publishState extends State<PublishActivity> {
+class PublishState extends State<PublishActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,15 +28,15 @@ class _publishState extends State<PublishActivity> {
       ),
       body: BlocProvider(
         create: (context) => ActivityCubit(),
-        child: buildActivityCard(widget: widget),
+        child: BuildActivityCard(widget: widget),
       ),
     );
   }
 }
 
-class buildActivityCard extends StatelessWidget {
+class BuildActivityCard extends StatelessWidget {
   // final Activity activity;
-  const buildActivityCard({
+  const BuildActivityCard({
     Key? key,
     required this.widget,
   }) : super(key: key);
@@ -91,7 +91,7 @@ class buildActivityCard extends StatelessWidget {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(Activity.formatDatetime(
-                                          widget.activity.start_date))
+                                          widget.activity.startDate))
                                     ]),
                               )
                             ],
@@ -129,7 +129,7 @@ class buildActivityCard extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       BlocProvider.of<ActivityCubit>(context)
-                          .PublishActivity(widget.activity.toDto());
+                          .publishActivity(widget.activity.toDto());
                     },
                     child: Text('Publish'))
               ],

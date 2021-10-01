@@ -12,10 +12,10 @@ class DetailedActivity extends StatefulWidget {
   const DetailedActivity({required this.activity});
 
   @override
-  _detailedActivityState createState() => _detailedActivityState();
+  _DetailedActivityState createState() => _DetailedActivityState();
 }
 
-class _detailedActivityState extends State<DetailedActivity> {
+class _DetailedActivityState extends State<DetailedActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +86,7 @@ class EndTimeWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text('End time: '),
-          Text(Activity.formatDatetime(widget.activity.end_date))
+          Text(Activity.formatDatetime(widget.activity.endDate))
         ],
       ),
     );
@@ -114,7 +114,7 @@ class StartTimeWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text('Start time: '),
-          Text(Activity.formatDatetime(widget.activity.start_date))
+          Text(Activity.formatDatetime(widget.activity.startDate))
         ],
       ),
     );

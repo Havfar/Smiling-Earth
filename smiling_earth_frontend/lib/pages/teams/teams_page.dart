@@ -18,19 +18,19 @@ class TeamsPage extends StatelessWidget {
           children: [
             BlocProvider(
               create: (context) => TeamsCubit()..getJoinedTeams(),
-              child: buildMyTeams(),
+              child: BuildMyTeams(),
             ),
             BlocProvider(
               create: (context) => TeamsCubit()..getTeams(),
-              child: buildGetTeams(),
+              child: BuildGetTeams(),
             ),
           ],
         ),
       ));
 }
 
-class buildMyTeams extends StatelessWidget {
-  const buildMyTeams({
+class BuildMyTeams extends StatelessWidget {
+  const BuildMyTeams({
     Key? key,
   }) : super(key: key);
 
@@ -61,7 +61,7 @@ class buildMyTeams extends StatelessWidget {
               Column(
                 children: state.teams
                     .map(
-                        (team) => teamWidget(team: team, showJoinButton: false))
+                        (team) => TeamWidget(team: team, showJoinButton: false))
                     .toList(),
               )
             ],
@@ -75,8 +75,8 @@ class buildMyTeams extends StatelessWidget {
   }
 }
 
-class buildGetTeams extends StatelessWidget {
-  const buildGetTeams({
+class BuildGetTeams extends StatelessWidget {
+  const BuildGetTeams({
     Key? key,
   }) : super(key: key);
 
@@ -100,7 +100,7 @@ class buildGetTeams extends StatelessWidget {
                   Column(
                     children: state.teams
                         .map((team) =>
-                            teamWidget(team: team, showJoinButton: true))
+                            TeamWidget(team: team, showJoinButton: true))
                         .toList(),
                   )
                 ],

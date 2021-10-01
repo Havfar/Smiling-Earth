@@ -1,10 +1,10 @@
 class TeamsDto {
   final int? id;
   final String name;
-  final int? memeber_count;
+  final int? memeberCount;
   final String symbol;
 
-  TeamsDto(this.id, this.name, this.memeber_count, this.symbol);
+  TeamsDto(this.id, this.name, this.memeberCount, this.symbol);
 
   factory TeamsDto.fromJson(Map<String, dynamic> json) => new TeamsDto(
       json['id'], json['name'], json['memeber_count'], json['symbol']);

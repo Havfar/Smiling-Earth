@@ -67,17 +67,17 @@ class TeamsDetailedPage extends StatelessWidget {
               builder: (context, state) {
                 if (state is RetrievedTeam) {
                   return ListView(children: [
-                    buildPageHeader(team: state.teams),
+                    BuildPageHeader(team: state.teams),
                     SizedBox(height: 15),
-                    buildPledges(),
+                    BuildPledges(),
                     SizedBox(height: 15),
-                    buildChart(),
+                    BuildChart(),
                     SizedBox(height: 15),
-                    buildTeamScoreList(),
+                    BuildTeamScoreList(),
                     SizedBox(height: 15),
-                    buildRivalryLeaderboard(),
+                    BuildRivalryLeaderboard(),
                     SizedBox(height: 15),
-                    buildTeamStats()
+                    BuildTeamStats()
                   ]);
                 } else if (state is ErrorRetrievingTeam) {
                   return Text("Error! " + state.error);
@@ -115,9 +115,9 @@ class TeamsDetailedPage extends StatelessWidget {
           ]));
 }
 
-class buildPageHeader extends StatelessWidget {
+class BuildPageHeader extends StatelessWidget {
   final TeamDetailedDto team;
-  const buildPageHeader({
+  const BuildPageHeader({
     Key? key,
     required this.team,
   }) : super(key: key);
@@ -128,8 +128,8 @@ class buildPageHeader extends StatelessWidget {
   }
 }
 
-class buildTeamStats extends StatelessWidget {
-  const buildTeamStats({
+class BuildTeamStats extends StatelessWidget {
+  const BuildTeamStats({
     Key? key,
   }) : super(key: key);
 
@@ -186,8 +186,8 @@ class buildTeamStats extends StatelessWidget {
   }
 }
 
-class buildTeamScoreList extends StatelessWidget {
-  const buildTeamScoreList({
+class BuildTeamScoreList extends StatelessWidget {
+  const BuildTeamScoreList({
     Key? key,
   }) : super(key: key);
 
@@ -208,7 +208,7 @@ class buildTeamScoreList extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border(top: BorderSide(color: Colors.black12))),
                 child: ListTile(
-                  leading: circleIcon(
+                  leading: CircleIcon(
                       backgroundColor: Colors.greenAccent, emoji: "🥗"),
                   title: Text("John Johnson"),
                   trailing: Text("65 kgCO2"),
@@ -222,8 +222,8 @@ class buildTeamScoreList extends StatelessWidget {
   }
 }
 
-class buildRivalryLeaderboard extends StatelessWidget {
-  const buildRivalryLeaderboard({
+class BuildRivalryLeaderboard extends StatelessWidget {
+  const BuildRivalryLeaderboard({
     Key? key,
   }) : super(key: key);
 
@@ -243,7 +243,7 @@ class buildRivalryLeaderboard extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border(top: BorderSide(color: Colors.black12))),
                 child: ListTile(
-                  leading: circleIcon(
+                  leading: CircleIcon(
                       backgroundColor: Colors.greenAccent, emoji: "🥗"),
                   title: Text("Team name"),
                   trailing: Text("65 kgCO2"),
@@ -257,8 +257,8 @@ class buildRivalryLeaderboard extends StatelessWidget {
   }
 }
 
-class buildChart extends StatelessWidget {
-  const buildChart({
+class BuildChart extends StatelessWidget {
+  const BuildChart({
     Key? key,
   }) : super(key: key);
 
@@ -291,8 +291,8 @@ class buildChart extends StatelessWidget {
   }
 }
 
-class buildPledges extends StatelessWidget {
-  const buildPledges({
+class BuildPledges extends StatelessWidget {
+  const BuildPledges({
     Key? key,
   }) : super(key: key);
 
@@ -308,7 +308,7 @@ class buildPledges extends StatelessWidget {
               margin: EdgeInsets.only(right: 10),
               child: Column(
                 children: [
-                  circleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
+                  CircleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
                   Text("pledge"),
                 ],
               ),
@@ -317,7 +317,7 @@ class buildPledges extends StatelessWidget {
               margin: EdgeInsets.only(right: 10),
               child: Column(
                 children: [
-                  circleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
+                  CircleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
                   Text("pledge"),
                 ],
               ),
@@ -326,7 +326,7 @@ class buildPledges extends StatelessWidget {
               margin: EdgeInsets.only(right: 10),
               child: Column(
                 children: [
-                  circleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
+                  CircleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
                   Text("pledge"),
                 ],
               ),

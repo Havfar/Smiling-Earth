@@ -17,14 +17,14 @@ class _EmissionEstimatePageState extends State<EmissionEstimatePage> {
         ),
         body: Container(
           child: Column(
-            children: [buildHeaderToolbar()],
+            children: [BuildHeaderToolbar()],
           ),
         ),
       );
 }
 
-class buildHeaderToolbar extends StatelessWidget {
-  const buildHeaderToolbar({
+class BuildHeaderToolbar extends StatelessWidget {
+  const BuildHeaderToolbar({
     Key? key,
   }) : super(key: key);
 

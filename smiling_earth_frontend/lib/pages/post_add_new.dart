@@ -46,14 +46,14 @@ class NewPostPage extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => PublishPostPage(PostDto(
                                 id: -1,
-                                comments_count: 0,
+                                commentsCount: 0,
                                 content: _controller.value.text,
-                                likes_count: 0,
+                                likesCount: 0,
                                 user: UserProfileDto(
-                                    first_name: "Name",
+                                    firstName: "Name",
                                     id: -1,
-                                    last_name: 'Name',
-                                    user_id: -1),
+                                    lastName: 'Name',
+                                    userId: -1),
                                 timestamp: ''))),
                       ),
                   child: Text("Preview Post"))

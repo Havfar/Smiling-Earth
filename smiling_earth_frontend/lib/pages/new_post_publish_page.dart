@@ -68,7 +68,7 @@ class PublishPostPage extends StatelessWidget {
                     ElevatedButton(
                         onPressed: () {
                           BlocProvider.of<NewPostCubit>(context)
-                              .NewPost(this.post);
+                              .newPost(this.post);
                         },
                         child: Text("Publish"))
                   ],

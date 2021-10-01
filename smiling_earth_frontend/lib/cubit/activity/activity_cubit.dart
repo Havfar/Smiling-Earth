@@ -12,7 +12,7 @@ class ActivityCubit extends Cubit<ActivityState> {
   final _postClient = PostClient();
   ActivityCubit() : super(ActivityInitial());
 
-  void PublishActivity(ActivityDto activity) {
+  void publishActivity(ActivityDto activity) {
     try {
       emit(CreatingActivity());
       _activityClient.newActivity(activity).then((newActivity) {

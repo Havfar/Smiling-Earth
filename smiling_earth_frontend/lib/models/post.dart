@@ -13,13 +13,13 @@ class PostDto {
   final UserProfileDto? user;
   final String content;
   final String timestamp;
-  final int likes_count;
-  final int comments_count;
+  final int likesCount;
+  final int commentsCount;
   final ActivityDto? activity;
 
   PostDto(
-      {required this.likes_count,
-      required this.comments_count,
+      {required this.likesCount,
+      required this.commentsCount,
       required this.id,
       this.user,
       required this.content,
@@ -33,8 +33,8 @@ class PostDto {
       user: UserProfileDto.fromJson(json['user']),
       content: json['content'],
       timestamp: json['timestamp'],
-      likes_count: json['likes_count'],
-      comments_count: json['comments_count'],
+      likesCount: json['likes_count'],
+      commentsCount: json['comments_count'],
       activity: json['activity'] != null
           ? ActivityDto.fromJson(json['activity'])
           : null);
@@ -65,10 +65,10 @@ class DetailedPostDto {
 
   PostDto toPostDto() {
     return PostDto(
-      comments_count: comments.length,
+      commentsCount: comments.length,
       content: content,
       id: id,
-      likes_count: likes.length,
+      likesCount: likes.length,
       timestamp: timestamp,
       user: user,
     );

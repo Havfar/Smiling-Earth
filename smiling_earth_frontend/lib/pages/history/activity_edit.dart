@@ -13,7 +13,7 @@ class EditActivity extends StatefulWidget {
   const EditActivity({required this.activity});
 
   @override
-  _editActivityState createState() => _editActivityState();
+  _EditActivityState createState() => _EditActivityState();
 }
 
 List<DropdownSelectElement> _createList() {
@@ -27,7 +27,7 @@ List<DropdownSelectElement> _createList() {
   return list;
 }
 
-class _editActivityState extends State<EditActivity> {
+class _EditActivityState extends State<EditActivity> {
   final formKey = GlobalKey<FormState>();
   late String title;
   late DateTime date;
@@ -256,8 +256,8 @@ class _editActivityState extends State<EditActivity> {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Activity act = new Activity(
                   title: title,
-                  start_date: widget.activity.start_date,
-                  end_date: widget.activity.end_date,
+                  startDate: widget.activity.startDate,
+                  endDate: widget.activity.endDate,
                   type: type.indexValue,
                   id: widget.activity.id);
 

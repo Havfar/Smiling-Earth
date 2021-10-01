@@ -12,10 +12,10 @@ class DetailedPostPage extends StatefulWidget {
   DetailedPostPage({Key? key, required this.post}) : super(key: key);
 
   @override
-  _detailedPostPageState createState() => _detailedPostPageState();
+  _DetailedPostPageState createState() => _DetailedPostPageState();
 }
 
-class _detailedPostPageState extends State<DetailedPostPage> {
+class _DetailedPostPageState extends State<DetailedPostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +33,7 @@ class _detailedPostPageState extends State<DetailedPostPage> {
             padding: MediaQuery.of(context).viewInsets,
             child: BlocProvider<NewcommentCubit>(
                 create: (context) => NewcommentCubit(),
-                child: buildCommentField(post: widget.post))),
+                child: BuildCommentField(post: widget.post))),
         body: BlocProvider<PostDetailedCubit>(
             create: (context) => PostDetailedCubit()..getPost(widget.post.id),
             child: Container(
@@ -52,8 +52,8 @@ class _detailedPostPageState extends State<DetailedPostPage> {
                         liked: false,
                       ),
                     ),
-                    buildLikes(likes: posts.first.likes),
-                    buildComments(comments: posts.first.comments),
+                    BuildLikes(likes: posts.first.likes),
+                    BuildComments(comments: posts.first.comments),
                   ],
                 );
               }),
@@ -61,11 +61,11 @@ class _detailedPostPageState extends State<DetailedPostPage> {
   }
 }
 
-class buildCommentField extends StatelessWidget {
+class BuildCommentField extends StatelessWidget {
   final PostDto post;
-  const buildCommentField({
+  const BuildCommentField({
     Key? key,
-    required PostDto this.post,
+    required this.post,
   }) : super(key: key);
 
   @override
@@ -106,9 +106,9 @@ class buildCommentField extends StatelessWidget {
   }
 }
 
-class buildLikes extends StatelessWidget {
+class BuildLikes extends StatelessWidget {
   final List<LikeDto> likes;
-  const buildLikes({
+  const BuildLikes({
     required this.likes,
     Key? key,
   }) : super(key: key);
@@ -136,9 +136,9 @@ class buildLikes extends StatelessWidget {
   }
 }
 
-class buildComments extends StatelessWidget {
+class BuildComments extends StatelessWidget {
   final List<CommentDto> comments;
-  const buildComments({
+  const BuildComments({
     required this.comments,
     Key? key,
   }) : super(key: key);
@@ -193,7 +193,7 @@ class CommentWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  comment.user!.first_name,
+                  comment.user!.firstName,
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Text(comment.comment)

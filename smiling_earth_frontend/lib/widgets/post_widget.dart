@@ -58,9 +58,9 @@ class _PostWidgetState extends State<PostWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.post.user!.first_name +
+                              widget.post.user!.firstName +
                                   " " +
-                                  widget.post.user!.last_name,
+                                  widget.post.user!.lastName,
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -96,7 +96,7 @@ class _PostWidgetState extends State<PostWidget> {
                         BlocProvider(
                           create: (context) =>
                               LikeCubit()..getLiked(this.widget.post.id),
-                          child: buildLikeButton(post: this.widget.post),
+                          child: BuildLikeButton(post: this.widget.post),
                         ),
                         IconButton(
                             onPressed: () => print(this.liked.toString()),
@@ -111,18 +111,18 @@ class _PostWidgetState extends State<PostWidget> {
   }
 }
 
-class buildLikeButton extends StatefulWidget {
+class BuildLikeButton extends StatefulWidget {
   final PostDto post;
-  const buildLikeButton({
+  const BuildLikeButton({
     Key? key,
     required this.post,
   }) : super(key: key);
 
   @override
-  State<buildLikeButton> createState() => _buildLikeButtonState(this.post);
+  State<BuildLikeButton> createState() => _BuildLikeButtonState(this.post);
 }
 
-class _buildLikeButtonState extends State<buildLikeButton> {
+class _BuildLikeButtonState extends State<BuildLikeButton> {
   final PostDto post;
 
   void like(LikeState state) {
@@ -133,7 +133,7 @@ class _buildLikeButtonState extends State<buildLikeButton> {
     }
   }
 
-  _buildLikeButtonState(this.post);
+  _BuildLikeButtonState(this.post);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LikeCubit, LikeState>(

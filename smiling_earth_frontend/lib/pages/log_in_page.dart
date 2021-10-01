@@ -9,10 +9,10 @@ class LogInPage extends StatefulWidget {
   LogInPage({Key? key}) : super(key: key);
 
   @override
-  _logInState createState() => _logInState();
+  _LogInState createState() => _LogInState();
 }
 
-class _logInState extends State<LogInPage> {
+class _LogInState extends State<LogInPage> {
   String username = "";
   String password = "";
   @override
