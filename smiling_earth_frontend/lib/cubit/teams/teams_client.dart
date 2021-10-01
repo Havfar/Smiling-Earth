@@ -42,4 +42,32 @@ class TeamsClient {
       throw e;
     }
   }
+
+  Future<TeamDetailedDto> getTeam(int id) async {
+    String endpoint = '/teams/' + id.toString();
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json = jsonDecode(response.body);
+      final team = TeamDetailedDto.fromJson(json);
+      return team;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<String> joinTeam(int id) async {
+    String endpoint = '/join_team/' + id.toString();
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json = jsonDecode(response.body);
+      final team = TeamDetailedDto.fromJson(json);
+      return "Response";
+    } catch (e) {
+      throw e;
+    }
+  }
 }

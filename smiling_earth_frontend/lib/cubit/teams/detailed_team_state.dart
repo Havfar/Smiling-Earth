@@ -1,6 +1,18 @@
 part of 'detailed_team_cubit.dart';
 
 @immutable
-abstract class DetailedteamState {}
+abstract class DetailedTeamState {}
 
-class DetailedteamInitial extends DetailedteamState {}
+class DetailedTeamInitial extends DetailedTeamState {}
+
+class RetrievedTeam extends DetailedTeamState {
+  final TeamDetailedDto teams;
+
+  RetrievedTeam(this.teams);
+}
+
+class ErrorRetrievingTeam extends DetailedTeamState {
+  final String error;
+
+  ErrorRetrievingTeam(this.error);
+}

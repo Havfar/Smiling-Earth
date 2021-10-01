@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 
 class TeamsDetailedPage extends StatelessWidget {
@@ -18,8 +20,20 @@ class TeamsDetailedPage extends StatelessWidget {
       ),
       body: Container(
         margin: EdgeInsets.all(15),
-        child: ListView(
-          children: [Text("Detailed" + id.toString())],
+        child: BlocProvider(
+          create: (context) => DetailedTeamCubit()..getTeams(this.id!),
+          child: Container(
+            child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
+              builder: (context, state) {
+                if (state is RetrievedTeam) {
+                  return Text(state.teams.name);
+                } else if (state is ErrorRetrievingTeam) {
+                  return Text("Error! " + state.error);
+                }
+                return Text("Loading");
+              },
+            ),
+          ),
         ),
       ));
 }
