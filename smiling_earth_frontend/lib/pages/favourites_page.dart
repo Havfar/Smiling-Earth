@@ -5,10 +5,11 @@ class FavouritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Favourites'),
           centerTitle: true,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.green),
         ),
         drawer: NavigationDrawerWidget(),
+        body: Text("Page"),
       );
 }
