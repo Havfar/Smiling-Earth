@@ -14,7 +14,8 @@ class TeamsClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      final json = jsonDecode(response.body)["results"] as List;
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final teams = json.map((teamJson) {
         return TeamsDto.fromJson(teamJson);
       }).toList();
@@ -30,7 +31,8 @@ class TeamsClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      final json = jsonDecode(response.body)["results"] as List;
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final teams = json.map((teamJson) {
         return TeamsDto.fromJson(teamJson);
       }).toList();
@@ -46,7 +48,7 @@ class TeamsClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
       final team = TeamDetailedDto.fromJson(json);
       return team;
     } catch (e) {
@@ -60,7 +62,7 @@ class TeamsClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
       final team = TeamDetailedDto.fromJson(json);
       return "Response";
     } catch (e) {

@@ -10,6 +10,9 @@ class PostsCubit extends Cubit<List<PostDto>> {
   PostsCubit() : super([]);
 
   void getPosts() async => emit(await _client.getPosts());
+
+  void getTeamPosts(int teamId) async =>
+      emit(await _client.getTeamPosts(teamId));
 }
 
 class PostDetailedCubit extends Cubit<List<DetailedPostDto>> {

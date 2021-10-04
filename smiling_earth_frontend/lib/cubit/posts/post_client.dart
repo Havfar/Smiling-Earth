@@ -15,7 +15,25 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      final json = jsonDecode(response.body)["results"] as List;
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+      final posts = json.map((postJson) {
+        return PostDto.fromJson(postJson);
+      }).toList();
+      return posts;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<PostDto>> getTeamPosts(int teamId) async {
+    String endpoint = '/posts/team/' + teamId.toString();
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final posts = json.map((postJson) {
         return PostDto.fromJson(postJson);
       }).toList();
@@ -32,7 +50,7 @@ class PostClient {
       final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token});
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
       final post = DetailedPostDto.fromJson(json);
       return [post];
     } catch (e) {
@@ -51,7 +69,7 @@ class PostClient {
       // if(response.statusCode = 200){
 
       // }
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
 
       final newComment = CommentDto.fromJson(json);
       return newComment;
@@ -120,7 +138,7 @@ class PostClient {
       // if(response.statusCode = 200){
 
       // }
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
 
       final newPost = PostDto.fromJson(json);
       return newPost;

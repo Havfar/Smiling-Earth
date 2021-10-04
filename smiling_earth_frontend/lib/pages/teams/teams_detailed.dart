@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
@@ -69,9 +70,13 @@ class TeamsDetailedPage extends StatelessWidget {
                   return ListView(children: [
                     BuildPageHeader(team: state.teams),
                     SizedBox(height: 15),
-                    BuildPledges(),
-                    SizedBox(height: 15),
                     BuildChart(),
+                    SizedBox(height: 15),
+                    BlocProvider(
+                      create: (context) =>
+                          PledgeCubit()..getTeamPledge(this.id!),
+                      child: BuildPledges(),
+                    ),
                     SizedBox(height: 15),
                     BuildTeamScoreList(),
                     SizedBox(height: 15),
@@ -124,7 +129,18 @@ class BuildPageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(this.team.name);
+    return Container(
+      margin: EdgeInsets.all(15),
+      child: Row(
+        children: [
+          CircleIcon(
+              backgroundColor: Colors.blueAccent, emoji: this.team.symbol),
+          SizedBox(width: 20),
+          Text(this.team.name,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
   }
 }
 
@@ -138,8 +154,20 @@ class BuildTeamStats extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Transportation"),
-        Text("Total time of group members"),
+        Container(
+          margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Transportation",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  )),
+              Text("Total time of group members"),
+            ],
+          ),
+        ),
         Container(
           decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: Colors.black12))),
@@ -196,8 +224,20 @@ class BuildTeamScoreList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Most Valuable Players"),
-        Text("Top 3 team members with the lowest emissions"),
+        Container(
+          margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Most Valuable Players",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  )),
+              Text("Top 3 team members with the lowest emissions"),
+            ],
+          ),
+        ),
         Container(
           decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: Colors.black12))),
@@ -232,7 +272,19 @@ class BuildRivalryLeaderboard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Rivals"),
+        Container(
+          margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Rivals",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  )),
+            ],
+          ),
+        ),
         Container(
           decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: Colors.black12))),
@@ -265,13 +317,14 @@ class BuildChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(left: 15),
       child: Column(children: [
         Row(
           children: [
             Text("Emissions",
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 )),
           ],
         ),
@@ -298,42 +351,35 @@ class BuildPledges extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Pledges"),
-        Row(
-          children: [
-            Container(
-              margin: EdgeInsets.only(right: 10),
-              child: Column(
-                children: [
-                  CircleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
-                  Text("pledge"),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(right: 10),
-              child: Column(
-                children: [
-                  CircleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
-                  Text("pledge"),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(right: 10),
-              child: Column(
-                children: [
-                  CircleIcon(backgroundColor: Colors.redAccent, emoji: "😎"),
-                  Text("pledge"),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
+    return Container(
+      margin: EdgeInsets.only(left: 15, bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("We pledges to:",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              )),
+          SizedBox(height: 10),
+          BlocBuilder<PledgeCubit, PledgeState>(builder: (context, state) {
+            if (state is RetrievedPledges) {
+              return Row(
+                  children: state.pledges
+                      .map((pledge) => Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Column(children: [
+                            CircleIcon(
+                                backgroundColor: Colors.amberAccent,
+                                emoji: pledge.icon),
+                            Text(pledge.title),
+                          ])))
+                      .toList());
+            }
+            return Text("Loading");
+          }),
+        ],
+      ),
     );
   }
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
+import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
+import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class TeamPosts extends StatelessWidget {
   final int? id;
@@ -54,7 +58,13 @@ class TeamPosts extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.green),
       ),
       drawer: NavigationDrawerWidget(),
-      body: Text("Page"),
+      body: Column(
+        children: [
+          BlocProvider<PostsCubit>(
+              create: (context) => PostsCubit()..getTeamPosts(id!),
+              child: BuildFeed()),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: 1,
           type: BottomNavigationBarType.fixed,
@@ -80,4 +90,34 @@ class TeamPosts extends StatelessWidget {
               label: 'About',
             ),
           ]));
+}
+
+class BuildFeed extends StatelessWidget {
+  const BuildFeed({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: 100000,
+      child: BlocBuilder<PostsCubit, List<PostDto>>(builder: (context, posts) {
+        if (posts.isEmpty) {
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+        return SingleChildScrollView(
+          child: ListView.builder(
+              itemCount: posts.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return PostWidget(
+                    clickable: true, liked: false, post: posts[index]);
+              }),
+        );
+      }),
+    );
+  }
 }
