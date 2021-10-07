@@ -11,6 +11,12 @@ class RetrievedTeam extends DetailedTeamState {
   RetrievedTeam(this.teams);
 }
 
+class RetrieveTeamMembers extends DetailedTeamState {
+  final List<TeamMemberDto> members;
+
+  RetrieveTeamMembers(this.members);
+}
+
 class ErrorRetrievingTeam extends DetailedTeamState {
   final String error;
 

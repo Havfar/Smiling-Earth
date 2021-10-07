@@ -10,7 +10,7 @@ class PostClient {
   final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
   Future<List<PostDto>> getPosts() async {
-    String endpoint = '/posts';
+    String endpoint = '/posts/';
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
@@ -20,6 +20,7 @@ class PostClient {
       final posts = json.map((postJson) {
         return PostDto.fromJson(postJson);
       }).toList();
+
       return posts;
     } catch (e) {
       throw e;
@@ -59,7 +60,7 @@ class PostClient {
   }
 
   Future<CommentDto> postComment(CommentDto comment) async {
-    String endpoint = '/comment';
+    String endpoint = '/comment/';
 
     try {
       final uri = Uri.parse(_url + endpoint);
@@ -79,7 +80,7 @@ class PostClient {
   }
 
   Future<int> postLike(int postId) async {
-    String endpoint = '/likes';
+    String endpoint = '/likes/';
 
     try {
       final uri = Uri.parse(_url + endpoint);

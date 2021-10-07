@@ -11,7 +11,17 @@ class DetailedTeamCubit extends Cubit<DetailedTeamState> {
 
   void getTeams(int id) {
     try {
-      _client.getTeam(id).then((teams) => emit(RetrievedTeam(teams)));
+      _client.getTeam(id).then((team) => emit(RetrievedTeam(team)));
+    } catch (e) {
+      emit(ErrorRetrievingTeam(e.toString()));
+    }
+  }
+
+  void getTeamMembers(int teamId) {
+    try {
+      _client
+          .getTeamMembers(teamId)
+          .then((members) => emit(RetrieveTeamMembers(members)));
     } catch (e) {
       emit(ErrorRetrievingTeam(e.toString()));
     }

@@ -40,9 +40,6 @@ class PledgeClient {
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       var pledge = json.first['pledge'];
-      print(pledge);
-      String x = pledge['icon'];
-      print(x);
       final pledges = json.map((pledgeJson) {
         return PledgeDto.fromJson(pledgeJson['pledge']);
       }).toList();

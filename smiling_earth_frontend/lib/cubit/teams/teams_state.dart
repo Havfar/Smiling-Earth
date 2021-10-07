@@ -11,6 +11,12 @@ class RetrievedTeams extends TeamsState {
   RetrievedTeams(this.teams);
 }
 
+class RetrievedTeamEmissions extends TeamsState {
+  final SimpleEmissionDto emissions;
+
+  RetrievedTeamEmissions(this.emissions);
+}
+
 class ErrorRetrievingTeams extends TeamsState {
   final String error;
 

@@ -51,7 +51,6 @@ class NewPostPage extends StatelessWidget {
                                 likesCount: 0,
                                 user: UserProfileDto(
                                     firstName: "Name",
-                                    id: -1,
                                     lastName: 'Name',
                                     userId: -1),
                                 timestamp: ''))),

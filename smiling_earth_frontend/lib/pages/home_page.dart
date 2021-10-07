@@ -139,7 +139,7 @@ class BuildPostsFeed extends StatelessWidget {
       child: BlocBuilder<PostsCubit, List<PostDto>>(builder: (context, posts) {
         if (posts.isEmpty) {
           return Center(
-            child: Text("Loading"),
+            child: CircularProgressIndicator(),
           );
         }
         return SingleChildScrollView(

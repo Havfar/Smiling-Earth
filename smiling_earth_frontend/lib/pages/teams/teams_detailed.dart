@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/teams/rivals_cubit.dart';
+import 'package:smiling_earth_frontend/models/rivals.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
@@ -61,38 +63,44 @@ class TeamsDetailedPage extends StatelessWidget {
       ),
       drawer: NavigationDrawerWidget(),
       body: Container(
-        child: BlocProvider(
+          child: ListView(children: [
+        BlocProvider(
           create: (context) => DetailedTeamCubit()..getTeams(this.id!),
-          child: Container(
-            child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
-              builder: (context, state) {
-                if (state is RetrievedTeam) {
-                  return ListView(children: [
+          child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
+            builder: (context, state) {
+              if (state is RetrievedTeam) {
+                return Column(
+                  children: [
                     BuildPageHeader(team: state.teams),
-                    SizedBox(height: 15),
-                    BuildChart(),
-                    SizedBox(height: 15),
-                    BlocProvider(
-                      create: (context) =>
-                          PledgeCubit()..getTeamPledge(this.id!),
-                      child: BuildPledges(),
-                    ),
-                    SizedBox(height: 15),
-                    BuildTeamScoreList(),
-                    SizedBox(height: 15),
-                    BuildRivalryLeaderboard(),
-                    SizedBox(height: 15),
-                    BuildTeamStats()
-                  ]);
-                } else if (state is ErrorRetrievingTeam) {
-                  return Text("Error! " + state.error);
-                }
-                return Text("Loading");
-              },
-            ),
+                    BuildChart(state.teams),
+                  ],
+                );
+              } else if (state is ErrorRetrievingTeam) {
+                return Text("Error " + state.error);
+              }
+              return LinearProgressIndicator();
+            },
           ),
         ),
-      ),
+        SizedBox(height: 15),
+        BlocProvider(
+          create: (context) => PledgeCubit()..getTeamPledge(this.id!),
+          child: BuildPledges(),
+        ),
+        SizedBox(height: 15),
+
+        BlocProvider(
+          create: (context) => DetailedTeamCubit()..getTeamMembers(this.id!),
+          child: BuildTeamScoreList(),
+        ),
+        SizedBox(height: 15),
+        BlocProvider(
+          create: (context) => RivalsCubit()..getRivals(this.id!),
+          child: BuildRivalryLeaderboard(this.id!),
+        ),
+        SizedBox(height: 15),
+        // BuildTeamStats()
+      ])),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: 0,
           type: BottomNavigationBarType.fixed,
@@ -221,49 +229,61 @@ class BuildTeamScoreList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-          child: Column(
+    return BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
+      builder: (context, state) {
+        if (state is RetrieveTeamMembers) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Most Valuable Players",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  )),
-              Text("Top 3 team members with the lowest emissions"),
-            ],
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.black12))),
-          child: Column(
-            children: [
               Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    border: Border(top: BorderSide(color: Colors.black12))),
-                child: ListTile(
-                  leading: CircleIcon(
-                      backgroundColor: Colors.greenAccent, emoji: "🥗"),
-                  title: Text("John Johnson"),
-                  trailing: Text("65 kgCO2"),
+                margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Most Valuable Players",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        )),
+                    Text("Top 3 team members with the lowest emissions"),
+                  ],
                 ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.black12))),
+                child: Column(
+                    children: state.members
+                        .map((member) => (Container(
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      top: BorderSide(color: Colors.black12))),
+                              child: ListTile(
+                                  leading: CircleAvatar(
+                                      radius: 20,
+                                      backgroundImage:
+                                          NetworkImage(member.user.image)),
+                                  title: Text(member.user.getName()),
+                                  trailing: Text(member.emissions.toString())),
+                            )))
+                        .toList()),
               )
             ],
-          ),
-        )
-      ],
+          );
+        } else if (state is ErrorRetrievingTeam) {
+          return Text("Error " + state.error);
+        }
+        return Text("Loading");
+      },
     );
   }
 }
 
 class BuildRivalryLeaderboard extends StatelessWidget {
-  const BuildRivalryLeaderboard({
+  final int id;
+  const BuildRivalryLeaderboard(
+    this.id, {
     Key? key,
   }) : super(key: key);
 
@@ -272,50 +292,67 @@ class BuildRivalryLeaderboard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Rivals",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  )),
-            ],
-          ),
+        BlocBuilder<RivalsCubit, RivalsState>(
+          builder: (context, state) {
+            if (state is RivalsFetched) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Rivals",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            )),
+                      ],
+                    ),
+                  ),
+                  Column(
+                      children: state.rivals
+                          .map((rival) => rivalListItem(rival, id))
+                          .toList()),
+                ],
+              );
+            } else if (state is RivalsError) {
+              return Text("Error: " + state.error);
+            }
+            return Text("Loading");
+          },
         ),
-        Container(
-          decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.black12))),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    border: Border(top: BorderSide(color: Colors.black12))),
-                child: ListTile(
-                  leading: CircleIcon(
-                      backgroundColor: Colors.greenAccent, emoji: "🥗"),
-                  title: Text("Team name"),
-                  trailing: Text("65 kgCO2"),
-                ),
-              )
-            ],
-          ),
-        )
       ],
+    );
+  }
+
+  Container rivalListItem(RivalDto rival, int id) {
+    TeamsDto rivalTeam = rival.sender.id == id ? rival.receiver : rival.sender;
+    return Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      decoration:
+          BoxDecoration(border: Border(top: BorderSide(color: Colors.black12))),
+      child: ListTile(
+        leading: CircleIcon(
+            backgroundColor: Colors.greenAccent, emoji: rivalTeam.symbol),
+        title: Text(rivalTeam.name),
+        trailing: Text(rivalTeam.emissions.toString() + " kgCO2"),
+      ),
     );
   }
 }
 
 class BuildChart extends StatelessWidget {
-  const BuildChart({
+  final TeamDetailedDto team;
+  const BuildChart(
+    this.team, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final double goal = 1000.0;
     return Container(
       margin: EdgeInsets.only(left: 15),
       child: Column(children: [
@@ -330,11 +367,11 @@ class BuildChart extends StatelessWidget {
         ),
         Center(
           child: SmilingEarthEmissionChart(
-            energyEmissionPercentage: 0.15,
-            transportEmissionPercentage: 0.33,
+            energyEmissionPercentage: this.team.emissions.energy / goal,
+            transportEmissionPercentage: this.team.emissions.transport / goal,
           ),
         ),
-        Text("134 kg Co2",
+        Text(this.team.emissions.getTotalEmissions().toString() + " kg Co2",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,

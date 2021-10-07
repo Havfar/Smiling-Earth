@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
-import 'package:smiling_earth_frontend/pages/challenges_page.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/favourites_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';

@@ -10,7 +10,6 @@ class UserProfile {
 }
 
 class UserProfileDto {
-  final int id;
   final String firstName;
   final String lastName;
   final int userId;
@@ -18,17 +17,13 @@ class UserProfileDto {
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
 
   UserProfileDto(
-      {required this.id,
-      required this.firstName,
-      required this.lastName,
-      required this.userId});
+      {required this.firstName, required this.lastName, required this.userId});
 
   factory UserProfileDto.fromJson(Map<String, dynamic> json) {
     return new UserProfileDto(
-        id: json['id'],
         firstName: json['first_name'],
         lastName: json['last_name'],
-        userId: json['user']);
+        userId: json['user_id']);
   }
 
   String getName() {

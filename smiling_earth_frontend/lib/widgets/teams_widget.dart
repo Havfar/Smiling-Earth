@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
+import 'package:smiling_earth_frontend/pages/teams/team_preview.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
@@ -17,10 +18,17 @@ class TeamWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TeamsDetailedPage(id: team.id)),
-          );
+              context,
+              MaterialPageRoute(
+                  builder: (context) => this.showJoinButton
+                      ? TeamPreview(id: team.id)
+                      : TeamsDetailedPage(id: team.id))
+              // this.showJoinButton
+              //     ? MaterialPageRoute(
+              //         builder: (context) => TeamPreview(id: team.id))
+              //     : MaterialPageRoute(
+              //         builder: (context) => TeamsDetailedPage(id: team.id)),
+              );
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
