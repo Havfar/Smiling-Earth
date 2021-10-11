@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/join_challenge_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -22,7 +24,11 @@ class PreviewChallengesPage extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   ChallengeCubit()..getDetailedChallenge(this.id),
-              child: _BuildDetailed())
+              child: _BuildDetailed()),
+          BlocProvider(
+            create: (context) => JoinChallengeCubit(),
+            child: _BuildJoinButton(this.id),
+          )
         ]),
       ));
 }
@@ -38,7 +44,9 @@ class _BuildDetailed extends StatelessWidget {
       builder: (context, state) {
         if (state is RetrievedDetailedChallenge) {
           return Column(
-            children: [_BuildHeader(state.challenge), _BuildJoinButton()],
+            children: [
+              _BuildHeader(state.challenge),
+            ],
           );
         }
         return CircularProgressIndicator();
@@ -48,44 +56,44 @@ class _BuildDetailed extends StatelessWidget {
 }
 
 class _BuildJoinButton extends StatelessWidget {
-  const _BuildJoinButton({
+  final int id;
+  const _BuildJoinButton(
+    this.id, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(child: Text('Join'), onPressed: () => print('join'));
-  }
-}
-
-class _BuildProgressBar extends StatelessWidget {
-  final int progress;
-  final int goal;
-  const _BuildProgressBar({required this.progress, required this.goal});
-
-  @override
-  Widget build(BuildContext context) {
-    double percent = this.progress / this.goal;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Progress',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        Container(
-            margin: EdgeInsets.only(top: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                width: 350,
-                height: 30,
-                // margin: EdgeInsets.only(top: 10),
-                child: LinearProgressIndicator(value: percent),
-              ),
-            )),
-      ],
+    return BlocBuilder<JoinChallengeCubit, JoinChallengeState>(
+      builder: (context, state) {
+        if (state is JoiningChallenge) {
+          return CircularProgressIndicator();
+        } else if (state is ChallengeJoined) {
+          return Column(
+            children: [
+              Text('You have now joined the challenge'),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              DetailedChallengesPage(id: this.id)),
+                    ); // push it back in
+                  },
+                  child: Text('Go to Challenge'))
+            ],
+          );
+        } else if (state is ChallengeJoinedError) {
+          return Text('Error' + state.error);
+        }
+        return ElevatedButton(
+          child: Text('Join'),
+          onPressed: () {
+            BlocProvider.of<JoinChallengeCubit>(context).joinChallenge(this.id);
+          },
+        );
+      },
     );
   }
 }
@@ -126,53 +134,6 @@ class _BuildHeader extends StatelessWidget {
           SizedBox(height: 20),
           Text(this.challenge.description),
           SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-}
-
-class _BuildLeaderboard extends StatelessWidget {
-  final List<UserChallengeDto> leaderboard;
-  const _BuildLeaderboard(
-    this.leaderboard, {
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 50, right: 20, left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Leader board',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              )),
-          Container(
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black12))),
-            child: ListTile(
-                dense: true,
-                leading: Text('#'),
-                title: Text('Name'),
-                trailing: Text('Score')),
-          ),
-          Column(
-              children: this
-                  .leaderboard
-                  .map((score) => Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.black12))),
-                        child: ListTile(
-                            leading: Text(score.id.toString()),
-                            title: Text(score.user.getName()),
-                            trailing: Text(score.score.toString())),
-                      ))
-                  .toList())
         ],
       ),
     );

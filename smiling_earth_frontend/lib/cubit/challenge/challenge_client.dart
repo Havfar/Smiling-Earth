@@ -58,4 +58,20 @@ class ChallengesClient {
       throw e;
     }
   }
+
+  Future<int> joinChallenge(int challengeId) async {
+    String endpoint = '/challenges/join/';
+    try {
+      final uri = Uri.parse(_url + endpoint);
+
+      final response = await http.post(uri,
+          headers: {"Authorization": "Token " + token},
+          body: {'challenge': challengeId.toString()});
+      print(response.body);
+      // final json = jsonDecode(utf8.decode(response.bodyBytes));
+      return response.statusCode;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

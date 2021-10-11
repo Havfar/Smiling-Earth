@@ -83,12 +83,6 @@ class NavigationDrawerWidget extends StatelessWidget {
                     onClicked: () => selectedItem(context, 6),
                   ),
                   const SizedBox(height: 12),
-                  buildMenuItem(
-                    text: 'Leaderboards',
-                    icon: Icons.leaderboard,
-                    onClicked: () => selectedItem(context, 7),
-                  ),
-                  const SizedBox(height: 12),
                   SignOut(),
                 ],
               ),
