@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
+import 'package:smiling_earth_frontend/models/challenge.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenges_preview.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -13,9 +18,15 @@ class ChallengesPage extends StatelessWidget {
         body: Container(
           margin: EdgeInsets.all(15),
           child: ListView(children: [
-            _BuildJoinedChallenges(),
+            BlocProvider(
+              create: (context) => ChallengeCubit()..getJoinedChallenges(),
+              child: _BuildJoinedChallenges(),
+            ),
             SizedBox(height: 30),
-            _BuildChallenges(),
+            BlocProvider(
+              create: (context) => ChallengeCubit()..getChallenges(),
+              child: _BuildChallenges(),
+            ),
           ]),
         ),
       );
@@ -36,17 +47,19 @@ class _BuildJoinedChallenges extends StatelessWidget {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),
-        ChallengeJoinedWidget(
-          showJoinButton: false,
-        ),
-        ChallengeJoinedWidget(
-          showJoinButton: false,
-        ),
-        ChallengeJoinedWidget(
-          showJoinButton: false,
-        ),
-        ChallengeJoinedWidget(
-          showJoinButton: false,
+        BlocBuilder<ChallengeCubit, ChallengeState>(
+          builder: (context, state) {
+            if (state is RetrievedJoinedChallenges) {
+              return Column(
+                  children: state.challenges
+                      .map((challenge) => ChallengeJoinedWidget(challenge,
+                          showJoinButton: false))
+                      .toList());
+            } else if (state is RetrievedChallengesError) {
+              return Text('Error: ' + state.error);
+            }
+            return CircularProgressIndicator();
+          },
         ),
       ],
     );
@@ -68,12 +81,20 @@ class _BuildChallenges extends StatelessWidget {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),
-        ChallengeWidget(),
-        ChallengeWidget(),
-        ChallengeWidget(),
-        ChallengeWidget(),
-        ChallengeWidget(),
-        ChallengeWidget(),
+        BlocBuilder<ChallengeCubit, ChallengeState>(
+          builder: (context, state) {
+            if (state is RetrievedChallenges) {
+              return Column(
+                children: state.challenges
+                    .map((challenge) => ChallengeWidget(challenge))
+                    .toList(),
+              );
+            } else if (state is RetrievedChallengesError) {
+              return Text('Error: ' + state.error);
+            }
+            return CircularProgressIndicator();
+          },
+        ),
       ],
     );
   }
@@ -81,7 +102,9 @@ class _BuildChallenges extends StatelessWidget {
 
 class ChallengeJoinedWidget extends StatelessWidget {
   final bool showJoinButton;
-  const ChallengeJoinedWidget({Key? key, required this.showJoinButton})
+  final JoinedChallengeDto challenge;
+  const ChallengeJoinedWidget(this.challenge,
+      {Key? key, required this.showJoinButton})
       : super(key: key);
 
   @override
@@ -89,11 +112,12 @@ class ChallengeJoinedWidget extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => TeamsDetailedPage(id: team.id)),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DetailedChallengesPage(id: challenge.challenge.id!)),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -103,7 +127,7 @@ class ChallengeJoinedWidget extends StatelessWidget {
                 Row(
                   children: [
                     CircleIcon(
-                      emoji: "🏆",
+                      emoji: this.challenge.challenge.symbol,
                       backgroundColor: Colors.greenAccent,
                     ),
                     SizedBox(
@@ -113,7 +137,7 @@ class ChallengeJoinedWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Complete something for 10 days",
+                          this.challenge.challenge.title,
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
@@ -149,18 +173,20 @@ class ChallengeJoinedWidget extends StatelessWidget {
 }
 
 class ChallengeWidget extends StatelessWidget {
-  const ChallengeWidget({Key? key}) : super(key: key);
+  final ChallengeDto challenge;
+  const ChallengeWidget(this.challenge, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: InkWell(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => TeamsDetailedPage(id: team.id)),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    PreviewChallengesPage(id: this.challenge.id!)),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -169,7 +195,7 @@ class ChallengeWidget extends StatelessWidget {
               Row(
                 children: [
                   CircleIcon(
-                    emoji: "🏅",
+                    emoji: challenge.symbol,
                     backgroundColor: Colors.blueGrey,
                   ),
                   SizedBox(
@@ -181,7 +207,7 @@ class ChallengeWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Complete something for 10 days",
+                          challenge.title,
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
