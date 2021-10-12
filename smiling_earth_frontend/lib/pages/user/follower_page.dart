@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/user/user_cubit.dart';
+import 'package:smiling_earth_frontend/pages/user/profile_page.dart';
+import 'package:smiling_earth_frontend/pages/user/profile_preview_page.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class FollowerPage extends StatelessWidget {
@@ -150,11 +152,35 @@ class _BuildList extends StatelessWidget {
                               border: Border(
                                   bottom: BorderSide(color: Colors.black12))),
                           child: ListTile(
-                            leading: CircleAvatar(
-                                radius: 20,
-                                backgroundImage: NetworkImage(user.image)),
-                            title: Text(user.getName()),
-                          ),
+                              //               Navigator.push(
+                              // context,
+                              // MaterialPageRoute(
+                              //     builder: (context) => this.showJoinButton
+                              //         ? TeamPreview(id: team.id)
+                              //         : TeamsDetailedPage(id: team.id))
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => user.isFollowing
+                                            ? ProfilePreviewPage(
+                                                userId: user.user.userId)
+                                            : ProfilePage(
+                                                userId: user.user.userId)));
+                              },
+                              leading: CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage:
+                                      NetworkImage(user.user.image)),
+                              title: Text(user.user.getName()),
+                              trailing: user.isFollowing
+                                  ? TextButton(
+                                      child: Text('Following'),
+                                      onPressed: () => print('ok'),
+                                    )
+                                  : ElevatedButton(
+                                      onPressed: () => print('lol'),
+                                      child: Text('Follow'))),
                         )))
                     .toList());
           } else if (state is UsersRetrivedError) {

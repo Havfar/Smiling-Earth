@@ -8,38 +8,43 @@ class UserClient {
   final _url = WebConfig.baseUrl;
   final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
-  Future<List<UserProfileDto>> getFollowers() async {
+  Future<List<FollowerDto>> getFollowers() async {
     String endpoint = '/followers/';
     final uri = Uri.parse(_url + endpoint);
     final response =
         await http.get(uri, headers: {"Authorization": "Token " + token});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
-    final users = json.map((followersJson) {
-      return UserProfileDto.fromJson(followersJson['user']);
+    final users = json.map((followerJson) {
+      return FollowerDto(
+          isFollowing: followerJson['is_following'],
+          user: UserProfileDto.fromJson(followerJson['followed_by']));
     }).toList();
     return users;
   }
 
-  Future<List<UserProfileDto>> getFollowing() async {
+  Future<List<FollowerDto>> getFollowing() async {
     String endpoint = '/following/';
     final uri = Uri.parse(_url + endpoint);
     final response =
         await http.get(uri, headers: {"Authorization": "Token " + token});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final users = json.map((followingJson) {
-      return UserProfileDto.fromJson(followingJson['user']);
+      return FollowerDto(
+          isFollowing: true,
+          user: UserProfileDto.fromJson(followingJson['user']));
     }).toList();
     return users;
   }
 
-  Future<List<UserProfileDto>> getNotFollowing() async {
+  Future<List<FollowerDto>> getNotFollowing() async {
     String endpoint = '/not-following/';
     final uri = Uri.parse(_url + endpoint);
     final response =
         await http.get(uri, headers: {"Authorization": "Token " + token});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final users = json.map((userJson) {
-      return UserProfileDto.fromJson(userJson);
+      return FollowerDto(
+          isFollowing: false, user: UserProfileDto.fromJson(userJson));
     }).toList();
     return users;
   }

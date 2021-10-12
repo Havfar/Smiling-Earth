@@ -12,7 +12,7 @@ class UserInitial extends UserState {}
 class RetrievingUser extends UserState {}
 
 class UsersRetrived extends UserState {
-  final List<UserProfileDto> users;
+  final List<FollowerDto> users;
 
   UsersRetrived(this.users);
 }

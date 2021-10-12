@@ -67,3 +67,10 @@ class User {
 
   // static Future<User> fromJson(Map elementAt) {}
 }
+
+class FollowerDto {
+  final bool isFollowing;
+  final UserProfileDto user;
+
+  FollowerDto({required this.isFollowing, required this.user});
+}
