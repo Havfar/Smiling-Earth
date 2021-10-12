@@ -1,4 +1,5 @@
 import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 
 class Post {
@@ -16,6 +17,7 @@ class PostDto {
   final int likesCount;
   final int commentsCount;
   final ActivityDto? activity;
+  final ChallengeDto? challenge;
 
   PostDto(
       {required this.likesCount,
@@ -24,7 +26,8 @@ class PostDto {
       this.user,
       required this.content,
       required this.timestamp,
-      this.activity});
+      this.activity,
+      this.challenge});
 
   Map<String, dynamic> toJson() => {"content": this.content};
 
@@ -37,6 +40,9 @@ class PostDto {
       commentsCount: json['comments_count'],
       activity: json['activity'] != null
           ? ActivityDto.fromJson(json['activity'])
+          : null,
+      challenge: json['challenge'] != null
+          ? ChallengeDto.fromJson(json['challenge'])
           : null);
 }
 

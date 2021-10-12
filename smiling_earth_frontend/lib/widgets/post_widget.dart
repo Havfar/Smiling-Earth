@@ -88,6 +88,23 @@ class _PostWidgetState extends State<PostWidget> {
                               fontSize: 16, fontWeight: FontWeight.w400)),
                     )
                   : Text(""),
+              this.widget.post.challenge != null
+                  ? Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              widget.post.challenge!.symbol +
+                                  ' ' +
+                                  widget.post.challenge!.title,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400)),
+                        ],
+                      ),
+                    )
+                  : Text(""),
               this.widget.isPreview
                   ? Text("")
                   : Row(
