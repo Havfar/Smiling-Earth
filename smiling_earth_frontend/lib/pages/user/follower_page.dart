@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/user/user_cubit.dart';
 import 'package:smiling_earth_frontend/pages/user/profile_page.dart';
 import 'package:smiling_earth_frontend/pages/user/profile_preview_page.dart';
@@ -66,17 +67,28 @@ class _BuildLoadingTile extends StatelessWidget {
     return Column(
         children: list
             .map(
-              (e) => Container(
-                // padding: EdgeInsets.only(top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.black12))),
-                child: ListTile(
-                  leading: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.blueGrey, shape: BoxShape.circle)),
-                  title: Text('Loading...'),
+              (e) => SkeletonAnimation(
+                borderRadius: BorderRadius.circular(10.0),
+                shimmerColor: Colors.white38,
+                shimmerDuration: 3000,
+                child: Container(
+                  // padding: EdgeInsets.only(top: 10, bottom: 10),
+                  decoration: BoxDecoration(
+                      border:
+                          Border(bottom: BorderSide(color: Colors.black12))),
+                  child: ListTile(
+                    leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.grey, shape: BoxShape.circle)),
+                    title: Container(
+                        width: 100,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade400,
+                        )),
+                  ),
                 ),
               ),
             )

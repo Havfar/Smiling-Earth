@@ -48,4 +48,15 @@ class UserClient {
     }).toList();
     return users;
   }
+
+  Future<UserProfileDetailedDto> getProfile(int userId) async {
+    String endpoint = '/users/' + userId.toString() + '/';
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token});
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    print(json);
+    final profile = UserProfileDetailedDto.fromJson(json);
+    return profile;
+  }
 }

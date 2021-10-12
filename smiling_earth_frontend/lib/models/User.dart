@@ -32,21 +32,25 @@ class UserProfileDto {
 }
 
 class UserProfileDetailedDto {
-  final String id;
+  final int? userId;
   final String firstName;
   final String lastName;
-  final String userId;
   final int followerCount;
-  final String email;
 
   UserProfileDetailedDto({
-    required this.id,
+    this.userId,
     required this.firstName,
     required this.lastName,
-    required this.userId,
     required this.followerCount,
-    required this.email,
   });
+
+  factory UserProfileDetailedDto.fromJson(Map<String, dynamic> json) {
+    return new UserProfileDetailedDto(
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        userId: json['user_id'],
+        followerCount: json['followers_count']);
+  }
 }
 
 class User {
