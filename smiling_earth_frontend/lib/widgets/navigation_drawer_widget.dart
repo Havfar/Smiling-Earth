@@ -11,6 +11,7 @@ import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/profile_page.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
+import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -56,12 +57,12 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.account_circle,
                     onClicked: () => selectedItem(context, 2),
                   ),
-                  const SizedBox(height: 12),
-                  buildMenuItem(
-                    text: 'Notifications',
-                    icon: Icons.notifications,
-                    onClicked: () => selectedItem(context, 3),
-                  ),
+                  // const SizedBox(height: 12),
+                  // buildMenuItem(
+                  //   text: 'Notifications',
+                  //   icon: Icons.notifications,
+                  //   onClicked: () => selectedItem(context, 3),
+                  // ),
                   const SizedBox(height: 12),
                   buildMenuItem(
                     text: 'Settings',
@@ -72,15 +73,21 @@ class NavigationDrawerWidget extends StatelessWidget {
                   Divider(color: Colors.white70),
                   const SizedBox(height: 16),
                   buildMenuItem(
+                    text: 'Find users',
+                    icon: Icons.people,
+                    onClicked: () => selectedItem(context, 5),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
                     text: 'Challenges',
                     icon: Icons.emoji_events,
-                    onClicked: () => selectedItem(context, 5),
+                    onClicked: () => selectedItem(context, 6),
                   ),
                   const SizedBox(height: 12),
                   buildMenuItem(
                     text: 'Teams',
                     icon: Icons.groups,
-                    onClicked: () => selectedItem(context, 6),
+                    onClicked: () => selectedItem(context, 7),
                   ),
                   const SizedBox(height: 12),
                   SignOut(),
@@ -197,20 +204,25 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ChallengesPage(),
+          builder: (context) => FollowerPage(),
         ));
         break;
       case 6:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => TeamsPage(),
+          builder: (context) => ChallengesPage(),
         ));
         break;
       case 7:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => LeaderboardPage(),
+          builder: (context) => TeamsPage(),
         ));
         break;
       case 8:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => LeaderboardPage(),
+        ));
+        break;
+      case 9:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => FollowersPage(),
         ));
