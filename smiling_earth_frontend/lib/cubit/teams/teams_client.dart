@@ -95,6 +95,16 @@ class TeamsClient {
     }
   }
 
+  Future<List<TeamsDto>> getMemberOf(int userId) async {
+    String endpoint = '/teams/users/' + userId.toString() + '/';
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+    final teams = json.map((team) => TeamsDto.fromJson(team['team'])).toList();
+    return teams;
+  }
+
   Future<int> joinTeam(int id) async {
     String endpoint = '/join_team/';
     try {
@@ -103,7 +113,6 @@ class TeamsClient {
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token},
           body: {'team': id.toString()});
-      // final json = jsonDecode(utf8.decode(response.bodyBytes));
       return response.statusCode;
     } catch (e) {
       throw e;

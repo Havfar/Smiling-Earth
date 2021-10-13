@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
-import 'package:smiling_earth_frontend/models/post.dart';
+import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
@@ -60,8 +59,8 @@ class TeamPosts extends StatelessWidget {
       drawer: NavigationDrawerWidget(),
       body: Column(
         children: [
-          BlocProvider<PostsCubit>(
-              create: (context) => PostsCubit()..getTeamPosts(id!),
+          BlocProvider<PostCubit>(
+              create: (context) => PostCubit()..getTeamPosts(id!),
               child: BuildFeed()),
         ],
       ),
@@ -101,21 +100,21 @@ class BuildFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 100000,
-      child: BlocBuilder<PostsCubit, List<PostDto>>(builder: (context, posts) {
-        if (posts.isEmpty) {
-          return Center(
-            child: Text("Loading"),
+      child: BlocBuilder<PostCubit, PostState>(builder: (context, state) {
+        if (state is PostRetrived) {
+          return SingleChildScrollView(
+            child: ListView.builder(
+                itemCount: state.posts.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return PostWidget(
+                      clickable: true, liked: false, post: state.posts[index]);
+                }),
           );
         }
-        return SingleChildScrollView(
-          child: ListView.builder(
-              itemCount: posts.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return PostWidget(
-                    clickable: true, liked: false, post: posts[index]);
-              }),
+        return Center(
+          child: Text("Loading"),
         );
       }),
     );

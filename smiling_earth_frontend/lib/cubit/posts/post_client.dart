@@ -28,7 +28,24 @@ class PostClient {
   }
 
   Future<List<PostDto>> getTeamPosts(int teamId) async {
-    String endpoint = '/posts/team/' + teamId.toString();
+    String endpoint = '/posts/team/' + teamId.toString() + '/';
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+      final posts = json.map((postJson) {
+        return PostDto.fromJson(postJson);
+      }).toList();
+      return posts;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<PostDto>> getUserPosts(int userId) async {
+    String endpoint = '/posts/users/' + userId.toString() + '/';
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =

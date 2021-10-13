@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/dao/UserDao.dart';
-import 'package:smiling_earth_frontend/cubit/posts/posts_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation.dart';
@@ -121,8 +121,8 @@ class _BuildFeedState extends State<BuildFeed> {
               icon: Icon(Icons.add),
               label: Text("Add"))
         ]),
-        BlocProvider<PostsCubit>(
-            create: (context) => PostsCubit()..getPosts(),
+        BlocProvider<PostCubit>(
+            create: (context) => PostCubit()..getPosts(),
             child: BuildPostsFeed()),
       ]),
     );
@@ -136,21 +136,21 @@ class BuildPostsFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 100000,
-      child: BlocBuilder<PostsCubit, List<PostDto>>(builder: (context, posts) {
-        if (posts.isEmpty) {
-          return Center(
-            child: CircularProgressIndicator(),
+      child: BlocBuilder<PostCubit, PostState>(builder: (context, state) {
+        if (state is PostRetrived) {
+          return SingleChildScrollView(
+            child: ListView.builder(
+                itemCount: state.posts.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return PostWidget(
+                      clickable: true, liked: false, post: state.posts[index]);
+                }),
           );
         }
-        return SingleChildScrollView(
-          child: ListView.builder(
-              itemCount: posts.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return PostWidget(
-                    clickable: true, liked: false, post: posts[index]);
-              }),
+        return Center(
+          child: CircularProgressIndicator(),
         );
       }),
     );

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/posts/like_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/post_detailed.dart';
+import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
 class PostWidget extends StatefulWidget {
   const PostWidget(
@@ -169,5 +171,54 @@ class _BuildLikeButtonState extends State<BuildLikeButton> {
         );
       },
     );
+  }
+}
+
+class PostSkeletonWidget extends StatelessWidget {
+  const PostSkeletonWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonAnimation(
+        shimmerColor: Colors.white38,
+        shimmerDuration: 4000,
+        child: Card(
+            child: Container(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleIconSkeleton(),
+                  SizedBox(width: 20),
+                  Container(
+                      height: 10,
+                      width: 40,
+                      decoration: BoxDecoration(color: Colors.grey)),
+                  SizedBox(width: 10),
+                  Container(
+                      height: 10,
+                      width: 70,
+                      decoration: BoxDecoration(color: Colors.grey))
+                ],
+              ),
+              Container(
+                  height: 10,
+                  width: 200,
+                  decoration: BoxDecoration(color: Colors.grey)),
+              SizedBox(height: 5),
+              Container(
+                  height: 10,
+                  width: 150,
+                  decoration: BoxDecoration(color: Colors.grey)),
+              SizedBox(height: 5),
+              Container(
+                  height: 10,
+                  width: 250,
+                  decoration: BoxDecoration(color: Colors.grey))
+            ],
+          ),
+        )));
   }
 }

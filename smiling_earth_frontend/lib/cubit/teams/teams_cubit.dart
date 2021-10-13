@@ -26,6 +26,14 @@ class TeamsCubit extends Cubit<TeamsState> {
     }
   }
 
+  void getUserIsMemberOf(int userId) {
+    try {
+      _client.getMemberOf(userId).then((teams) => emit(RetrievedTeams(teams)));
+    } catch (e) {
+      emit(ErrorRetrievingTeams(e.toString()));
+    }
+  }
+
   // void getTeamEmissions(int teamId) {
   //   try {
   //     _client
