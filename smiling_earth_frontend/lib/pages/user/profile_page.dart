@@ -33,7 +33,7 @@ class ProfilePage extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) => PledgeCubit()..getUserPledges(this.userId),
-                child: _BuildPledges(),
+                child: BuildPledges(),
               ),
               BlocProvider(
                 create: (context) =>
@@ -47,7 +47,7 @@ class ProfilePage extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) => PostCubit()..getUserPosts(this.userId),
-                child: _BuildFeed(),
+                child: BuildFeed(),
               )
             ],
           ),
@@ -100,8 +100,8 @@ class _BuildHeader extends StatelessWidget {
   }
 }
 
-class _BuildPledges extends StatelessWidget {
-  const _BuildPledges({
+class BuildPledges extends StatelessWidget {
+  const BuildPledges({
     Key? key,
   }) : super(key: key);
 
@@ -298,8 +298,8 @@ class _BuildTeamsList extends StatelessWidget {
   }
 }
 
-class _BuildFeed extends StatelessWidget {
-  const _BuildFeed({
+class BuildFeed extends StatelessWidget {
+  const BuildFeed({
     Key? key,
   }) : super(key: key);
 

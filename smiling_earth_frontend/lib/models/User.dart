@@ -69,12 +69,16 @@ class UserProfileDetailedDto {
   final int? userId;
   final String firstName;
   final String lastName;
+  final int? followerCount;
+  final int? followingCount;
   final String bio;
   final String image =
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
 
   UserProfileDetailedDto(
       {this.userId,
+      this.followerCount,
+      this.followingCount,
       required this.firstName,
       required this.lastName,
       required this.bio});
@@ -84,6 +88,8 @@ class UserProfileDetailedDto {
         firstName: json['first_name'],
         lastName: json['last_name'],
         userId: json['user_id'],
+        followerCount: json['followers_count'],
+        followingCount: json['following_count'],
         bio: json['bio']);
   }
 
