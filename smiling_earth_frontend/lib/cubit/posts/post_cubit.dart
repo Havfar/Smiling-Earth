@@ -25,6 +25,14 @@ class PostCubit extends Cubit<PostState> {
     }
   }
 
+  void getMyPosts() {
+    try {
+      _client.getMyPosts().then((posts) => emit(PostRetrived(posts)));
+    } catch (e) {
+      emit(PostError(e.toString()));
+    }
+  }
+
   void getTeamPosts(int teamId) {
     try {
       _client.getTeamPosts(teamId).then((posts) => emit(PostRetrived(posts)));

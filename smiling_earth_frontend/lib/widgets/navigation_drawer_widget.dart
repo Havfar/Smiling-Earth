@@ -8,10 +8,10 @@ import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/pages/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
-import 'package:smiling_earth_frontend/pages/profile_page.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
+import 'package:smiling_earth_frontend/pages/user/my_profile.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -32,7 +32,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               name: name,
               email: email,
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePage(),
+                builder: (context) => MyProfilePage(),
               )),
             ),
             Container(

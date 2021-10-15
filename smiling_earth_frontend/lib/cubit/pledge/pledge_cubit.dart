@@ -29,5 +29,15 @@ class PledgeCubit extends Cubit<PledgeState> {
     }
   }
 
+  void getMyUserPledges() {
+    try {
+      _client
+          .getMyUserPledges()
+          .then((pledges) => emit(RetrievedPledges(pledges)));
+    } catch (e) {
+      emit(ErrorRetrievingPledges(e.toString()));
+    }
+  }
+
   void getPledes() {}
 }

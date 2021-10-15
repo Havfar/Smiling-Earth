@@ -11,10 +11,8 @@ import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
-class ProfilePage extends StatelessWidget {
-  final int userId;
-
-  const ProfilePage({Key? key, required this.userId}) : super(key: key);
+class MyProfilePage extends StatelessWidget {
+  const MyProfilePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -28,25 +26,24 @@ class ProfilePage extends StatelessWidget {
           child: ListView(
             children: [
               BlocProvider(
-                create: (context) => ProfileCubit()..getProfile(this.userId),
+                create: (context) => ProfileCubit()..getMyProfile(),
                 child: _BuildHeader(),
               ),
               BlocProvider(
-                create: (context) => PledgeCubit()..getUserPledges(this.userId),
+                create: (context) => PledgeCubit()..getMyUserPledges(),
                 child: _BuildPledges(),
               ),
               BlocProvider(
                 create: (context) =>
-                    ChallengeCubit()..getCompletedChallenges(this.userId),
+                    ChallengeCubit()..getMyCompletedChallenges(),
                 child: _BuildAchievements(),
               ),
+              // BlocProvider(
+              //   create: (context) => TeamsCubit()..getUserIsMemberOf(1),
+              //   child: _BuildTeamsList(),
+              // ),
               BlocProvider(
-                create: (context) =>
-                    TeamsCubit()..getUserIsMemberOf(this.userId),
-                child: _BuildTeamsList(),
-              ),
-              BlocProvider(
-                create: (context) => PostCubit()..getUserPosts(this.userId),
+                create: (context) => PostCubit()..getMyPosts(),
                 child: _BuildFeed(),
               )
             ],

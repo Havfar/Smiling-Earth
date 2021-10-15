@@ -59,4 +59,21 @@ class PledgeClient {
       throw e;
     }
   }
+
+  Future<List<PledgeDto>> getMyUserPledges() async {
+    String endpoint = '/pledge/user/self/';
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token});
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+      final pledges = json.map((pledgeJson) {
+        return PledgeDto.fromJson(pledgeJson['pledge']);
+      }).toList();
+      return pledges;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

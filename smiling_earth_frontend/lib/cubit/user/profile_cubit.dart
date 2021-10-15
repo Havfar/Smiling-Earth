@@ -18,4 +18,12 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(ProfileRetrivedError(e.toString()));
     }
   }
+
+  void getMyProfile() {
+    try {
+      _client.getMyProfile().then((profile) => emit(ProfileRetrived(profile)));
+    } catch (e) {
+      emit(ProfileRetrivedError(e.toString()));
+    }
+  }
 }

@@ -55,6 +55,19 @@ class ChallengesClient {
     return challenges;
   }
 
+  Future<List<ChallengeDto>> getMyCompletedChallenges() async {
+    String endpoint = '/challenges/user/self/completed';
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+
+    final challenges = json.map((challengeJson) {
+      return ChallengeDto.fromJson(challengeJson);
+    }).toList();
+    return challenges;
+  }
+
   Future<List<JoinedChallengeDto>> getJoinedChallenges() async {
     String endpoint = '/challenges/user/';
     try {

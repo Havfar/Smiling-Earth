@@ -55,8 +55,17 @@ class UserClient {
     final response =
         await http.get(uri, headers: {"Authorization": "Token " + token});
     final json = jsonDecode(utf8.decode(response.bodyBytes));
-    print(json);
     final profile = UserProfileDetailedDto.fromJson(json);
+    return profile;
+  }
+
+  Future<UserProfileDetailedDto> getMyProfile() async {
+    String endpoint = '/users/self/';
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+    final profile = UserProfileDetailedDto.fromJson(json.first);
     return profile;
   }
 }
