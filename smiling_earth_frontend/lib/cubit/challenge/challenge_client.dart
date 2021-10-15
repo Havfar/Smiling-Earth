@@ -26,6 +26,8 @@ class ChallengesClient {
     }
   }
 
+  // http://127.0.0.1:8000/challenges/user/1/completed
+
   Future<DetailedChallengeDto> getChallengeDetailed(int challengeId) async {
     String endpoint = '/challenges/' + challengeId.toString() + '/';
     try {
@@ -38,6 +40,19 @@ class ChallengesClient {
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<List<ChallengeDto>> getCompletedChallenges(int userId) async {
+    String endpoint = '/challenges/user/' + userId.toString() + '/completed';
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+
+    final challenges = json.map((challengeJson) {
+      return ChallengeDto.fromJson(challengeJson);
+    }).toList();
+    return challenges;
   }
 
   Future<List<JoinedChallengeDto>> getJoinedChallenges() async {

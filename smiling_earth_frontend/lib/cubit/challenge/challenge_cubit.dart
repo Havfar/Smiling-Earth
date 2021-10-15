@@ -31,6 +31,16 @@ class ChallengeCubit extends Cubit<ChallengeState> {
     }
   }
 
+  void getCompletedChallenges(int userId) {
+    try {
+      _client
+          .getCompletedChallenges(userId)
+          .then((challenges) => emit(RetrievedChallenges(challenges)));
+    } catch (e) {
+      emit(RetrievedChallengesError(e.toString()));
+    }
+  }
+
   void getDetailedChallenge(int challengeId) {
     emit(RetrivingChallenges());
     try {

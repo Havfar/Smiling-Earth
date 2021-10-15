@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/user/profile_cubit.dart';
@@ -29,8 +31,15 @@ class ProfilePage extends StatelessWidget {
                 create: (context) => ProfileCubit()..getProfile(this.userId),
                 child: _BuildHeader(),
               ),
-              _BuildPledges(),
-              _BuildAchievements(),
+              BlocProvider(
+                create: (context) => PledgeCubit()..getUserPledges(this.userId),
+                child: _BuildPledges(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    ChallengeCubit()..getCompletedChallenges(this.userId),
+                child: _BuildAchievements(),
+              ),
               BlocProvider(
                 create: (context) =>
                     TeamsCubit()..getUserIsMemberOf(this.userId),
@@ -105,30 +114,53 @@ class _BuildPledges extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 20, bottom: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('I pledge to',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-          SkeletonAnimation(
-              // borderRadius: BorderRadius.circular(10.0),
-              shimmerColor: Colors.white38,
-              shimmerDuration: 4000,
-              child: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Row(
-                  children: [
-                    CircleIconSkeleton(),
-                    SizedBox(width: 20),
-                    CircleIconSkeleton(),
-                    SizedBox(width: 20),
-                    CircleIconSkeleton(),
-                    SizedBox(width: 20),
-                    CircleIconSkeleton(),
-                    SizedBox(width: 20),
-                    CircleIconSkeleton(),
-                  ],
-                ),
-              ))
+          BlocBuilder<PledgeCubit, PledgeState>(
+            builder: (context, state) {
+              if (state is RetrievedPledges) {
+                return Row(
+                    children: state.pledges
+                        .map((pledge) => Column(children: [
+                              CircleIcon(
+                                emoji: pledge.icon,
+                                backgroundColor: Colors.blueAccent,
+                              ),
+                              Text(pledge.title,
+                                  style: TextStyle(fontSize: 10)),
+                            ]))
+                        .toList());
+              } else if (state is ErrorRetrievingPledges) {
+                return Text('Error: ' + state.error);
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SkeletonAnimation(
+                      // borderRadius: BorderRadius.circular(10.0),
+                      shimmerColor: Colors.white38,
+                      shimmerDuration: 4000,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Row(
+                          children: [
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                          ],
+                        ),
+                      ))
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -148,74 +180,39 @@ class _BuildAchievements extends StatelessWidget {
       children: [
         Text('Completed Challenges',
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-        SkeletonAnimation(
-            // borderRadius: BorderRadius.circular(10.0),
-            shimmerColor: Colors.white38,
-            shimmerDuration: 4000,
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Row(
-                children: [
-                  CircleIconSkeleton(),
-                  SizedBox(width: 20),
-                  CircleIconSkeleton(),
-                  SizedBox(width: 20),
-                  CircleIconSkeleton(),
-                  SizedBox(width: 20),
-                  CircleIconSkeleton(),
-                  SizedBox(width: 20),
-                  CircleIconSkeleton(),
-                ],
-              ),
-            ))
-      ],
-    ));
-  }
-}
-
-class _BuildTeamsList extends StatelessWidget {
-  const _BuildTeamsList({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Joined Teams',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-        BlocBuilder<TeamsCubit, TeamsState>(
+        BlocBuilder<ChallengeCubit, ChallengeState>(
           builder: (context, state) {
-            if (state is RetrievedTeams) {
+            if (state is RetrievedChallenges) {
               return Row(
-                  children: state.teams
-                      .map((team) => Container(
+                  children: state.challenges
+                      .map((challenge) => Container(
                             margin: EdgeInsets.only(right: 10),
                             child: Column(
                               children: [
                                 CircleIcon(
-                                  emoji: team.symbol,
+                                  emoji: challenge.symbol,
                                   backgroundColor: Colors.blueAccent,
                                 ),
                                 SizedBox(height: 5),
-                                Text(team.name, style: TextStyle(fontSize: 10)),
+                                Text(challenge.title,
+                                    style: TextStyle(fontSize: 10)),
                               ],
                             ),
                           ))
                       .toList());
+            } else if (state is RetrievedChallengesError) {
+              return Text('Error: ' + state.error);
             }
             return Column(
               children: [
                 SkeletonAnimation(
+                    // borderRadius: BorderRadius.circular(10.0),
                     shimmerColor: Colors.white38,
                     shimmerDuration: 4000,
                     child: Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Row(
                         children: [
-                          CircleIconSkeleton(),
-                          SizedBox(width: 20),
                           CircleIconSkeleton(),
                           SizedBox(width: 20),
                           CircleIconSkeleton(),
@@ -233,6 +230,74 @@ class _BuildTeamsList extends StatelessWidget {
           },
         ),
       ],
+    ));
+  }
+}
+
+class _BuildTeamsList extends StatelessWidget {
+  const _BuildTeamsList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Joined Teams',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+          BlocBuilder<TeamsCubit, TeamsState>(
+            builder: (context, state) {
+              if (state is RetrievedTeams) {
+                return Row(
+                    children: state.teams
+                        .map((team) => Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: Column(
+                                children: [
+                                  CircleIcon(
+                                    emoji: team.symbol,
+                                    backgroundColor: Colors.blueAccent,
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(team.name,
+                                      style: TextStyle(fontSize: 10)),
+                                ],
+                              ),
+                            ))
+                        .toList());
+              }
+              return Column(
+                children: [
+                  SkeletonAnimation(
+                      shimmerColor: Colors.white38,
+                      shimmerDuration: 4000,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Row(
+                          children: [
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                            SizedBox(width: 20),
+                            CircleIconSkeleton(),
+                          ],
+                        ),
+                      ))
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
