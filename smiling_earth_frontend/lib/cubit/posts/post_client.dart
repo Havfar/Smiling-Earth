@@ -4,17 +4,18 @@ import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
+import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
 class PostClient {
   final _url = WebConfig.baseUrl;
-  final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
   Future<List<PostDto>> getPosts() async {
     String endpoint = '/posts/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final posts = json.map((postJson) {
@@ -29,10 +30,11 @@ class PostClient {
 
   Future<List<PostDto>> getTeamPosts(int teamId) async {
     String endpoint = '/posts/team/' + teamId.toString() + '/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final posts = json.map((postJson) {
@@ -46,10 +48,11 @@ class PostClient {
 
   Future<List<PostDto>> getUserPosts(int userId) async {
     String endpoint = '/posts/users/' + userId.toString() + '/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final posts = json.map((postJson) {
@@ -63,10 +66,11 @@ class PostClient {
 
   Future<List<PostDto>> getMyPosts() async {
     String endpoint = '/posts/users/self/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final posts = json.map((postJson) {
@@ -79,12 +83,12 @@ class PostClient {
   }
 
   Future<List<DetailedPostDto>> getPost(int id) async {
-    String endpoint = '/posts/' + id.toString();
-
+    String endpoint = '/posts/' + id.toString() + '/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json = jsonDecode(utf8.decode(response.bodyBytes));
       final post = DetailedPostDto.fromJson(json);
       return [post];
@@ -95,11 +99,12 @@ class PostClient {
 
   Future<CommentDto> postComment(CommentDto comment) async {
     String endpoint = '/comment/';
-
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token}, body: comment.toJson());
+          headers: {"Authorization": "Token " + token!},
+          body: comment.toJson());
 
       // if(response.statusCode = 200){
 
@@ -115,12 +120,13 @@ class PostClient {
 
   Future<int> postLike(int postId) async {
     String endpoint = '/likes/';
+    final token = await UserSecureStorage.getToken();
 
     try {
       final uri = Uri.parse(_url + endpoint);
       final data = {'post': postId.toString()};
       final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token}, body: data);
+          headers: {"Authorization": "Token " + token!}, body: data);
       final Map<String, dynamic> json = jsonDecode(response.body);
       return json['id'] as int;
     } catch (e) {
@@ -129,12 +135,12 @@ class PostClient {
   }
 
   Future<bool> deleteLike(int likeId) async {
-    String endpoint = '/likes/' + likeId.toString();
-
+    String endpoint = '/likes/' + likeId.toString() + '/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.delete(uri, headers: {"Authorization": "Token " + token});
+          await http.delete(uri, headers: {"Authorization": "Token " + token!});
 
       // final Map<String, dynamic> json = jsonDecode(response.body);
       return response.statusCode == 204;
@@ -144,12 +150,13 @@ class PostClient {
   }
 
   Future<int> getLike(int postId) async {
-    String endpoint = '/liked/' + postId.toString();
+    String endpoint = '/liked/' + postId.toString() + '/';
 
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
 
       final Map<String, dynamic> json = jsonDecode(response.body);
 
@@ -165,10 +172,11 @@ class PostClient {
 
   Future<PostDto> newPost(PostDto post) async {
     String endpoint = '/posts/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token}, body: post.toJson());
+          headers: {"Authorization": "Token " + token!}, body: post.toJson());
 
       // if(response.statusCode = 200){
 
@@ -184,14 +192,12 @@ class PostClient {
 
   Future<PostDto> newPostWithActivity(ActivityDto newActivity) async {
     String endpoint = '/posts/';
+    final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token},
+          headers: {"Authorization": "Token " + token!},
           body: {"content": "Activity", "activity": newActivity.id.toString()});
-      // if(response.statusCode = 200){
-
-      // }
       final json = jsonDecode(response.body);
 
       final newPost = PostDto.fromJson(json);

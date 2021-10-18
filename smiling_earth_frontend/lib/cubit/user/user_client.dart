@@ -3,16 +3,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
+import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
 class UserClient {
   final _url = WebConfig.baseUrl;
-  final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
   Future<List<FollowerDto>> getFollowers() async {
     String endpoint = '/followers/';
+    final token = await UserSecureStorage.getToken();
+
     final uri = Uri.parse(_url + endpoint);
     final response =
-        await http.get(uri, headers: {"Authorization": "Token " + token});
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final users = json.map((followerJson) {
       return FollowerDto(
@@ -24,9 +26,11 @@ class UserClient {
 
   Future<List<FollowerDto>> getFollowing() async {
     String endpoint = '/following/';
+    final token = await UserSecureStorage.getToken();
+
     final uri = Uri.parse(_url + endpoint);
     final response =
-        await http.get(uri, headers: {"Authorization": "Token " + token});
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final users = json.map((followingJson) {
       return FollowerDto(
@@ -38,9 +42,11 @@ class UserClient {
 
   Future<List<FollowerDto>> getNotFollowing() async {
     String endpoint = '/not-following/';
+    final token = await UserSecureStorage.getToken();
+
     final uri = Uri.parse(_url + endpoint);
     final response =
-        await http.get(uri, headers: {"Authorization": "Token " + token});
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final users = json.map((userJson) {
       return FollowerDto(
@@ -51,9 +57,11 @@ class UserClient {
 
   Future<UserProfileDetailedDto> getProfile(int userId) async {
     String endpoint = '/users/' + userId.toString() + '/';
+    final token = await UserSecureStorage.getToken();
+
     final uri = Uri.parse(_url + endpoint);
     final response =
-        await http.get(uri, headers: {"Authorization": "Token " + token});
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes));
     final profile = UserProfileDetailedDto.fromJson(json);
     return profile;
@@ -61,9 +69,11 @@ class UserClient {
 
   Future<UserProfileDetailedDto> getMyProfile() async {
     String endpoint = '/users/self/';
+    final token = await UserSecureStorage.getToken();
+
     final uri = Uri.parse(_url + endpoint);
     final response =
-        await http.get(uri, headers: {"Authorization": "Token " + token});
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final profile = UserProfileDetailedDto.fromJson(json.first);
     return profile;

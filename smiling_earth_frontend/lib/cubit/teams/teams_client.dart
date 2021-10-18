@@ -4,17 +4,19 @@ import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/rivals.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
+import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
 class TeamsClient {
   final _url = WebConfig.baseUrl;
-  final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
   Future<List<TeamsDto>> getJoinedTeams() async {
     String endpoint = '/teams/joined';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final teams = json.map((teamJson) {
@@ -28,10 +30,12 @@ class TeamsClient {
 
   Future<List<TeamsDto>> getTeams() async {
     String endpoint = '/teams/';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final teams = json.map((teamJson) {
@@ -45,10 +49,12 @@ class TeamsClient {
 
   Future<TeamDetailedDto> getTeam(int id) async {
     String endpoint = '/teams/' + id.toString() + "/";
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json = jsonDecode(utf8.decode(response.bodyBytes));
       final team = TeamDetailedDto.fromJson(json);
       return team;
@@ -78,10 +84,12 @@ class TeamsClient {
 
   Future<List<TeamMemberDto>> getTeamMembers(int id) async {
     String endpoint = '/teams/' + id.toString() + '/members/';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final emissions = json
@@ -96,10 +104,12 @@ class TeamsClient {
   }
 
   Future<List<TeamsDto>> getMemberOf(int userId) async {
+    final token = await UserSecureStorage.getToken();
+
     String endpoint = '/teams/users/' + userId.toString() + '/';
     final uri = Uri.parse(_url + endpoint);
     final response =
-        await http.get(uri, headers: {"Authorization": "Token " + token});
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final teams = json.map((team) => TeamsDto.fromJson(team['team'])).toList();
     return teams;
@@ -107,11 +117,13 @@ class TeamsClient {
 
   Future<int> joinTeam(int id) async {
     String endpoint = '/join_team/';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
 
       final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token},
+          headers: {"Authorization": "Token " + token!},
           body: {'team': id.toString()});
       return response.statusCode;
     } catch (e) {
@@ -121,10 +133,12 @@ class TeamsClient {
 
   Future<List<RivalDto>> getRivals(int teamId) async {
     String endpoint = '/rivals/' + teamId.toString();
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))['results'] as List;
       final rivals = json.map((rival) => RivalDto.fromJson(rival)).toList();

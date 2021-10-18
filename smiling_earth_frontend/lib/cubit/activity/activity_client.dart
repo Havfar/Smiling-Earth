@@ -3,17 +3,19 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
 class ActivityClient {
   final _url = WebConfig.baseUrl;
-  final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
   Future<ActivityDto> newActivity(ActivityDto activityDto) async {
+    final token = await UserSecureStorage.getToken();
+
     String endpoint = '/activities/';
     try {
       final uri = Uri.parse(_url + endpoint);
       final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token},
+          headers: {"Authorization": "Token " + token!},
           body: activityDto.toJson());
 
       final json = jsonDecode(response.body);

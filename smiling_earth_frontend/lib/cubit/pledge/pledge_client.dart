@@ -3,17 +3,19 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/pledge.dart';
+import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
 class PledgeClient {
   final _url = WebConfig.baseUrl;
-  final token = "1ef4424ee40e7f213893ffe0c1da4cff1d8b5797";
 
   Future<List<PledgeDto>> getPledges() async {
     String endpoint = '/pledge/';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final pledges = json.map((pledgeJson) {
@@ -27,10 +29,12 @@ class PledgeClient {
 
   Future<List<PledgeDto>> getTeamPledges(int teamId) async {
     String endpoint = '/pledge/team/' + teamId.toString();
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       var pledge = json.first['pledge'];
@@ -45,10 +49,12 @@ class PledgeClient {
 
   Future<List<PledgeDto>> getUserPledges(int userId) async {
     String endpoint = '/pledge/user/' + userId.toString() + '/';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final pledges = json.map((pledgeJson) {
@@ -62,10 +68,12 @@ class PledgeClient {
 
   Future<List<PledgeDto>> getMyUserPledges() async {
     String endpoint = '/pledge/user/self/';
+    final token = await UserSecureStorage.getToken();
+
     try {
       final uri = Uri.parse(_url + endpoint);
       final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token});
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final pledges = json.map((pledgeJson) {
