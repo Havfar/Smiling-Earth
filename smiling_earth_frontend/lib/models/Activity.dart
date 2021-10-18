@@ -6,7 +6,7 @@ class Activity {
   final int? id;
   final String title;
   final DateTime? startDate;
-  final DateTime? endDate;
+  DateTime? endDate;
   final String? tag;
   final int type;
 

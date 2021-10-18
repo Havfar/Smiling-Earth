@@ -35,20 +35,17 @@ void _onData(ActivityEvent activityEvent) async {
   //TODO: Må slik at starttime blir
 
   if (activityEvent.type != latestActivity.type) {
-    // SJekk om startime er satt
-    if (latestActivity != ActivityEvent.empty()) {
-      if (![
-        ActivityType.INVALID.index,
-        ActivityType.STILL.index,
-        ActivityType.TILTING.index,
-        ActivityType.UNKNOWN.index,
-      ].contains(activityEvent.type.index)) {
-        await DatabaseHelper.instance.add(Activity(
-            title: generateTitle(activityEvent),
-            type: activityEvent.type.index,
-            startDate: latestActivity.timeStamp,
-            endDate: activityEvent.timeStamp));
-      }
+    if (![
+      ActivityType.INVALID.index,
+      ActivityType.STILL.index,
+      ActivityType.TILTING.index,
+      ActivityType.UNKNOWN.index,
+    ].contains(activityEvent.type.index)) {
+      await DatabaseHelper.instance.add(Activity(
+          title: generateTitle(activityEvent),
+          type: activityEvent.type.index,
+          startDate: activityEvent.timeStamp,
+          endDate: activityEvent.timeStamp));
     }
     latestActivity = activityEvent;
   }

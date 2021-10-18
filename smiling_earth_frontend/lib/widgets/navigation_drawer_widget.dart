@@ -51,12 +51,12 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.update,
                     onClicked: () => selectedItem(context, 1),
                   ),
-                  const SizedBox(height: 12),
-                  buildMenuItem(
-                    text: 'Profile',
-                    icon: Icons.account_circle,
-                    onClicked: () => selectedItem(context, 2),
-                  ),
+                  // const SizedBox(height: 12),
+                  // buildMenuItem(
+                  //   text: 'Profile',
+                  //   icon: Icons.account_circle,
+                  //   onClicked: () => selectedItem(context, 2),
+                  // ),
                   // const SizedBox(height: 12),
                   // buildMenuItem(
                   //   text: 'Notifications',

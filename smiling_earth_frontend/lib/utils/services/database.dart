@@ -46,9 +46,29 @@ class DatabaseHelper {
     Database db = await instance.database;
     var activitiesQuery = await db.query('activities', orderBy: 'id');
 
-    List<Activity> activitiesList = activitiesQuery.isNotEmpty
-        ? activitiesQuery.map((c) => Activity.fromMap(c)).toList()
-        : [];
+    List<Activity> activitiesList = [];
+
+    if (activitiesQuery.isNotEmpty) {
+      late Activity newActivity;
+      bool isInitized = false;
+      for (var activityJson in activitiesQuery) {
+        if (!isInitized) {
+          newActivity = Activity.fromMap(activityJson);
+          isInitized = true;
+        } else {
+          Activity nextActivity = Activity.fromMap(activityJson);
+          Duration difference =
+              nextActivity.startDate!.difference(newActivity.endDate!);
+          if (difference.inMinutes > 5) {
+            activitiesList.add(newActivity);
+            newActivity = nextActivity;
+          } else {
+            newActivity.endDate = nextActivity.startDate;
+          }
+        }
+      }
+      activitiesList.add(newActivity);
+    }
 
     var groupedBy = groupBy(activitiesList,
         (Activity obj) => obj.startDate!.toString().substring(0, 10));
