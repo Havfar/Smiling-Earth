@@ -12,9 +12,9 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('History'),
           centerTitle: true,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.green),
         ),
         drawer: NavigationDrawerWidget(),
         body: Center(
@@ -53,6 +53,7 @@ class BuildActivityListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print("noe");
     return FutureBuilder<List<ActivityGroupedByDate>>(
         future: DatabaseHelper.instance.getActivities(),
         builder: (BuildContext context,

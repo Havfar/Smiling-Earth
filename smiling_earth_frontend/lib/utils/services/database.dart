@@ -44,7 +44,8 @@ class DatabaseHelper {
 
   Future<List<ActivityGroupedByDate>> getActivities() async {
     Database db = await instance.database;
-    var activitiesQuery = await db.query('activities', orderBy: 'id');
+    var activitiesQuery =
+        await db.query('activities', orderBy: 'id', limit: 1000);
 
     List<Activity> activitiesList = [];
 
@@ -52,6 +53,7 @@ class DatabaseHelper {
       late Activity newActivity;
       bool isInitized = false;
       for (var activityJson in activitiesQuery) {
+        print(activityJson);
         if (!isInitized) {
           newActivity = Activity.fromMap(activityJson);
           isInitized = true;
@@ -100,11 +102,14 @@ class DatabaseHelper {
   }
 
   Future<int> add(Activity activity) async {
+    print("Adding activity " + activity.title);
     Database db = await instance.database;
     return await db.insert('activities', activity.toMap());
   }
 
   Future<int> insertActivity(Activity activity) async {
+    print("Adding activity " + activity.title);
+
     Database db = await instance.database;
     return await db.insert('activities', activity.toMap());
   }

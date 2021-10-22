@@ -32,19 +32,88 @@ void _startTracking() async {
 }
 
 void _onData(ActivityEvent activityEvent) async {
-  //TODO: Må slik at starttime blir
+  print(activityEvent.type);
 
-  if (activityEvent.type != latestActivity.type) {
+  // if (activityEvent.type != latestActivity.type) {
+
+  // if (![
+  //   ActivityType.INVALID.index,
+  //   ActivityType.STILL.index,
+  //   ActivityType.TILTING.index,
+  //   ActivityType.UNKNOWN.index,
+  // ].contains(activityEvent.type.index)) {
+  //   if (latestActivity.type == ActivityType.UNKNOWN ||
+  //       latestActivity.type == ActivityType.STILL) {
+  //     print("ein. " +
+  //         latestActivity.type.toString() +
+  //         " " +
+  //         activityEvent.type.toString());
+  //     await DatabaseHelper.instance.add(Activity(
+  //         title: generateTitle(activityEvent),
+  //         type: activityEvent.type.index,
+  //         startDate: activityEvent.timeStamp,
+  //         endDate: activityEvent.timeStamp));
+  //     latestActivity = activityEvent;
+  //   } else {
+  //     print("to. " +
+  //         latestActivity.type.toString() +
+  //         " " +
+  //         activityEvent.type.toString());
+
+  //     if (latestActivity.type != activityEvent.type) {
+  //       print("tre");
+
+  //       await DatabaseHelper.instance.add(Activity(
+  //           title: generateTitle(latestActivity),
+  //           type: latestActivity.type.index,
+  //           startDate: latestActivity.timeStamp,
+  //           endDate: activityEvent.timeStamp));
+
+  //       latestActivity = activityEvent;
+  //     }
+  //   }
+  // }
+
+  // if (activityEvent.type == ActivityType.STILL) {
+  //   if (latestActivity.type == ActivityType.ON_FOOT) {
+  //     print("fira");
+  //     await DatabaseHelper.instance.add(Activity(
+  //         title: generateTitle(latestActivity),
+  //         type: latestActivity.type.index,
+  //         startDate: latestActivity.timeStamp,
+  //         endDate: activityEvent.timeStamp));
+  //   } else if (latestActivity.type == ActivityType.ON_BICYCLE) {
+  //     print("fem");
+  //     await DatabaseHelper.instance.add(Activity(
+  //         title: generateTitle(latestActivity),
+  //         type: latestActivity.type.index,
+  //         startDate: latestActivity.timeStamp,
+  //         endDate: activityEvent.timeStamp));
+  //   }
+  //   latestActivity = activityEvent;
+  // }
+
+  if (latestActivity.type != activityEvent.type) {
+    print("Activity changed");
     if (![
       ActivityType.INVALID.index,
       ActivityType.STILL.index,
       ActivityType.TILTING.index,
       ActivityType.UNKNOWN.index,
-    ].contains(activityEvent.type.index)) {
+    ].contains(latestActivity.type.index)) {
+      Duration dur =
+          latestActivity.timeStamp.difference(activityEvent.timeStamp);
+      print("Save Transistion from:" +
+          latestActivity.type.toString() +
+          " to " +
+          activityEvent.toString() +
+          ". Duration: " +
+          dur.inSeconds.toString() +
+          " seconds");
       await DatabaseHelper.instance.add(Activity(
-          title: generateTitle(activityEvent),
-          type: activityEvent.type.index,
-          startDate: activityEvent.timeStamp,
+          title: "new: " + generateTitle(latestActivity),
+          type: latestActivity.type.index,
+          startDate: latestActivity.timeStamp,
           endDate: activityEvent.timeStamp));
     }
     latestActivity = activityEvent;
