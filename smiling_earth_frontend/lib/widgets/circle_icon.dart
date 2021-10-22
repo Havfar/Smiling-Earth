@@ -51,3 +51,26 @@ class CircleIconSkeleton extends StatelessWidget {
     );
   }
 }
+
+class CircleIconPlaceHolder extends StatelessWidget {
+  const CircleIconPlaceHolder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+              color: Colors.grey.shade300, shape: BoxShape.circle),
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade300, shape: BoxShape.circle),
+              padding: EdgeInsets.all(8),
+              child: Text('')),
+        ),
+      ],
+    );
+  }
+}

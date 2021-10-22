@@ -117,6 +117,14 @@ class BuildPledges extends StatelessWidget {
           BlocBuilder<PledgeCubit, PledgeState>(
             builder: (context, state) {
               if (state is RetrievedPledges) {
+                if (state.pledges.isEmpty) {
+                  return Row(
+                      children: state.pledges
+                          .map((pledge) => Column(children: [
+                                CircleIconPlaceHolder(),
+                              ]))
+                          .toList());
+                }
                 return Row(
                     children: state.pledges
                         .map((pledge) => Column(children: [

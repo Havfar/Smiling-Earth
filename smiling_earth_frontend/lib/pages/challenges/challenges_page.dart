@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
-import 'package:smiling_earth_frontend/pages/challenges/challenges_preview.dart';
+import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -50,6 +51,13 @@ class _BuildJoinedChallenges extends StatelessWidget {
         BlocBuilder<ChallengeCubit, ChallengeState>(
           builder: (context, state) {
             if (state is RetrievedJoinedChallenges) {
+              if (state.challenges.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: Center(
+                      child: Text("You have not joined any challenges yet..")),
+                );
+              }
               return Column(
                   children: state.challenges
                       .map((challenge) => ChallengeJoinedWidget(challenge,
@@ -58,7 +66,24 @@ class _BuildJoinedChallenges extends StatelessWidget {
             } else if (state is RetrievedChallengesError) {
               return Text('Error: ' + state.error);
             }
-            return CircularProgressIndicator();
+            return SkeletonAnimation(
+                // borderRadius: BorderRadius.circular(10.0),
+                shimmerColor: Colors.white38,
+                shimmerDuration: 4000,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                    ],
+                  ),
+                ));
           },
         ),
       ],
@@ -84,6 +109,13 @@ class _BuildChallenges extends StatelessWidget {
         BlocBuilder<ChallengeCubit, ChallengeState>(
           builder: (context, state) {
             if (state is RetrievedChallenges) {
+              if (state.challenges.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: Center(
+                      child: Text("You have joined all the challenges! 🏆💪")),
+                );
+              }
               return Column(
                 children: state.challenges
                     .map((challenge) => ChallengeWidget(challenge))
@@ -92,7 +124,24 @@ class _BuildChallenges extends StatelessWidget {
             } else if (state is RetrievedChallengesError) {
               return Text('Error: ' + state.error);
             }
-            return CircularProgressIndicator();
+            return SkeletonAnimation(
+                // borderRadius: BorderRadius.circular(10.0),
+                shimmerColor: Colors.white38,
+                shimmerDuration: 4000,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                    ],
+                  ),
+                ));
           },
         ),
       ],
@@ -164,74 +213,6 @@ class ChallengeJoinedWidget extends StatelessWidget {
                   ],
                 ),
               ]),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ChallengeWidget extends StatelessWidget {
-  final ChallengeDto challenge;
-  const ChallengeWidget(this.challenge, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    PreviewChallengesPage(id: this.challenge.id!)),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CircleIcon(
-                    emoji: challenge.symbol,
-                    backgroundColor: Colors.blueGrey,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          challenge.title,
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          "2 weeks and 5 days left",
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w300),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    margin: EdgeInsets.only(top: 5, right: 10),
-                    child: TextButton(
-                      onPressed: () => print("joined"),
-                      child:
-                          Text("Join", style: TextStyle(color: Colors.white)),
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.blueAccent),
-                    ),
-                  )
-                ],
-              ),
             ],
           ),
         ),
