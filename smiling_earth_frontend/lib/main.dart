@@ -5,6 +5,7 @@ import 'package:smiling_earth_frontend/bloc/login/repository/user_repository.dar
 import 'package:smiling_earth_frontend/pages/home_page.dart';
 import 'package:smiling_earth_frontend/pages/log_in_page.dart';
 import 'package:smiling_earth_frontend/pages/splash_page.dart';
+import 'package:smiling_earth_frontend/utils/services/background_services.dart';
 import 'package:smiling_earth_frontend/widgets/loading_indicator.dart';
 
 // void main() {
@@ -56,6 +57,8 @@ void main() {
     },
     child: App(userRepository: userRepository),
   ));
+  //todo: if authenticated
+  initializeWorkManagerAndPushNotification();
 }
 
 class App extends StatelessWidget {

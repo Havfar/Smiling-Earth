@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
-import 'package:smiling_earth_frontend/utils/services/database.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
 import 'package:smiling_earth_frontend/widgets/dropdown_select.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -14,7 +14,7 @@ class NewActivity extends StatefulWidget {
 
 List<DropdownSelectElement> _createList() {
   var list = <DropdownSelectElement>[];
-  for (ActivityType activityType in ActivityType.values) {
+  for (AppActivityType activityType in AppActivityType.values) {
     list.add(new DropdownSelectElement(
         title: getActivityNameByActivityType(activityType),
         icon: getIconByActivityType(activityType),
@@ -32,8 +32,8 @@ class NewActivityState extends State<NewActivity> {
   late String durationMinutes;
   List<DropdownSelectElement> items = _createList();
   DropdownSelectElement type = new DropdownSelectElement(
-      title: getActivityNameByActivityType(ActivityType.IN_CAR),
-      icon: getIconByActivityType(ActivityType.IN_CAR),
+      title: getActivityNameByActivityType(AppActivityType.IN_CAR),
+      icon: getIconByActivityType(AppActivityType.IN_CAR),
       indexValue: 0);
 
   @override
@@ -200,7 +200,7 @@ class NewActivityState extends State<NewActivity> {
                       minutes: int.tryParse(durationMinutes)!)),
                   type: type.indexValue);
 
-              DatabaseHelper.instance.add(act);
+              ActivityDatabaseManager.instance.add(act);
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => HistoryPage()));
             }

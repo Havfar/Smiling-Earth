@@ -2,34 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 
 String getActivityNameByActivity(Activity activity) {
-  var activityType = ActivityType.values[activity.type];
+  var activityType = AppActivityType.values[activity.type];
   switch (activityType) {
-    case ActivityType.IN_VEHICLE:
+    case AppActivityType.IN_VEHICLE:
       return "Drive";
-    case ActivityType.WALKING:
+    case AppActivityType.WALKING:
       return "Walk";
-    case ActivityType.RUNNING:
+    case AppActivityType.RUNNING:
       return "Run";
-    case ActivityType.ON_BICYCLE:
+    case AppActivityType.ON_BICYCLE:
       return "Bicycle";
-    case ActivityType.ON_FOOT:
+    case AppActivityType.ON_FOOT:
       return "Walk";
     default:
       return "Other";
   }
 }
 
-String getActivityNameByActivityType(ActivityType type) {
+String getActivityNameByActivityType(AppActivityType type) {
   switch (type) {
-    case ActivityType.IN_VEHICLE:
+    case AppActivityType.IN_VEHICLE:
       return "Drive";
-    case ActivityType.WALKING:
+    case AppActivityType.WALKING:
       return "Walk";
-    case ActivityType.RUNNING:
+    case AppActivityType.RUNNING:
       return "Run";
-    case ActivityType.ON_BICYCLE:
+    case AppActivityType.ON_BICYCLE:
       return "Bicycle";
-    case ActivityType.ON_FOOT:
+    case AppActivityType.ON_FOOT:
       return "Walk";
     default:
       return "Other";
@@ -37,69 +37,74 @@ String getActivityNameByActivityType(ActivityType type) {
 }
 
 IconData getIconByActivity(Activity activity) {
-  var activityType = ActivityType.values[activity.type];
+  var activityType = AppActivityType.values[activity.type];
   switch (activityType) {
-    case ActivityType.IN_VEHICLE:
+    case AppActivityType.ELECTRICITY:
+      return Icons.power;
+    case AppActivityType.IN_VEHICLE:
       return Icons.commute;
-    case ActivityType.WALKING:
+    case AppActivityType.WALKING:
       return Icons.directions_walk;
-    case ActivityType.RUNNING:
+    case AppActivityType.RUNNING:
       return Icons.directions_run_outlined;
-    case ActivityType.ON_BICYCLE:
+    case AppActivityType.ON_BICYCLE:
       return Icons.directions_bike_outlined;
-    case ActivityType.ON_FOOT:
+    case AppActivityType.ON_FOOT:
       return Icons.directions_walk;
-    case ActivityType.IN_CAR:
+    case AppActivityType.IN_CAR:
       return Icons.directions_car;
-    case ActivityType.IN_BUS:
+    case AppActivityType.IN_BUS:
       return Icons.directions_bus_filled_rounded;
-    case ActivityType.IN_TRAIN:
+    case AppActivityType.IN_TRAIN:
       return Icons.train;
-    case ActivityType.ON_ELECTRIC_SCOOTER:
+    case AppActivityType.ON_ELECTRIC_SCOOTER:
       return Icons.electric_scooter;
-    case ActivityType.IN_PLANE:
+    case AppActivityType.IN_PLANE:
       return Icons.airplanemode_active;
-    case ActivityType.IN_FERRY:
+    case AppActivityType.IN_FERRY:
       return Icons.directions_ferry;
-    case ActivityType.IN_ELECTRIC_CAR:
+    case AppActivityType.IN_ELECTRIC_CAR:
       return Icons.electric_car;
     default:
       return Icons.error;
   }
 }
 
-IconData getIconByActivityType(ActivityType activityType) {
+IconData getIconByActivityType(AppActivityType activityType) {
   switch (activityType) {
-    case ActivityType.IN_VEHICLE:
+    case AppActivityType.ELECTRICITY:
+      return Icons.power;
+    case AppActivityType.IN_VEHICLE:
       return Icons.commute;
-    case ActivityType.WALKING:
+    case AppActivityType.WALKING:
       return Icons.directions_walk;
-    case ActivityType.RUNNING:
+    case AppActivityType.RUNNING:
       return Icons.directions_run_outlined;
-    case ActivityType.ON_BICYCLE:
+    case AppActivityType.ON_BICYCLE:
       return Icons.directions_bike_outlined;
-    case ActivityType.ON_FOOT:
+    case AppActivityType.ON_FOOT:
       return Icons.directions_walk;
-    case ActivityType.IN_CAR:
+    case AppActivityType.IN_CAR:
       return Icons.directions_car;
-    case ActivityType.IN_BUS:
+    case AppActivityType.IN_BUS:
       return Icons.directions_bus_filled_rounded;
-    case ActivityType.IN_TRAIN:
+    case AppActivityType.IN_TRAIN:
       return Icons.train;
-    case ActivityType.ON_ELECTRIC_SCOOTER:
+    case AppActivityType.ON_ELECTRIC_SCOOTER:
       return Icons.electric_scooter;
-    case ActivityType.IN_PLANE:
+    case AppActivityType.IN_PLANE:
       return Icons.airplanemode_active;
-    case ActivityType.IN_FERRY:
+    case AppActivityType.IN_FERRY:
       return Icons.directions_ferry;
-    case ActivityType.IN_ELECTRIC_CAR:
+    case AppActivityType.IN_ELECTRIC_CAR:
       return Icons.electric_car;
     default:
       return Icons.error;
   }
 }
 
-enum ActivityType {
+enum AppActivityType {
+  ELECTRICITY,
   IN_VEHICLE,
   ON_BICYCLE,
   ON_FOOT,

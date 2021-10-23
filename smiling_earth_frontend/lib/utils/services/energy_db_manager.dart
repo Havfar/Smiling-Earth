@@ -1,0 +1,83 @@
+import 'dart:io';
+
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:sqflite/sqflite.dart';
+
+class EnergyDatabaseManager {
+  EnergyDatabaseManager._privateConstructor();
+  static final EnergyDatabaseManager instance =
+      EnergyDatabaseManager._privateConstructor();
+
+  static Database? _database;
+  Future<Database> get database async => _database ??= await _initDatabase();
+
+  Future<Database> _initDatabase() async {
+    Directory documentDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentDirectory.path, 'energy.db');
+    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    return db;
+  }
+
+  // UPGRADE DATABASE TABLES
+  // TODO: Fiks https://efthymis.com/migrating-a-mobile-database-in-flutter-sqlite/
+  void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    if (oldVersion < newVersion) {
+      db.execute("ALTER TABLE history ADD COLUMN e;");
+    }
+  }
+
+  Future _onCreate(Database db, int version) async {
+    print("creating db");
+    await db.execute('''
+      CREATE TABLE energy(
+          id INTEGER PRIMARY KEY,
+          date TEXT,
+          heat_load REAL,
+          heat_load_forecast REAL
+      )
+      ''');
+  }
+
+  Future<List<EnergyActivity>> getHeat() async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query('energy', orderBy: 'id', limit: 1000);
+
+    List<EnergyActivity> activites = [];
+    for (var activityJson in activitiesQuery) {
+      EnergyActivity activity = EnergyActivity.fromMap(activityJson);
+      activites.add(activity);
+    }
+    return activites;
+  }
+
+  Future<List<EnergyActivity>> getHeatByDatetime(DateTime time) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query('energy', orderBy: 'id', limit: 1000);
+
+    List<EnergyActivity> activites = [];
+    for (var activityJson in activitiesQuery) {
+      EnergyActivity activity = EnergyActivity.fromMap(activityJson);
+      activites.add(activity);
+    }
+    return activites;
+  }
+
+  Future<int> add(EnergyActivity activity) async {
+    print("Adding activity " + activity.title);
+    Database db = await instance.database;
+    return await db.insert('energy', activity.toMap());
+  }
+
+  Future<int> remove(int id) async {
+    Database db = await instance.database;
+    return await db.delete('energy', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> update(EnergyActivity activity) async {
+    Database db = await instance.database;
+    return await db.update('energy', activity.toMap(),
+        where: "id = ?", whereArgs: [activity.id]);
+  }
+}

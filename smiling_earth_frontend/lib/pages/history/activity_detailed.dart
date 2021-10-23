@@ -4,7 +4,7 @@ import 'package:smiling_earth_frontend/pages/history/actiivity_publish.dart';
 import 'package:smiling_earth_frontend/pages/history/activity_edit.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
-import 'package:smiling_earth_frontend/utils/services/database.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 
 class DetailedActivity extends StatefulWidget {
   final Activity activity;
@@ -259,7 +259,7 @@ class AppbarActivityWidget extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.delete),
           color: Colors.black87,
           onPressed: () {
-            DatabaseHelper.instance.remove(widget.activity.id!);
+            ActivityDatabaseManager.instance.remove(widget.activity.id!);
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => HistoryPage()));
           },

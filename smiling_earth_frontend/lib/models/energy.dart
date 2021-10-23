@@ -24,6 +24,12 @@ class Energy {
     return electricityCost;
   }
 
+  static double calculatePastHourElectricityCo2(double temperature) {
+    double electricityCost =
+        Heat.getHeatingCO2ByOutsideTemperature(temperature);
+    return electricityCost;
+  }
+
   static double calculateElectricityCostWithSolar(double pvSystemSize) {
     double electricityCost = 0;
     for (var hour = 0; hour < 24; hour++) {
@@ -45,9 +51,16 @@ class Heat {
   static double pvOutput1kw = 3;
   static double defaultElectricityLoad = 0.4;
 
-  static double getCurrentHeat(int? hour) {
+  static double getCurrentHeat(int hour) {
     //should fetch outside temperature of the hour
     return (roomTemperature - outsideTemperature) * heatingConstant;
+    // return (roomTemperature - temp[hour]) * heatingConstant;
+  }
+
+  static double getHeatingCO2ByOutsideTemperature(double outsideTemp) {
+    //should fetch outside temperature of the hour
+    return (roomTemperature - outsideTemp) * heatingConstant;
+    // return (roomTemperature - temp[hour]) * heatingConstant;
   }
 
   static double getCurrentHeatingCost() {

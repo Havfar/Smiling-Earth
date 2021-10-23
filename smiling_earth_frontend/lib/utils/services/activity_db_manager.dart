@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseHelper {
-  DatabaseHelper._privateConstructor();
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+class ActivityDatabaseManager {
+  ActivityDatabaseManager._privateConstructor();
+  static final ActivityDatabaseManager instance =
+      ActivityDatabaseManager._privateConstructor();
 
   static Database? _database;
   Future<Database> get database async => _database ??= await _initDatabase();
@@ -37,12 +37,13 @@ class DatabaseHelper {
           start_date TEXT,
           end_date TEXT,
           type INTEGER,
-          tag TEXT
+          tag TEXT,
+          temperature REAL
       )
       ''');
   }
 
-  Future<List<ActivityGroupedByDate>> getActivities() async {
+  Future<List<Activity>> getActivities() async {
     Database db = await instance.database;
     var activitiesQuery =
         await db.query('activities', orderBy: 'id', limit: 1000);
@@ -51,32 +52,36 @@ class DatabaseHelper {
 
     if (activitiesQuery.isNotEmpty) {
       late Activity newActivity;
+
       bool isInitized = false;
       for (var activityJson in activitiesQuery) {
-        print(activityJson);
+        // print(activityJson);
+
+        Activity nextActivity = Activity.fromMap(activityJson);
+
         if (!isInitized) {
-          newActivity = Activity.fromMap(activityJson);
+          newActivity = nextActivity;
           isInitized = true;
         } else {
-          Activity nextActivity = Activity.fromMap(activityJson);
-          Duration difference =
-              nextActivity.startDate!.difference(newActivity.endDate!);
-          if (difference.inMinutes > 5) {
+          if (nextActivity.type == newActivity.type) {
+            Duration difference =
+                nextActivity.startDate!.difference(newActivity.endDate!);
+            if (difference.inMinutes > 5) {
+              activitiesList.add(newActivity);
+              newActivity = nextActivity;
+            } else {
+              newActivity.endDate = nextActivity.startDate;
+            }
+          } else {
             activitiesList.add(newActivity);
             newActivity = nextActivity;
-          } else {
-            newActivity.endDate = nextActivity.startDate;
           }
         }
       }
       activitiesList.add(newActivity);
     }
 
-    var groupedBy = groupBy(activitiesList,
-        (Activity obj) => obj.startDate!.toString().substring(0, 10));
-    List<ActivityGroupedByDate> activitesGroups =
-        _parseActivtityGroup(groupedBy);
-    return activitesGroups;
+    return activitiesList;
   }
 
   List<ActivityGroupedByDate> _parseActivtityGroup(

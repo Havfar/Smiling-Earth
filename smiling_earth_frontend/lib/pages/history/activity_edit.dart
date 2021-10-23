@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/pages/history/activity_detailed.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
-import 'package:smiling_earth_frontend/utils/services/database.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
 import 'package:smiling_earth_frontend/widgets/dropdown_select.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -18,7 +18,7 @@ class EditActivity extends StatefulWidget {
 
 List<DropdownSelectElement> _createList() {
   var list = <DropdownSelectElement>[];
-  for (ActivityType activityType in ActivityType.values) {
+  for (AppActivityType activityType in AppActivityType.values) {
     list.add(new DropdownSelectElement(
         title: getActivityNameByActivityType(activityType),
         icon: getIconByActivityType(activityType),
@@ -37,8 +37,8 @@ class _EditActivityState extends State<EditActivity> {
 
   List<DropdownSelectElement> items = _createList();
   DropdownSelectElement type = new DropdownSelectElement(
-      title: getActivityNameByActivityType(ActivityType.IN_CAR),
-      icon: getIconByActivityType(ActivityType.IN_CAR),
+      title: getActivityNameByActivityType(AppActivityType.IN_CAR),
+      icon: getIconByActivityType(AppActivityType.IN_CAR),
       indexValue: 0);
 
   @override
@@ -261,7 +261,7 @@ class _EditActivityState extends State<EditActivity> {
                   type: type.indexValue,
                   id: widget.activity.id);
 
-              DatabaseHelper.instance.update(act);
+              ActivityDatabaseManager.instance.update(act);
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
                       DetailedActivity(activity: widget.activity)));

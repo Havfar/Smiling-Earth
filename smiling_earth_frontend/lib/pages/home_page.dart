@@ -7,6 +7,7 @@ import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
+import 'package:smiling_earth_frontend/utils/services/background_services.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
@@ -23,6 +24,7 @@ class _HomeState extends State<HomePage> {
   void initState() {
     super.initState();
     startActivityMonitor();
+    callbackDispatcherTest();
   }
 
   @override

@@ -2,7 +2,19 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Activity {
+abstract class ActivityInterface {
+  final int? id;
+  final String title;
+  final DateTime? startDate;
+
+  ActivityInterface(this.id, this.title, this.startDate);
+
+  double getEmission() {
+    return 0.0;
+  }
+}
+
+class Activity extends ActivityInterface {
   final int? id;
   final String title;
   final DateTime? startDate;
@@ -10,13 +22,14 @@ class Activity {
   final String? tag;
   final int type;
 
-  Activity(
-      {this.id,
-      required this.title,
-      required this.startDate,
-      required this.endDate,
-      required this.type,
-      this.tag});
+  Activity({
+    this.id,
+    required this.title,
+    required this.startDate,
+    required this.endDate,
+    required this.type,
+    this.tag,
+  }) : super(id, title, startDate);
 
   static DateTime calculateEndTime(DateTime datetime, int hour, int minutes) {
     Duration duration = Duration(hours: hour, minutes: minutes);
@@ -33,6 +46,41 @@ class Activity {
 
   static String formatDatetime(DateTime? time) {
     return DateFormat('h:mm').format(time!);
+  }
+
+  // void addEmission(double emission) {
+  //   this.emissions += emission;
+  // }
+
+  // void setEmission() {
+  //   // var activity = ActivityType.values[this.type];
+  //   switch (this.type) {
+  //     case -1:
+  //       emissions = Energy.calculatePastHourElectricityCo2(this.temperature!);
+  //       break;
+  //     default:
+  //       emissions = 6;
+  //   }
+  // }
+
+  double getEmission() {
+    // var activity = ActivityType.values[this.type];
+    switch (this.type) {
+      case -1:
+      // return Energy.calculatePastHourElectricityCo2(this.temperature!);
+      case 0:
+        return 1;
+      case 1:
+        return 2;
+      case 2:
+        return 3;
+      case 3:
+        return 4;
+      case 4:
+        return 5;
+      default:
+        return 6;
+    }
   }
 
   static String formatActivityForListTile(Activity activity) {
@@ -55,20 +103,22 @@ class Activity {
   }
 
   factory Activity.fromMap(Map<String, dynamic> json) => new Activity(
-      id: json['id'],
-      title: json['title'],
-      startDate: DateTime.tryParse(json['start_date']),
-      endDate: DateTime.tryParse(json['end_date']),
-      type: json['type'],
-      tag: json['tag']);
+        id: json['id'],
+        title: json['title'],
+        startDate: DateTime.tryParse(json['start_date']),
+        endDate: DateTime.tryParse(json['end_date']),
+        type: json['type'],
+        tag: json['tag'],
+      );
 
   ActivityDto toDto() {
     return ActivityDto(
-        title: this.title,
-        description: '',
-        activityEnumValue: this.type,
-        startTime: this.startDate!.toIso8601String(),
-        endTime: endDate!.toIso8601String());
+      title: this.title,
+      description: '',
+      activityEnumValue: this.type,
+      startTime: this.startDate!.toIso8601String(),
+      endTime: endDate!.toIso8601String(),
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -78,11 +128,14 @@ class Activity {
       'start_date': startDate!.toIso8601String(),
       'end_date': endDate!.toIso8601String(),
       'tag': tag,
-      'type': type
+      'type': type,
     };
   }
 
   IconData getIcon() {
+    if (this.type == -1) {
+      return Icons.power;
+    }
     var activity = ActivityType.values[this.type];
     switch (activity) {
       case ActivityType.IN_VEHICLE:
@@ -107,7 +160,7 @@ class Activity {
 
 class ActivityGroupedByDate {
   final String date;
-  final List<Activity> activities;
+  final List<ActivityInterface> activities;
 
   ActivityGroupedByDate({required this.date, required this.activities});
 }
@@ -150,4 +203,38 @@ class ActivityDto {
       // end_time: json["end_time"],
       tag: json["tag"],
       activityEnumValue: json["activity_enum_value"]);
+}
+
+class EnergyActivity extends ActivityInterface {
+  final int? id;
+  final String title;
+  final double heatLoad;
+  final double heatLoadForecast;
+
+  final DateTime? date;
+
+  EnergyActivity(
+      {required this.title,
+      required this.date,
+      required this.heatLoad,
+      required this.heatLoadForecast,
+      this.id})
+      : super(id, title, date);
+
+  factory EnergyActivity.fromMap(Map<String, dynamic> json) =>
+      new EnergyActivity(
+          id: json['id'],
+          title: 'Energy',
+          date: DateTime.tryParse(json['date']),
+          heatLoad: json['heat_load'],
+          heatLoadForecast: json['heat_load_forecast']);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'date': date!.toIso8601String(),
+      'heat_load': heatLoad,
+      'heat_load_forecast': heatLoadForecast
+    };
+  }
 }

@@ -4,7 +4,7 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/utils/services/database.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 
 ActivityEvent latestActivity = ActivityEvent.empty();
 ActivityRecognition activityRecognition = ActivityRecognition.instance;
@@ -12,6 +12,7 @@ late Stream<ActivityEvent> activityStream;
 
 Future<void> startActivityMonitor() async {
   WidgetsFlutterBinding.ensureInitialized();
+  print("start tracking");
 
   // Start the activity stream updates
   if (Platform.isAndroid) {
@@ -110,7 +111,7 @@ void _onData(ActivityEvent activityEvent) async {
           ". Duration: " +
           dur.inSeconds.toString() +
           " seconds");
-      await DatabaseHelper.instance.add(Activity(
+      await ActivityDatabaseManager.instance.add(Activity(
           title: "new: " + generateTitle(latestActivity),
           type: latestActivity.type.index,
           startDate: latestActivity.timeStamp,
