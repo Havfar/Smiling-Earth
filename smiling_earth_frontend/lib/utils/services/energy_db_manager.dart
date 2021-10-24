@@ -52,16 +52,34 @@ class EnergyDatabaseManager {
     return activites;
   }
 
-  Future<List<EnergyActivity>> getHeatByDatetime(DateTime time) async {
+  Future<double> getHeatByDatetime(DateTime time) async {
     Database db = await instance.database;
-    var activitiesQuery = await db.query('energy', orderBy: 'id', limit: 1000);
+    var activitiesQuery = await db.query('energy',
+        orderBy: 'id', where: 'date LIKE ?', whereArgs: ['2021-10%']);
 
-    List<EnergyActivity> activites = [];
+    // whereArgs: [time.toIso8601String().split('T').first + '%']);
+    double emissions = 0.0;
     for (var activityJson in activitiesQuery) {
       EnergyActivity activity = EnergyActivity.fromMap(activityJson);
-      activites.add(activity);
+      emissions += activity.getEmission();
     }
-    return activites;
+    return emissions;
+  }
+
+  Future<double> getHeatMonthByDatetime(DateTime time) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query('energy',
+        orderBy: 'id',
+        where: 'date LIKE ?',
+        whereArgs: [
+          time.toIso8601String().split('T').first.substring(0, 7) + '%'
+        ]);
+    double emissions = 0.0;
+    for (var activityJson in activitiesQuery) {
+      EnergyActivity activity = EnergyActivity.fromMap(activityJson);
+      emissions += activity.getEmission();
+    }
+    return emissions;
   }
 
   Future<int> add(EnergyActivity activity) async {

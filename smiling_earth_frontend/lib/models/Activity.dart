@@ -1,6 +1,8 @@
 import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smiling_earth_frontend/models/energy.dart';
+import 'package:smiling_earth_frontend/utils/activity_util.dart';
 
 abstract class ActivityInterface {
   final int? id;
@@ -10,6 +12,7 @@ abstract class ActivityInterface {
   ActivityInterface(this.id, this.title, this.startDate);
 
   double getEmission() {
+    print('jaha');
     return 0.0;
   }
 }
@@ -63,23 +66,23 @@ class Activity extends ActivityInterface {
   //   }
   // }
 
+  @override
   double getEmission() {
-    // var activity = ActivityType.values[this.type];
-    switch (this.type) {
-      case -1:
+    var activity = AppActivityType.values[this.type];
+    var duration = startDate!.difference(endDate!);
+    switch (activity) {
+      case AppActivityType.IN_CAR:
+        return 1.3 * duration.inMinutes / 60;
       // return Energy.calculatePastHourElectricityCo2(this.temperature!);
-      case 0:
-        return 1;
-      case 1:
-        return 2;
-      case 2:
-        return 3;
-      case 3:
-        return 4;
-      case 4:
-        return 5;
+      case AppActivityType.IN_BUS:
+        return 1.3 * duration.inMinutes / 60;
+      case AppActivityType.IN_PLANE:
+        return 1.3 * duration.inMinutes / 60;
+      case AppActivityType.IN_FERRY:
+        return 1.3 * duration.inMinutes / 60;
+
       default:
-        return 6;
+        return 0;
     }
   }
 
@@ -236,5 +239,10 @@ class EnergyActivity extends ActivityInterface {
       'heat_load': heatLoad,
       'heat_load_forecast': heatLoadForecast
     };
+  }
+
+  @override
+  double getEmission() {
+    return Energy.calculateCO2FromElectricity(heatLoad);
   }
 }

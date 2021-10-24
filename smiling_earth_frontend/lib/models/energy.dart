@@ -8,12 +8,8 @@ class Energy {
   static double pvOutput = 0.516;
   static double energyTariff = 0.44;
 
-  static double calculateElectricityCost() {
-    double electricityCost = 0;
-    for (var hour = 0; hour < 24; hour++) {
-      electricityCost += Heat.getCurrentHeat(hour) * electricityPrice;
-    }
-    return electricityCost;
+  static double calculateElectricityCost(double heat) {
+    return heat * electricityPrice;
   }
 
   static double calculateElectricityCo2() {
@@ -22,6 +18,10 @@ class Energy {
       electricityCost += Heat.getCurrentHeatingCO2(hour);
     }
     return electricityCost;
+  }
+
+  static double calculateCO2FromElectricity(double heat) {
+    return heat * co2Factor;
   }
 
   static double calculatePastHourElectricityCo2(double temperature) {
@@ -85,17 +85,17 @@ class Expenses {
     switch (type) {
       case 1:
         //Solar
-        savings = Energy.calculateElectricityCost() -
+        savings = Energy.calculateElectricityCost(0) -
             Energy.calculateElectricityCostWithSolar(1);
         break;
       case 2:
         //walking
-        savings = Energy.calculateElectricityCost() -
+        savings = Energy.calculateElectricityCost(0) -
             Energy.calculateElectricityCostWithSolar(1);
         break;
       case 3:
         //cycling
-        savings = Energy.calculateElectricityCost() -
+        savings = Energy.calculateElectricityCost(0) -
             Energy.calculateElectricityCostWithSolar(1);
         break;
       default:

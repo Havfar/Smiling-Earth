@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/bloc/login/dao/UserDao.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation.dart';
+import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
-import 'package:smiling_earth_frontend/utils/services/background_services.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
@@ -24,7 +25,7 @@ class _HomeState extends State<HomePage> {
   void initState() {
     super.initState();
     startActivityMonitor();
-    callbackDispatcherTest();
+    // callbackDispatcherTest();
   }
 
   @override
@@ -60,6 +61,7 @@ class BuildChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double EmissionGoal = 50;
     return Container(
       child: Column(children: [
         Row(
@@ -71,17 +73,46 @@ class BuildChart extends StatelessWidget {
                 )),
           ],
         ),
-        Center(
-          child: SmilingEarthEmissionChart(
-            energyEmissionPercentage: 0.15,
-            transportEmissionPercentage: 0.33,
-          ),
+        FutureBuilder<ChartData>(
+          future: getChartDataByMonth(DateTime.now()),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: [
+                  Center(
+                    child: SmilingEarthEmissionChart(
+                      energyEmissionPercentage:
+                          snapshot.data!.energy / EmissionGoal,
+                      transportEmissionPercentage:
+                          snapshot.data!.transport / EmissionGoal,
+                    ),
+                  ),
+                  Text((snapshot.data!.getTotal()).toString() + " kg Co2",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                ],
+              );
+            }
+            return SkeletonAnimation(
+                // borderRadius: BorderRadius.circular(10.0),
+                shimmerColor: Colors.white38,
+                shimmerDuration: 4000,
+                child: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: SmilingEarthChartSkeleton()),
+                    Text("Loading..",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ],
+                ));
+          },
         ),
-        Text("134 kg Co2",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
       ]),
     );
   }

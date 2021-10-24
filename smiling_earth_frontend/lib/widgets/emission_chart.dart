@@ -32,6 +32,29 @@ class SmilingEarthEmissionChart extends StatelessWidget {
   }
 }
 
+class SmilingEarthChartSkeleton extends StatelessWidget {
+  const SmilingEarthChartSkeleton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300,
+      width: 300,
+      child: CustomPaint(
+          foregroundPainter: EmissionChart(0, 0),
+          child: Container(
+            height: 300,
+            width: 300,
+            child: Center(
+                child: Image(
+                    height: 160,
+                    width: 160,
+                    image: AssetImage('assets/img/smiling-earth/earth.png'))),
+          )),
+    );
+  }
+}
+
 class EmissionChart extends CustomPainter {
   final double energyEmissionPercentage;
   final double transportEmissionPercentage;

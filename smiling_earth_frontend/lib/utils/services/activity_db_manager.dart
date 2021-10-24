@@ -106,6 +106,39 @@ class ActivityDatabaseManager {
     return activitiesList;
   }
 
+  Future<double> geEmissionByDate(DateTime date) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query('activities',
+        orderBy: 'id',
+        where: 'start_date LIKE ?',
+        whereArgs: [date.toIso8601String().split('T').first + '%']);
+
+    double emissions = 0;
+    for (var activity in activitiesQuery) {
+      print(activity);
+
+      emissions += Activity.fromMap(activity).getEmission();
+    }
+
+    return emissions;
+  }
+
+  Future<double> geEmissionMonthByDate(DateTime date) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query('activities',
+        orderBy: 'id',
+        where: 'start_date LIKE ?',
+        whereArgs: [
+          date.toIso8601String().split('T').first.substring(0, 7) + '%'
+        ]);
+
+    double emissions = 0;
+    for (var activity in activitiesQuery) {
+      emissions += Activity.fromMap(activity).getEmission();
+    }
+    return emissions;
+  }
+
   Future<int> add(Activity activity) async {
     print("Adding activity " + activity.title);
     Database db = await instance.database;
