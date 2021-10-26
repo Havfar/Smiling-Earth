@@ -33,8 +33,8 @@ class Energy {
   static double calculateElectricityCostWithSolar(double pvSystemSize) {
     double electricityCost = 0;
     for (var hour = 0; hour < 24; hour++) {
-      electricityCost += (Heat.getCurrentHeat(hour) - pvOutput * pvSystemSize) *
-          electricityPrice;
+      electricityCost +=
+          (Heat.getCurrentHeat(0) - pvOutput * pvSystemSize) * electricityPrice;
     }
     return electricityCost;
   }
@@ -51,7 +51,7 @@ class Heat {
   static double pvOutput1kw = 3;
   static double defaultElectricityLoad = 0.4;
 
-  static double getCurrentHeat(int hour) {
+  static double getCurrentHeat(double outsideTemp) {
     //should fetch outside temperature of the hour
     return (roomTemperature - outsideTemperature) * heatingConstant;
     // return (roomTemperature - temp[hour]) * heatingConstant;
@@ -68,7 +68,7 @@ class Heat {
   }
 
   static double getCurrentHeatingCO2(int hour) {
-    return getCurrentHeat(hour) * Energy.co2Factor;
+    return getCurrentHeat(0) * Energy.co2Factor;
   }
 
   static double getCurrentHeatingCO2PerDay() {
@@ -77,7 +77,7 @@ class Heat {
 }
 
 class Expenses {
-  //TODO: make it accurate
+  //todo: make it accurate
   static double solarPanelPrice = 100000;
 
   double calculateSavings(int type) {

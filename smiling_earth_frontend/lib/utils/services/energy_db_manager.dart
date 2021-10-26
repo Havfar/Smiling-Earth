@@ -21,12 +21,12 @@ class EnergyDatabaseManager {
   }
 
   // UPGRADE DATABASE TABLES
-  // TODO: Fiks https://efthymis.com/migrating-a-mobile-database-in-flutter-sqlite/
-  void _onUpgrade(Database db, int oldVersion, int newVersion) {
-    if (oldVersion < newVersion) {
-      db.execute("ALTER TABLE history ADD COLUMN e;");
-    }
-  }
+  // todo: Fiks https://efthymis.com/migrating-a-mobile-database-in-flutter-sqlite/
+  // void _onUpgrade(Database db, int oldVersion, int newVersion) {
+  //   if (oldVersion < newVersion) {
+  //     db.execute("ALTER TABLE history ADD COLUMN e;");
+  //   }
+  // }
 
   Future _onCreate(Database db, int version) async {
     print("creating db");

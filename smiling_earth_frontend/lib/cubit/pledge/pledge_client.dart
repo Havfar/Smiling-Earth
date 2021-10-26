@@ -37,7 +37,6 @@ class PledgeClient {
           await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
-      var pledge = json.first['pledge'];
       final pledges = json.map((pledgeJson) {
         return PledgeDto.fromJson(pledgeJson['pledge']);
       }).toList();

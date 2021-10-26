@@ -1,59 +1,65 @@
 import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:smiling_earth_frontend/models/energy.dart';
 import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
 import 'package:workmanager/workmanager.dart';
 
 const backgroundTask = "simplePeriodicTask";
 
 const List<double> temp = [
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
+  7,
   7,
   8,
-  9,
+  8,
+  8,
+  8,
+  7,
+  7,
+  7,
+  7,
+  70,
+  8,
+  8,
   10,
   11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23
+  11,
+  11,
+  10,
+  9,
+  9,
+  9,
+  9,
+  8,
+  8
 ];
 
 void callbackDispatcher() {
+  print('dispatcher');
   Workmanager().executeTask((task, inputData) {
     print("Native called background task: $backgroundTask");
-    EnergyDatabaseManager.instance.add(new EnergyActivity(
+    var e = new EnergyActivity(
       title: "Energy",
       date: DateTime.now(),
-      heatLoad: 1.86,
-      heatLoadForecast: 1.86,
-    ));
+      heatLoad: Heat.getCurrentHeat(temp.elementAt(DateTime.now().hour)),
+      heatLoadForecast:
+          Heat.getCurrentHeat(temp.elementAt(DateTime.now().hour)),
+    );
+    print('totoot');
+    EnergyDatabaseManager.instance.add(e);
+    print('background task completed');
     return Future.value(true);
   });
 }
 
-void callbackDispatcherTest() {
-  print("Native called background task: $backgroundTask");
-  EnergyDatabaseManager.instance.add(new EnergyActivity(
-    title: "Energy",
-    date: DateTime.now(),
-    heatLoad: 1.86,
-    heatLoadForecast: 1.86,
-  ));
-  return;
-}
+// void callbackDispatcherTest() {
+//   print("Native called background task: $backgroundTask");
+//   EnergyDatabaseManager.instance.add(new EnergyActivity(
+//     title: "Energy",
+//     date: DateTime.now(),
+//     heatLoad: 1.86,
+//     heatLoadForecast: 1.86,
+//   ));
+//   return;
+// }
 
 Future initializeWorkManagerAndPushNotification() async {
   print('starting background service');

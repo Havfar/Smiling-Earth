@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/repository/user_repository.dart';
-import 'package:smiling_earth_frontend/pages/home_page.dart';
+import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/log_in_page.dart';
 import 'package:smiling_earth_frontend/pages/splash_page.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
 import 'package:smiling_earth_frontend/utils/services/background_services.dart';
 import 'package:smiling_earth_frontend/widgets/loading_indicator.dart';
 
@@ -58,7 +59,6 @@ void main() {
     child: App(userRepository: userRepository),
   ));
   //todo: if authenticated
-  initializeWorkManagerAndPushNotification();
 }
 
 class App extends StatelessWidget {
@@ -79,6 +79,10 @@ class App extends StatelessWidget {
             return SplashPage();
           }
           if (state is AuthenticationAuthenticated) {
+            initializeWorkManagerAndPushNotification();
+            print('skal berre vise ein gong');
+            startActivityMonitor();
+
             return HomePage();
           }
           if (state is AuthenticationUnauthenticated) {

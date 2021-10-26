@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/posts/newcomment_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
-import 'package:smiling_earth_frontend/pages/home_page.dart';
+import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class DetailedPostPage extends StatefulWidget {

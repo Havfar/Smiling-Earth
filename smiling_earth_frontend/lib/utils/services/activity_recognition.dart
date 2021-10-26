@@ -27,9 +27,9 @@ Future<void> startActivityMonitor() async {
   }
 }
 
-void _startTracking() async {
+void _startTracking() {
   activityStream = activityRecognition.startStream(runForegroundService: true);
-  await activityStream.listen(_onData);
+  activityStream.listen(_onData);
 }
 
 void _onData(ActivityEvent activityEvent) async {

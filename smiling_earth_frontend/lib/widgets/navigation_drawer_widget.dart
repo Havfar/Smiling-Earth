@@ -5,7 +5,7 @@ import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/favourites_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
-import 'package:smiling_earth_frontend/pages/home_page.dart';
+import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';

@@ -21,12 +21,12 @@ class ActivityDatabaseManager {
   }
 
   // UPGRADE DATABASE TABLES
-  // TODO: Fiks https://efthymis.com/migrating-a-mobile-database-in-flutter-sqlite/
-  void _onUpgrade(Database db, int oldVersion, int newVersion) {
-    if (oldVersion < newVersion) {
-      db.execute("ALTER TABLE history ADD COLUMN e;");
-    }
-  }
+  // todo: Fiks https://efthymis.com/migrating-a-mobile-database-in-flutter-sqlite/
+  // void _onUpgrade(Database db, int oldVersion, int newVersion) {
+  //   if (oldVersion < newVersion) {
+  //     db.execute("ALTER TABLE history ADD COLUMN e;");
+  //   }
+  // }
 
   Future _onCreate(Database db, int version) async {
     print("creating db");
@@ -82,17 +82,6 @@ class ActivityDatabaseManager {
     }
 
     return activitiesList;
-  }
-
-  List<ActivityGroupedByDate> _parseActivtityGroup(
-      Map<String, List<Activity>> groupedBy) {
-    List<ActivityGroupedByDate> activity = [];
-    for (var key in groupedBy.keys) {
-      activity.add(new ActivityGroupedByDate(
-          date: key, activities: groupedBy[key]!.toList()));
-    }
-    // ignore: deprecated_member_use
-    return activity;
   }
 
   Future<List<Activity>> getActivitiesByDate(String date) async {
