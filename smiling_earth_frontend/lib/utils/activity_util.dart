@@ -109,11 +109,8 @@ enum AppActivityType {
   ON_BICYCLE,
   ON_FOOT,
   RUNNING,
-  STILL,
-  TILTING,
-  UNKNOWN,
   WALKING,
-  INVALID, // Used for parsing errors
+  // INVALID, // Used for parsing errors
   IN_CAR,
   IN_ELECTRIC_CAR,
   IN_BUS,

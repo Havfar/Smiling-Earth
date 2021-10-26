@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
-import 'package:smiling_earth_frontend/pages/favourites_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
+import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
@@ -51,12 +51,12 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.update,
                     onClicked: () => selectedItem(context, 1),
                   ),
-                  // const SizedBox(height: 12),
-                  // buildMenuItem(
-                  //   text: 'Profile',
-                  //   icon: Icons.account_circle,
-                  //   onClicked: () => selectedItem(context, 2),
-                  // ),
+                  const SizedBox(height: 12),
+                  buildMenuItem(
+                    text: 'registration',
+                    icon: Icons.account_circle,
+                    onClicked: () => selectedItem(context, 2),
+                  ),
                   // const SizedBox(height: 12),
                   // buildMenuItem(
                   //   text: 'Notifications',
@@ -189,7 +189,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FavouritesPage(),
+          builder: (context) => WelcomePage(),
         ));
         break;
       case 3:

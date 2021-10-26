@@ -7,4 +7,18 @@ class SmilingEarthIcon {
         width: 33,
         image: AssetImage('assets/img/smiling-earth/earth1.png'));
   }
+
+  static Image getLargeIcon() {
+    return Image(
+        height: 220,
+        width: 220,
+        image: AssetImage('assets/img/smiling-earth/earth1.png'));
+  }
+
+  static Image getSmallIcon(int imageIndex) {
+    return Image(
+        height: 60,
+        width: 60,
+        image: AssetImage('assets/img/smiling-earth/earth1.png'));
+  }
 }
