@@ -1,48 +1,136 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/registration/climate_action.dart';
 import 'package:smiling_earth_frontend/pages/registration/transportation_registration.dart';
-import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
 
-class CarRegistrationPage extends StatelessWidget {
+class CarRegistrationPage extends StatefulWidget {
+  @override
+  State<CarRegistrationPage> createState() => _CarRegistrationPageState();
+}
+
+class _CarRegistrationPageState extends State<CarRegistrationPage> {
+  bool _ownsCar = false;
+  final _formKey = GlobalKey<FormState>();
+  String _registrationNo = '';
+  String _estimatedValueOfCar = '';
+  String _estimatedDrivingDistance = '';
+  String _estimatedOwnership = '';
+  double _margin = 125;
+
   @override
   Widget build(BuildContext context) => Scaffold(
         // appBar: AppBar(),
         // drawer: NavigationDrawerWidget(),
         body: Container(
-          margin: EdgeInsets.only(top: 150),
+          margin: EdgeInsets.only(top: 50),
           child: Center(
-              child: Column(
+              child: ListView(
             children: [
-              Text(
-                'About the app',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400),
+              SwitchListTile(
+                title: Text('Do you own a car? 🚙'),
+                value: _ownsCar,
+                onChanged: (bool value) {
+                  setState(() {
+                    _ownsCar = value;
+                  });
+                },
               ),
-              SizedBox(
-                height: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SmilingEarthIcon.getSmallIcon(0),
-                  SmilingEarthIcon.getSmallIcon(1),
-                  SmilingEarthIcon.getSmallIcon(2),
-                  SmilingEarthIcon.getSmallIcon(3),
-                  SmilingEarthIcon.getSmallIcon(4),
-                ],
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, right: 40),
-                child: Text(
-                  "This app aims to make you more aware of how your daily habits and energy use affect the environment. \n\nThe Earth is happy when you have a carbon footprint below 4kgCO2 per day. However, if you exceed the limit of 4 kgCO2, the Earth's mood and health change accordingly.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              Form(
+                key: _formKey,
+                child: Container(
+                  decoration: BoxDecoration(
+                      border:
+                          Border(top: BorderSide(color: Colors.grey.shade200))),
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  padding: EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Registration Number',
+                          border: OutlineInputBorder(),
+                          // hintText: "Enter the car's registration number"
+                        ),
+                        enabled: _ownsCar,
+                        onSaved: (value) =>
+                            setState(() => _registrationNo = value!),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Estimated value of the car',
+                          border: OutlineInputBorder(),
+                        ),
+                        enabled: _ownsCar,
+                        onSaved: (value) =>
+                            setState(() => _estimatedValueOfCar = value!),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Estimated yearly driving distance',
+                          border: OutlineInputBorder(),
+                        ),
+                        enabled: _ownsCar,
+                        onSaved: (value) =>
+                            setState(() => _estimatedDrivingDistance = value!),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Planned duration of ownership (years)',
+                          border: OutlineInputBorder(),
+                        ),
+                        enabled: _ownsCar,
+                        onSaved: (value) =>
+                            setState(() => _estimatedOwnership = value!),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            // If the form is valid, display a snackbar. In the real world,
+                            // you'd often call a server or save the information in a database.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
+                            );
+                          }
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              )
             ],
           )),
         ),
@@ -54,4 +142,67 @@ class CarRegistrationPage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => ClimateActionPage()),
         ),
       );
+}
+
+// Define a custom Form widget.
+class CarForm extends StatefulWidget {
+  const CarForm({Key? key}) : super(key: key);
+
+  @override
+  CarFormState createState() {
+    return CarFormState();
+  }
+}
+
+// Define a corresponding State class.
+// This class holds data related to the form.
+class CarFormState extends State<CarForm> {
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  //
+  // Note: This is a `GlobalKey<FormState>`,
+  // not a GlobalKey<MyCustomFormState>.
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
+    return Form(
+      key: _formKey,
+      child: Container(
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Minutes',
+                border: OutlineInputBorder(),
+              ),
+              enabled: false,
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Validate returns true if the form is valid, or false otherwise.
+                if (_formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Processing Data')),
+                  );
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

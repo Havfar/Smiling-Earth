@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:smiling_earth_frontend/pages/registration/climate_action.dart';
-import 'package:smiling_earth_frontend/pages/registration/house_registration.dart';
+import 'package:smiling_earth_frontend/pages/registration/registration_completed.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
 
@@ -17,7 +17,14 @@ class PledgeRegistrationPage extends StatelessWidget {
             children: [
               Text(
                 '  Make a pledge',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Text(
+                  'Tell the world how you will help mitigate climate change. Commit to one or more pledges below!',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -45,11 +52,10 @@ class PledgeRegistrationPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: PageIndicator(
-          index: 5,
+          index: 4,
           previousPage:
               MaterialPageRoute(builder: (context) => ClimateActionPage()),
-          nextPage:
-              MaterialPageRoute(builder: (context) => HouseRegistrationPage()),
+          nextPage: MaterialPageRoute(builder: (context) => FinishedPage()),
         ),
       );
 }

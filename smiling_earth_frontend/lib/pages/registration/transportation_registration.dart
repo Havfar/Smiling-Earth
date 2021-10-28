@@ -24,7 +24,7 @@ class TransportationRegistrationPage extends StatelessWidget {
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400),
                   ),
                   Text(
-                    'What means of transportation do you normally use?',
+                    'What means of transportation do you use on a regular basis?',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
                   ),
@@ -35,7 +35,7 @@ class TransportationRegistrationPage extends StatelessWidget {
               ),
             ),
             Column(
-                children: AppActivityType.values
+                children: getTransportationTypes()
                     .map((activity) => CheckboxWidget(
                           activity: activity,
                         ))
@@ -73,14 +73,14 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: Colors.grey.shade300))),
       child: CheckboxListTile(
-        title: Text(widget.activity.toString()),
+        title: Text(getTransporationNameByActivityType(widget.activity)),
         value: _checked,
         onChanged: (bool? value) {
           setState(() {
             _checked = value!;
           });
         },
-        secondary: Icon(getIconByActivityType(widget.activity)),
+        secondary: Icon(getTransporationIconByActivityType(widget.activity)),
       ),
     );
   }
