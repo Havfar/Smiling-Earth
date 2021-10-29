@@ -63,7 +63,7 @@ class _WalkEmissionEstimatePageState extends State<WalkEmissionEstimatePage> {
       ),
       body: Container(
         child: Column(
-          children: [BuildHeaderToolbar()],
+          children: [BuildHeaderToolbar(), BuildWalkingEstimation()],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -91,6 +91,55 @@ class _WalkEmissionEstimatePageState extends State<WalkEmissionEstimatePage> {
               label: 'Electric car',
             ),
           ]));
+}
+
+class BuildWalkingEstimation extends StatefulWidget {
+  const BuildWalkingEstimation({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<BuildWalkingEstimation> createState() => _BuildWalkingEstimationState();
+}
+
+class _BuildWalkingEstimationState extends State<BuildWalkingEstimation> {
+  double _sliderValue = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('See how much you can save by walking instead of driving'),
+        Row(
+          children: [
+            Column(children: [
+              Icon(Icons.directions_walk),
+              Text((_sliderValue * 100).roundToDouble().toString() + ' km')
+            ]),
+            Slider(
+                value: _sliderValue,
+                onChanged: (newValue) => setState(() {
+                      _sliderValue = newValue;
+                    })),
+            Column(children: [
+              Icon(Icons.directions_car),
+              Text(
+                  ((1 - _sliderValue) * 100).roundToDouble().toString() + ' km')
+            ]),
+          ],
+        ),
+        ListTile(
+          leading: Text('💰', style: TextStyle(fontSize: 22)),
+          title: Text('By walking you could save (per day): '),
+          trailing: Text('100' + ' kr'),
+        ),
+        ListTile(
+          leading: Text('⚡️', style: TextStyle(fontSize: 22)),
+          title: Text('Your energy percentage from solar: '),
+          trailing: Text('10' + ' %'),
+        )
+      ],
+    );
+  }
 }
 
 class BuildHeaderToolbar extends StatelessWidget {

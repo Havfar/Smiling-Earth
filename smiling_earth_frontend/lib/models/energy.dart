@@ -36,7 +36,7 @@ class Energy {
       electricityCost +=
           (Heat.getCurrentHeat(0) - pvOutput * pvSystemSize) * electricityPrice;
     }
-    return electricityCost;
+    return electricityCost.roundToDouble();
   }
 
   static double getPVOutput() {

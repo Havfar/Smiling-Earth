@@ -55,4 +55,7 @@ class Transportation {
   //   //Future versions should review the emissions of  air travel.
   //   return duration.inMinutes * airtravelEmission;
   // }
+  static double calculateSavingsFromTransport() {
+    return 10;
+  }
 }
