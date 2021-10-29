@@ -42,6 +42,45 @@ class Energy {
   static double getPVOutput() {
     return irradiance * 0.86; // factor 0.86 to poorly approximate
   }
+
+  static double calculateDailyAverage(double load, int start, int stop) {
+    return ((stop > 24 + start) ? load / (1 + (stop - start) / 24) : load);
+  }
+
+  //TODO: summeer daglig energy load fra db
+  static double calculateEnergyConsumption() {
+    double load = 0;
+    // int[] indexes = indexesFromTimeScale(timeScale);
+
+    // for(int i = indexes[0]; i<=indexes[1]; i++) {
+    //     load += (db.getHeat(i) > -100) ? db.getHeat(i) : 0;
+    // }
+    // TODO make it a synchronous task - hourly or when user reopens the app
+    // return calculateDailyAverage(load, indexes[0], indexes[1]);
+    return 10;
+  }
+
+  static double calculateEnergyConsumptioWithSolar(double panelSize) {
+    double load = 0;
+    // double load = 0;
+    // int[] indexes = indexesFromTimeScale(timeScale);
+
+    // for (int i=indexes[0]; i<=indexes[1]; i++)
+    //     load += (db.getHeat(i) > -100) ? db.getHeat(i) - PVoutput * pvSystemSize : 0;
+
+    // // TODO make it a synchronous task - hourly or when user reopens the app
+    // return calculateDailyAverage(load, indexes[0], indexes[1]);
+
+    return 10 - pvOutput * panelSize;
+  }
+
+  static double calculatePercentageSelfConsumption(double panelSize) {
+    double dailyConsumption = calculateEnergyConsumption();
+    double dailyconsumptionWithSolar =
+        calculateEnergyConsumptioWithSolar(panelSize);
+
+    return (dailyConsumption - dailyconsumptionWithSolar) / dailyConsumption;
+  }
 }
 
 class Heat {

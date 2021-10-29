@@ -3,6 +3,8 @@ import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estima
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_cycling.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_walk.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
+import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
+import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 
 class DriveEmissionEstimatePage extends StatefulWidget {
   DriveEmissionEstimatePage({Key? key}) : super(key: key);
@@ -63,7 +65,7 @@ class _DriveEmissionEstimatePageState extends State<DriveEmissionEstimatePage> {
       ),
       body: Container(
         child: Column(
-          children: [BuildHeaderToolbar()],
+          children: [BuildElectricCarEstimation()],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -93,87 +95,27 @@ class _DriveEmissionEstimatePageState extends State<DriveEmissionEstimatePage> {
           ]));
 }
 
-class BuildHeaderToolbar extends StatelessWidget {
-  const BuildHeaderToolbar({
+class BuildElectricCarEstimation extends StatelessWidget {
+  const BuildElectricCarEstimation({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Walking",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
+    return Column(
+      children: <Widget>[
+        BuildHeaderToolbar(
+            distance: null,
+            electricity: null,
+            kcal: null,
+            money: 10,
+            time: null),
+        Text('See how much you can save by changing to an electric car'),
+        SmilingEarthEmissionChart(
+          energyEmissionPercentage: 0,
+          transportEmissionPercentage: 0,
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        )
-      ]),
+      ],
     );
   }
 }

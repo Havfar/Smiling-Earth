@@ -4,6 +4,7 @@ import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estima
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_driving.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_walk.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
+import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 
 class EmissionEstimatePage extends StatefulWidget {
   @override
@@ -60,7 +61,16 @@ class _EmissionEstimatePageState extends State<EmissionEstimatePage> {
       ),
       body: Container(
         child: Column(
-          children: [BuildHeaderToolbar(), BuildSolarEstimation()],
+          children: [
+            BuildHeaderToolbar(
+              distance: null,
+              electricity: null,
+              kcal: null,
+              money: null,
+              time: null,
+            ),
+            BuildSolarEstimation()
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -140,10 +150,31 @@ class _BuildSolarEstimationState extends State<BuildSolarEstimation> {
         ListTile(
           leading: Text('⚡️', style: TextStyle(fontSize: 22)),
           title: Text('Your energy percentage from solar: '),
-          trailing: Text('10' + ' %'),
+          trailing: Text(_calculateConsumptionOfSolar() + ' %'),
         )
       ],
     );
+  }
+
+  String _calculateConsumptionOfSolar() {
+    switch (selectedButton) {
+      case 0:
+        return (Energy.calculatePercentageSelfConsumption(3) * 100)
+            .roundToDouble()
+            .toString();
+      case 1:
+        return (Energy.calculatePercentageSelfConsumption(4) * 100)
+            .roundToDouble()
+            .toString();
+      case 2:
+        return (Energy.calculatePercentageSelfConsumption(5) * 100)
+            .roundToDouble()
+            .toString();
+      default:
+        return (Energy.calculatePercentageSelfConsumption(6) * 100)
+            .roundToDouble()
+            .toString();
+    }
   }
 
   double _calculateSavingsOfSolar() {
@@ -196,91 +227,6 @@ class SolarPanelButton extends StatelessWidget {
                     color: isSelected ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold))),
       ),
-    );
-  }
-}
-
-class BuildHeaderToolbar extends StatelessWidget {
-  const BuildHeaderToolbar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        )
-      ]),
     );
   }
 }

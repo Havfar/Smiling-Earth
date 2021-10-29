@@ -3,7 +3,7 @@ import 'dart:core';
 class VehicleCost {
   final int yearsOwnedCar;
   final int carSize; // 0 = small, 1 = medium, 2 = large
-  final int cost;
+  final double cost;
   final bool isNewCar;
   final double distancePerYear;
   late double fuelConsumptionPerKm;
@@ -11,12 +11,13 @@ class VehicleCost {
   final double interest = 0.04;
   final double roadFee = 2820;
   final double fuelCostPerLiter = 14;
-  final double tires = 0;
+  double tires = 0;
   final double taxFactor = 0.76;
-  final double insurance = 0;
+  double fuelCost = 0;
+  double insurance = 0;
   final double service = 0;
   final double wash = 0;
-  final double repair = 0;
+  double repair = 0;
   final double valueLossRateYr1 = 0.20;
   final double valueLossRateYr2 = 0.14;
   final double valueLossRateYr3 = 0.13;
@@ -32,17 +33,17 @@ class VehicleCost {
   final List<double> defaultFuelConsumptionPrKm = [0.06, 0.07, 0.08];
 
   //Variables
-  final double valueLoss = 0;
-  final double interestLoss = 0;
+  double valueLoss = 0;
+  double interestLoss = 0;
   Map<String, String> defaultValueMap = new Map<String, String>();
   final bool preferenceChange = false;
 
   //info
-  late double totCost;
-  late double totCostWithoutFuel;
-  late double totFuelCostPrKm;
-  late double avgCostPrKm;
-  late double avgCostPrDay;
+  double totCost = 0;
+  double totCostWithoutFuel = 0;
+  double totFuelCostPrKm = 0;
+  double avgCostPrKm = 0;
+  double avgCostPrDay = 0;
   double marginalCostPr1Km = 0;
   double marginalCostFuel = 0;
 
@@ -252,5 +253,105 @@ class VehicleCost {
     }
     this.marginalCostPr1Km = marginalCostPr1Km;
     this.marginalCostFuel = marginalCostFuel;
+  }
+
+  void calculateCosts() {
+    if (this.isNewCar) {
+      fuelConsumptionPerKm = defaultFuelConsumptionPrKm[carSize];
+
+      fuelCost = distancePerYear * fuelConsumptionPerKm * fuelCostPerLiter;
+      insurance = calcInsurance();
+      tires = calcTires(distancePerYear);
+      repair = calcRepCost(distancePerYear, yearsOwnedCar) / yearsOwnedCar;
+
+      calc();
+
+      this.totCost =
+          ((fuelCost + insurance + roadFee + tires + wash + service + repair) *
+                  yearsOwnedCar) +
+              valueLoss +
+              interestLoss;
+      this.totCostWithoutFuel =
+          ((insurance + roadFee + tires + wash + service + repair) *
+                  yearsOwnedCar) +
+              valueLoss +
+              interestLoss;
+
+      this.totFuelCostPrKm = fuelConsumptionPerKm * fuelCostPerLiter;
+      this.avgCostPrKm = totCost / (distancePerYear * yearsOwnedCar);
+      this.avgCostPrDay = totCost / (365 * yearsOwnedCar);
+    } else {
+      //oldCarCalc
+    }
+  }
+
+  // Author Mangus Tangen and Celine Mihn
+  void calc() {
+    // Variables related to normal value loss (no km correction)
+    double normalValueLoss = 0;
+    double totNormalValueLoss = 0;
+    double normalCurrentValue = cost;
+
+    // Variables related to km correction
+    double correctedLossDiff = 0;
+    double totCorrectedLossDiff = 0;
+    double correctedCurrentValue = cost;
+
+    // Losses related to interest
+    double totInterestLoss = 0;
+    double interestLoss = 0;
+
+    for (int i = 0; i < yearsOwnedCar; i++) {
+      correctedLossDiff = (getDistanceFactor(i) *
+          ((distancePerYear / distancePerYear) - 1) *
+          100);
+      totCorrectedLossDiff += correctedLossDiff;
+      if (i >= 5) {
+        normalValueLoss = normalCurrentValue * valueLossRateArray[5];
+        totNormalValueLoss += normalValueLoss;
+      } else {
+        normalValueLoss = normalCurrentValue * valueLossRateArray[i];
+        totNormalValueLoss += normalValueLoss;
+      }
+
+      interestLoss = taxFactor *
+          (correctedCurrentValue) *
+          interest *
+          (1 -
+              (((normalValueLoss + correctedLossDiff) /
+                      (correctedCurrentValue)) /
+                  2));
+      totInterestLoss += interestLoss;
+
+      normalCurrentValue = cost - totNormalValueLoss;
+      correctedCurrentValue = cost - totNormalValueLoss - totCorrectedLossDiff;
+    }
+
+    valueLoss = totNormalValueLoss + totCorrectedLossDiff;
+    interestLoss = totInterestLoss;
+  }
+
+  double getDistanceFactor(int yr) {
+    if (yr >= 5) {
+      yr = 5;
+    }
+    return distFactor[yr][carSize];
+  }
+
+  double getAverageCurrentCarCost() {
+    int hour = DateTime.now().hour;
+    return avgCostPrDay / 24 * hour;
+  }
+
+  double getCostToday() {
+    int hour = DateTime.now().hour;
+    //float dist = db.getDrivingDistanceToday();
+    //TODO: hent distance today
+    double dist = 20;
+    double costToday =
+        ((totCostWithoutFuel / (24 * 365 * yearsOwnedCar)) * hour) +
+            ((dist / 1000) * totFuelCostPrKm);
+
+    return costToday;
   }
 }

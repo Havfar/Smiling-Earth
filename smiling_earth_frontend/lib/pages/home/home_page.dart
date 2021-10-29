@@ -9,6 +9,7 @@ import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estima
 import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
+import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
@@ -41,7 +42,13 @@ class _HomeState extends State<HomePage> {
         margin: EdgeInsets.all(10),
         child: ListView(
           children: [
-            BuildHeaderToolbar(),
+            BuildHeaderToolbar(
+              distance: null,
+              electricity: null,
+              kcal: null,
+              money: null,
+              time: null,
+            ),
             BuildChart(),
             BuildEmissionEstimation(),
             BuildFeed(),
@@ -209,91 +216,6 @@ class BuildEmissionEstimation extends StatelessWidget {
         title: Text("Emission estimation"),
         trailing: Icon(Icons.chevron_right),
       ),
-    );
-  }
-}
-
-class BuildHeaderToolbar extends StatelessWidget {
-  const BuildHeaderToolbar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        )
-      ]),
     );
   }
 }

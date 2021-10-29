@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:smiling_earth_frontend/models/active_minutes.dart';
+import 'package:smiling_earth_frontend/models/calories.dart';
+import 'package:smiling_earth_frontend/models/vehicle_cost.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_cycling.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_driving.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
+import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
+import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 
 class WalkEmissionEstimatePage extends StatefulWidget {
   WalkEmissionEstimatePage({Key? key}) : super(key: key);
@@ -63,7 +68,10 @@ class _WalkEmissionEstimatePageState extends State<WalkEmissionEstimatePage> {
       ),
       body: Container(
         child: Column(
-          children: [BuildHeaderToolbar(), BuildWalkingEstimation()],
+          children: [
+            // BuildHeaderToolbar(),
+            BuildWalkingEstimation()
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -104,125 +112,101 @@ class BuildWalkingEstimation extends StatefulWidget {
 
 class _BuildWalkingEstimationState extends State<BuildWalkingEstimation> {
   double _sliderValue = 0;
+  VehicleCost vehicleCost = VehicleCost.defaultVehicle();
+  Calories caloriesEstimator = Calories(null, null, null);
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
+        BuildHeaderToolbar(
+          distance: (_sliderValue * 100).round(),
+          electricity: null,
+          kcal: caloriesEstimator
+              .calculateCaloriesFromWalkingDistance((_sliderValue * 100))
+              .round(),
+          money: _getSavingsFromWalking(((1 - _sliderValue) * 100)).round(),
+          time: ActiveMinutes.calculateActiveMinutesFromWalking(
+                  (_sliderValue * 100))
+              .round(),
+        ),
         Text('See how much you can save by walking instead of driving'),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(children: [
-              Icon(Icons.directions_walk),
-              Text((_sliderValue * 100).roundToDouble().toString() + ' km')
-            ]),
-            Slider(
-                value: _sliderValue,
-                onChanged: (newValue) => setState(() {
-                      _sliderValue = newValue;
-                    })),
-            Column(children: [
-              Icon(Icons.directions_car),
-              Text(
-                  ((1 - _sliderValue) * 100).roundToDouble().toString() + ' km')
-            ]),
+            Container(
+              width: 60,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.directions_walk),
+                    Text(
+                      (_sliderValue * 100).roundToDouble().toString() + ' km',
+                      textAlign: TextAlign.center,
+                    )
+                  ]),
+            ),
+            Container(
+              width: 220,
+              child: Slider(
+                  value: _sliderValue,
+                  onChanged: (newValue) => setState(() {
+                        _sliderValue = newValue;
+                      })),
+            ),
+            Container(
+              width: 60,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.directions_car),
+                    Text(
+                      ((1 - _sliderValue) * 100).roundToDouble().toString() +
+                          ' km',
+                      textAlign: TextAlign.center,
+                    )
+                  ]),
+            ),
           ],
+        ),
+        SmilingEarthEmissionChart(
+          energyEmissionPercentage: 0,
+          transportEmissionPercentage: 1 - _sliderValue,
         ),
         ListTile(
           leading: Text('💰', style: TextStyle(fontSize: 22)),
-          title: Text('By walking you could save (per day): '),
-          trailing: Text('100' + ' kr'),
+          title: Text('By walking you could save : '),
+          subtitle: Text('(per day)'),
+          trailing: Text(_getSavingsFromWalking((1 - _sliderValue) * 100)
+                  .roundToDouble()
+                  .toString() +
+              ' kr'),
         ),
         ListTile(
-          leading: Text('⚡️', style: TextStyle(fontSize: 22)),
-          title: Text('Your energy percentage from solar: '),
-          trailing: Text('10' + ' %'),
+          leading: Text('☀️', style: TextStyle(fontSize: 22)),
+          title: Text('Days to finance you solar roof: '),
+          trailing: Text(
+              _calculateDaysLeftForSolarRoof((1 - _sliderValue) * 100)
+                  .round()
+                  .toString()),
         )
       ],
     );
   }
-}
 
-class BuildHeaderToolbar extends StatelessWidget {
-  const BuildHeaderToolbar({
-    Key? key,
-  }) : super(key: key);
+  double _getSavingsFromWalking(double distance) {
+    vehicleCost.calculateCosts();
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Walking",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "123",
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              "km",
-              style: TextStyle(color: Colors.black87),
-            )
-          ],
-        )
-      ]),
-    );
+    double savings = (100 - distance) * vehicleCost.avgCostPrKm;
+    return savings;
+  }
+
+  double _calculateDaysLeftForSolarRoof(double distance) {
+    final int SOLAR_PANEL_PRICE = 100000;
+    double savings = _getSavingsFromWalking(distance);
+    if (savings == 0) {
+      return -1;
+    }
+    return SOLAR_PANEL_PRICE / savings;
   }
 }
