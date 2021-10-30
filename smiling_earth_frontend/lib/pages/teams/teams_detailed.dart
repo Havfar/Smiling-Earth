@@ -367,9 +367,7 @@ class BuildChart extends StatelessWidget {
         ),
         Center(
           child: SmilingEarthEmissionChart(
-            energyEmissionPercentage: this.team.emissions.energy / goal,
-            transportEmissionPercentage: this.team.emissions.transport / goal,
-          ),
+              energyEmission: 10, transportEmission: 20, goal: 100),
         ),
         Text(this.team.emissions.getTotalEmissions().toString() + " kg Co2",
             style: TextStyle(

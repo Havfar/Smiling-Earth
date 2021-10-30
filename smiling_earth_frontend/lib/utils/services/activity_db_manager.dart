@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:smiling_earth_frontend/models/transportation.dart';
+import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ActivityDatabaseManager {
@@ -110,6 +112,39 @@ class ActivityDatabaseManager {
     }
 
     return emissions;
+  }
+
+  Future<double> getDurationDrivingPerDay() async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query(
+      'activities',
+      orderBy: 'id',
+      where: 'type=' + AppActivityType.IN_CAR.index.toString(),
+    );
+
+    double emissions = 0;
+    double distance = 0;
+    int days = 0;
+    DateTime previousDay = DateTime(0);
+    for (var activityQ in activitiesQuery) {
+      var activity = Activity.fromMap(activityQ);
+      emissions += activity.getEmission();
+
+      distance += Transportation.convertCarDurationToDistance(
+          activity.getTotalDurationInMinutes());
+      if (previousDay.year == 0) {
+        previousDay = activity.startDate!;
+        days += 1;
+      }
+      if (previousDay.day != activity.startDate!.day) {
+        days += 1;
+        previousDay = activity.startDate!;
+      }
+    }
+    if (days == 0) {
+      return 0;
+    }
+    return distance / days;
   }
 
   Future<double> geEmissionMonthByDate(DateTime date) async {

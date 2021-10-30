@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smiling_earth_frontend/models/transportation.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_cycling.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_walk.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 
@@ -102,20 +104,49 @@ class BuildElectricCarEstimation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        BuildHeaderToolbar(
-            distance: null,
-            electricity: null,
-            kcal: null,
-            money: 10,
-            time: null),
-        Text('See how much you can save by changing to an electric car'),
-        SmilingEarthEmissionChart(
-          energyEmissionPercentage: 0,
-          transportEmissionPercentage: 0,
-        ),
-      ],
-    );
+    return FutureBuilder<double>(
+        future: ActivityDatabaseManager.instance.getDurationDrivingPerDay(),
+        builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: Text('Loading...'));
+          }
+          if (snapshot.data! == 0) {
+            return Text('No car rides detected');
+          }
+          return Column(
+            children: <Widget>[
+              BuildHeaderToolbar(
+                  distance: snapshot.data!.round(),
+                  electricity: null,
+                  kcal: null,
+                  money: Transportation.compareCostElectricVsGasolineCar(
+                          snapshot.data!)
+                      .round(),
+                  time: null),
+              Text('See how much you can save by changing to an electric car'),
+              SmilingEarthEmissionChart(
+                  energyEmission: 10, transportEmission: 20, goal: 100),
+              ListTile(
+                leading: Text('🌳', style: TextStyle(fontSize: 22)),
+                title: Text('By changing to an electric car you would save '),
+                subtitle: Text('per day'),
+                trailing: Text(Transportation.getGasolineCarEmissionByDistance(
+                            snapshot.data!)
+                        .roundToDouble()
+                        .toString() +
+                    ' kgCO2'),
+              ),
+              ListTile(
+                leading: Text('💰', style: TextStyle(fontSize: 22)),
+                title: Text('By changing to an electric car you would save: '),
+                trailing: Text(Transportation.compareCostElectricVsGasolineCar(
+                            snapshot.data!)
+                        .roundToDouble()
+                        .toString() +
+                    ' kr'),
+              )
+            ],
+          );
+        });
   }
 }

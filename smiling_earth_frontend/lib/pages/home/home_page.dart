@@ -82,22 +82,12 @@ class BuildChart extends StatelessWidget {
           future: getChartDataByMonth(DateTime.now()),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Center(
-                    child: SmilingEarthEmissionChart(
-                      energyEmissionPercentage:
-                          snapshot.data!.energy / emissionGoal,
-                      transportEmissionPercentage:
-                          snapshot.data!.transport / emissionGoal,
-                    ),
-                  ),
-                  Text((snapshot.data!.getTotal()).toString() + " kg Co2",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      )),
-                ],
+              return Center(
+                child: SmilingEarthEmissionChart(
+                    energyEmission: 30,
+                    // snapshot.data!.energy,
+                    transportEmission: snapshot.data!.transport,
+                    goal: emissionGoal),
               );
             }
             return SkeletonAnimation(
@@ -213,7 +203,7 @@ class BuildEmissionEstimation extends StatelessWidget {
           context,
           MaterialPageRoute(builder: (context) => EmissionEstimatePage()),
         ),
-        title: Text("Emission estimation"),
+        title: Text("See how to reduce your emissions"),
         trailing: Icon(Icons.chevron_right),
       ),
     );

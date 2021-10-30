@@ -1,5 +1,7 @@
 // These models and their values are copied from the previous version of Smiling Earth by Ragnhild Larsen and Celine Mihn. The code has been transefered and updated from Java code to flutter code.
 
+import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
+
 class Energy {
   static double heatingConstant = 0.0165;
   static double co2Factor = 0.137;
@@ -60,8 +62,8 @@ class Energy {
     return 10;
   }
 
-  static double calculateEnergyConsumptioWithSolar(double panelSize) {
-    double load = 0;
+  static double calculateEnergyConsumptioWithSolar(
+      double load, double panelSize) {
     // double load = 0;
     // int[] indexes = indexesFromTimeScale(timeScale);
 
@@ -71,13 +73,15 @@ class Energy {
     // // TODO make it a synchronous task - hourly or when user reopens the app
     // return calculateDailyAverage(load, indexes[0], indexes[1]);
 
-    return 10 - pvOutput * panelSize;
+    return load - pvOutput * panelSize;
   }
 
-  static double calculatePercentageSelfConsumption(double panelSize) {
-    double dailyConsumption = calculateEnergyConsumption();
+  static Future<double> calculatePercentageSelfConsumption(
+      double panelSize) async {
+    double dailyConsumption =
+        await EnergyDatabaseManager.instance.getAverageDailyConsumption();
     double dailyconsumptionWithSolar =
-        calculateEnergyConsumptioWithSolar(panelSize);
+        calculateEnergyConsumptioWithSolar(dailyConsumption, panelSize);
 
     return (dailyConsumption - dailyconsumptionWithSolar) / dailyConsumption;
   }
@@ -147,5 +151,3 @@ class Expenses {
     return savings > 0 ? solarPanelPrice / savings : -1;
   }
 }
-
-class Transportation {}

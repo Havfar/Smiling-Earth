@@ -82,6 +82,33 @@ class EnergyDatabaseManager {
     return emissions;
   }
 
+  Future<double> getAverageDailyConsumption() async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query(
+      'energy',
+      orderBy: 'id',
+    );
+    double heatLoad = 0.0;
+    int days = 0;
+    DateTime previousDay = DateTime(0);
+    for (var activityJson in activitiesQuery) {
+      EnergyActivity activity = EnergyActivity.fromMap(activityJson);
+      heatLoad += activity.heatLoad;
+      if (previousDay.year == 0) {
+        previousDay = activity.startDate!;
+        days += 1;
+      }
+      if (previousDay.day != activity.startDate!.day) {
+        days += 1;
+        previousDay = activity.startDate!;
+      }
+    }
+    if (days == 0) {
+      return 0;
+    }
+    return heatLoad / days;
+  }
+
   Future<int> add(EnergyActivity activity) async {
     print("Adding activity " + activity.title);
     Database db = await instance.database;

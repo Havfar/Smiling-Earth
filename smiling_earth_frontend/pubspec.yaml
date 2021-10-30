@@ -64,6 +64,10 @@ flutter:
   assets:
     - assets/img/smiling-earth/earth.png
     - assets/img/smiling-earth/earth1.png
+    - assets/img/smiling-earth/earth2.png
+    - assets/img/smiling-earth/earth3.png
+    - assets/img/smiling-earth/earth4.png
+    - assets/img/smiling-earth/earth5.png
     - assets/img/sdg13.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/active_minutes.dart';
 import 'package:smiling_earth_frontend/models/calories.dart';
+import 'package:smiling_earth_frontend/models/transportation.dart';
 import 'package:smiling_earth_frontend/models/vehicle_cost.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation_cycling.dart';
@@ -67,7 +68,7 @@ class _WalkEmissionEstimatePageState extends State<WalkEmissionEstimatePage> {
         backgroundColor: Colors.white,
       ),
       body: Container(
-        child: Column(
+        child: ListView(
           children: [
             // BuildHeaderToolbar(),
             BuildWalkingEstimation()
@@ -170,8 +171,10 @@ class _BuildWalkingEstimationState extends State<BuildWalkingEstimation> {
           ],
         ),
         SmilingEarthEmissionChart(
-          energyEmissionPercentage: 0,
-          transportEmissionPercentage: 1 - _sliderValue,
+          energyEmission: 0,
+          transportEmission: Transportation.getGasolineCarEmissionByDistance(
+              (1 - _sliderValue) * 100),
+          goal: Transportation.getGasolineCarEmissionByDistance(100),
         ),
         ListTile(
           leading: Text('💰', style: TextStyle(fontSize: 22)),

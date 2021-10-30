@@ -147,33 +147,43 @@ class _BuildSolarEstimationState extends State<BuildSolarEstimation> {
           title: Text('By change to solar panel you could save (per day): '),
           trailing: Text(_calculateSavingsOfSolar().abs().toString() + ' kr'),
         ),
-        ListTile(
-          leading: Text('⚡️', style: TextStyle(fontSize: 22)),
-          title: Text('Your energy percentage from solar: '),
-          trailing: Text(_calculateConsumptionOfSolar() + ' %'),
-        )
+        FutureBuilder<double>(
+            future: _calculateConsumptionOfSolar(),
+            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: Text('Loading...'));
+              }
+              if (snapshot.data! == 0) {
+                return Text('No car rides detected');
+              }
+              return ListTile(
+                leading: Text('⚡️', style: TextStyle(fontSize: 22)),
+                title: Text('Your energy percentage from solar: '),
+                trailing: Text(snapshot.data!.toString() + ' %'),
+              );
+            })
       ],
     );
   }
 
-  String _calculateConsumptionOfSolar() {
+  Future<double> _calculateConsumptionOfSolar() async {
     switch (selectedButton) {
       case 0:
-        return (Energy.calculatePercentageSelfConsumption(3) * 100)
-            .roundToDouble()
-            .toString();
+        double energyConsumption =
+            await Energy.calculatePercentageSelfConsumption(3);
+        return (energyConsumption * 100).roundToDouble();
       case 1:
-        return (Energy.calculatePercentageSelfConsumption(4) * 100)
-            .roundToDouble()
-            .toString();
+        double energyConsumption =
+            await Energy.calculatePercentageSelfConsumption(4);
+        return (energyConsumption * 100).roundToDouble();
       case 2:
-        return (Energy.calculatePercentageSelfConsumption(5) * 100)
-            .roundToDouble()
-            .toString();
+        double energyConsumption =
+            await Energy.calculatePercentageSelfConsumption(5);
+        return (energyConsumption * 100).roundToDouble();
       default:
-        return (Energy.calculatePercentageSelfConsumption(6) * 100)
-            .roundToDouble()
-            .toString();
+        double energyConsumption =
+            await Energy.calculatePercentageSelfConsumption(6);
+        return (energyConsumption * 100).roundToDouble();
     }
   }
 
