@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/registration/climate_action.dart';
 import 'package:smiling_earth_frontend/pages/registration/transportation_registration.dart';
+import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
 
 class CarRegistrationPage extends StatefulWidget {
@@ -12,10 +13,9 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
   bool _ownsCar = false;
   final _formKey = GlobalKey<FormState>();
   String _registrationNo = '';
-  String _estimatedValueOfCar = '';
-  String _estimatedDrivingDistance = '';
-  String _estimatedOwnership = '';
-  double _margin = 125;
+  int _estimatedValueOfCar = 0;
+  int _estimatedDrivingDistance = 0;
+  int _estimatedOwnership = 0;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -68,9 +68,14 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           labelText: 'Estimated value of the car',
                           border: OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.number,
+                        maxLength: 2,
                         enabled: _ownsCar,
-                        onSaved: (value) =>
-                            setState(() => _estimatedValueOfCar = value!),
+                        onSaved: (value) => setState(() {
+                          int? valueInt = int.tryParse(value!);
+                          _estimatedValueOfCar = valueInt!;
+                          return;
+                        }),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -85,9 +90,11 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           labelText: 'Estimated yearly driving distance',
                           border: OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
                         enabled: _ownsCar,
-                        onSaved: (value) =>
-                            setState(() => _estimatedDrivingDistance = value!),
+                        onSaved: (value) => setState(() =>
+                            _estimatedDrivingDistance = int.tryParse(value!)!),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -103,8 +110,10 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           border: OutlineInputBorder(),
                         ),
                         enabled: _ownsCar,
-                        onSaved: (value) =>
-                            setState(() => _estimatedOwnership = value!),
+                        onSaved: (value) => setState(
+                            () => _estimatedOwnership = int.tryParse(value!)!),
+                        keyboardType: TextInputType.number,
+                        maxLength: 2,
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -112,20 +121,6 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           }
                           return null;
                         },
-                      ),
-                      SizedBox(height: 30),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            // If the form is valid, display a snackbar. In the real world,
-                            // you'd often call a server or save the information in a database.
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
-                          }
-                        },
-                        child: const Text('Submit'),
                       ),
                     ],
                   ),
@@ -135,13 +130,48 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
           )),
         ),
         bottomNavigationBar: PageIndicator(
-          index: 3,
-          previousPage: MaterialPageRoute(
-              builder: (context) => TransportationRegistrationPage()),
-          nextPage:
-              MaterialPageRoute(builder: (context) => ClimateActionPage()),
-        ),
+            index: 3,
+            previousPage: MaterialPageRoute(
+                builder: (context) => TransportationRegistrationPage()),
+            nextPage: MaterialPageRoute(
+              builder: (context) => ClimateActionPage(),
+            ),
+            formSumbissionFunction: () => submitCarInformation(context)),
       );
+
+  void submitCarInformation(BuildContext context) {
+    if (_ownsCar) {
+      if (_formKey.currentState!.validate()) {
+        Settings settings = Settings(
+            0,
+            null,
+            null,
+            null,
+            null,
+            this._registrationNo,
+            this._estimatedValueOfCar,
+            this._estimatedDrivingDistance,
+            this._estimatedOwnership,
+            null,
+            null,
+            null,
+            null,
+            null);
+        var settingsDbm = SettingsDatabaseManager.instance;
+        settingsDbm.update(settings);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Processing Data')),
+        );
+
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ClimateActionPage()));
+      }
+    } else {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => ClimateActionPage()));
+    }
+  }
 }
 
 // Define a custom Form widget.

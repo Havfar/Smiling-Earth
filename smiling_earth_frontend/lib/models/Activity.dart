@@ -2,6 +2,7 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smiling_earth_frontend/models/energy.dart';
+import 'package:smiling_earth_frontend/models/transportation.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 
 abstract class ActivityInterface {
@@ -72,14 +73,12 @@ class Activity extends ActivityInterface {
     var duration = startDate!.difference(endDate!);
     switch (activity) {
       case AppActivityType.IN_CAR:
-        return 1.3 * duration.inMinutes / 60;
+        return Transportation.getGasolineCarEmission(duration);
       // return Energy.calculatePastHourElectricityCo2(this.temperature!);
       case AppActivityType.IN_BUS:
-        return 1.3 * duration.inMinutes / 60;
+        return Transportation.getBusEmission(duration);
       case AppActivityType.IN_PLANE:
-        return 1.3 * duration.inMinutes / 60;
-      case AppActivityType.IN_FERRY:
-        return 1.3 * duration.inMinutes / 60;
+        return Transportation.getFlyingEmission(duration);
 
       default:
         return 0;

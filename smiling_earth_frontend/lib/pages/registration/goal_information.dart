@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/pages/registration/house_registration.dart';
+import 'package:smiling_earth_frontend/pages/registration/user_information.dart';
 import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
@@ -49,8 +49,8 @@ class GoalInformationPage extends StatelessWidget {
         bottomNavigationBar: PageIndicator(
           index: 0,
           previousPage: MaterialPageRoute(builder: (context) => WelcomePage()),
-          nextPage:
-              MaterialPageRoute(builder: (context) => HouseRegistrationPage()),
+          nextPage: MaterialPageRoute(
+              builder: (context) => UserInformationRegistration()),
         ),
       );
 }

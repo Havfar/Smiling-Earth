@@ -125,17 +125,25 @@ class BuildPledges extends StatelessWidget {
                               ]))
                           .toList());
                 }
-                return Row(
-                    children: state.pledges
-                        .map((pledge) => Column(children: [
-                              CircleIcon(
-                                emoji: pledge.icon,
-                                backgroundColor: Colors.blueAccent,
-                              ),
-                              Text(pledge.title,
-                                  style: TextStyle(fontSize: 10)),
-                            ]))
-                        .toList());
+                return Container(
+                  height: 80,
+                  width: double.infinity,
+                  child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: state.pledges
+                          .map((pledge) => Container(
+                                margin: EdgeInsets.only(right: 10),
+                                child: Column(children: [
+                                  CircleIcon(
+                                    emoji: pledge.icon,
+                                    backgroundColor: Colors.blueAccent,
+                                  ),
+                                  Text(pledge.title,
+                                      style: TextStyle(fontSize: 10)),
+                                ]),
+                              ))
+                          .toList()),
+                );
               } else if (state is ErrorRetrievingPledges) {
                 return Text('Error: ' + state.error);
               }

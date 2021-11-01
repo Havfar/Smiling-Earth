@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:smiling_earth_frontend/pages/registration/goal_information.dart';
+import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -37,9 +38,14 @@ class WelcomePage extends StatelessWidget {
                 height: 50,
               ),
               TextButton(
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GoalInformationPage(),
-                      )),
+                  onPressed: () {
+                    var settingsDbm = SettingsDatabaseManager.instance;
+                    settingsDbm.add(Settings(0, null, null, null, null, null,
+                        null, null, null, null, null, null, null, null));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => GoalInformationPage(),
+                    ));
+                  },
                   child: Text('Start registration >',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w400)))

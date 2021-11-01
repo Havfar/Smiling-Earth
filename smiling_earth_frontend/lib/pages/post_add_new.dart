@@ -50,9 +50,11 @@ class NewPostPage extends StatelessWidget {
                                 content: _controller.value.text,
                                 likesCount: 0,
                                 user: UserProfileDto(
-                                    firstName: "Name",
-                                    lastName: 'Name',
-                                    userId: -1),
+                                  firstName: "Name",
+                                  lastName: 'Name',
+                                  userId: -1,
+                                  avatar: null,
+                                ),
                                 timestamp: ''))),
                       ),
                   child: Text("Preview Post"))

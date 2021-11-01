@@ -18,8 +18,10 @@ class PledgeClient {
           await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+      print(response.body);
       final pledges = json.map((pledgeJson) {
-        return PledgeDto.fromJson(pledgeJson['pledge']);
+        print(pledgeJson);
+        return PledgeDto.fromJson(pledgeJson);
       }).toList();
       return pledges;
     } catch (e) {
@@ -79,6 +81,29 @@ class PledgeClient {
         return PledgeDto.fromJson(pledgeJson['pledge']);
       }).toList();
       return pledges;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<bool> createUserPledge(List<int> pledges) async {
+    String endpoint = '/pledge/user/';
+    final token = await UserSecureStorage.getToken();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      print('for');
+      var list = jsonEncode(pledges.toList());
+      Map<String, dynamic> body = {"pledges": list};
+      print(body);
+      final response = await http.post(uri,
+          headers: {"Authorization": "Token " + token!}, body: body);
+      // body: jsonEncode(body));
+      print('aja');
+      if (response.statusCode == 201) {
+        return true;
+      }
+      throw Exception('error');
     } catch (e) {
       throw e;
     }

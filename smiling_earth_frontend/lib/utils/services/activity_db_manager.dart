@@ -31,7 +31,7 @@ class ActivityDatabaseManager {
   // }
 
   Future _onCreate(Database db, int version) async {
-    print("creating db");
+    print("creating TABLE activities");
     await db.execute('''
       CREATE TABLE activities(
           id INTEGER PRIMARY KEY,
@@ -158,7 +158,10 @@ class ActivityDatabaseManager {
 
     double emissions = 0;
     for (var activity in activitiesQuery) {
-      emissions += Activity.fromMap(activity).getEmission();
+      var e = Activity.fromMap(activity).getEmission();
+      print(e);
+
+      emissions += e;
     }
     return emissions;
   }

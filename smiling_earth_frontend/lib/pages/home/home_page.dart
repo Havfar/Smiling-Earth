@@ -84,8 +84,7 @@ class BuildChart extends StatelessWidget {
             if (snapshot.hasData) {
               return Center(
                 child: SmilingEarthEmissionChart(
-                    energyEmission: 30,
-                    // snapshot.data!.energy,
+                    energyEmission: snapshot.data!.energy,
                     transportEmission: snapshot.data!.transport,
                     goal: emissionGoal),
               );

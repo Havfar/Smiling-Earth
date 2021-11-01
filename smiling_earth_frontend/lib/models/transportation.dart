@@ -29,7 +29,7 @@ class Transportation {
 
   static double getDieselCarEmission(Duration duration) {
     //Future versions should track distance covered.
-    var speed = duration.inMinutes > 30 ? highwaySpeed : citySpeed;
+    var speed = duration.inMinutes.abs() > 30 ? highwaySpeed : citySpeed;
     var distance = duration.inMinutes / 60 * speed;
     return dieselEmission * _getCarLiterPerKm() * distance;
   }
@@ -37,7 +37,7 @@ class Transportation {
   static double getGasolineCarEmission(Duration duration) {
     //Future versions should track distance covered.
     // var speed = duration.inMinutes > 30 ? highwaySpeed : citySpeed;
-    var distance = convertCarDurationToDistance(duration.inMinutes);
+    var distance = convertCarDurationToDistance(duration.inMinutes.abs());
     return getGasolineCarEmissionByDistance(distance);
   }
 

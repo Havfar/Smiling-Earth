@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
+import 'package:smiling_earth_frontend/pages/fluttermoji.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
-import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
@@ -76,6 +76,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Find users',
                     icon: Icons.people,
                     onClicked: () => selectedItem(context, 5),
+                  ),
+                  buildMenuItem(
+                    text: 'fluttermoji',
+                    icon: Icons.people,
+                    onClicked: () => selectedItem(context, 3),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
@@ -194,7 +199,9 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => NotificationsPage(),
+          builder: (context) => FlutterMojiPage(
+            title: 'test',
+          ),
         ));
         break;
       case 4:

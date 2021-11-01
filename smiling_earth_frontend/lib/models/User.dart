@@ -1,3 +1,5 @@
+import 'package:smiling_earth_frontend/models/avatar.dart';
+
 UserProfile mockUser = UserProfile(
     name: "John Doe",
     image:
@@ -13,17 +15,22 @@ class UserProfileDto {
   final String firstName;
   final String lastName;
   final int userId;
+  final Avatar? avatar;
   String image =
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
 
   UserProfileDto(
-      {required this.firstName, required this.lastName, required this.userId});
+      {required this.firstName,
+      required this.lastName,
+      required this.userId,
+      required this.avatar});
 
   factory UserProfileDto.fromJson(Map<String, dynamic> json) {
     return new UserProfileDto(
         firstName: json['first_name'],
         lastName: json['last_name'],
-        userId: json['user_id']);
+        userId: json['user_id'],
+        avatar: Avatar.fromJson(json['avatar']));
   }
 
   String getName() {

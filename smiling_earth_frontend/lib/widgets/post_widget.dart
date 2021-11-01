@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/posts/like_cubit.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/post_detailed.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
@@ -51,9 +52,18 @@ class _PostWidgetState extends State<PostWidget> {
                 margin: EdgeInsets.only(bottom: 20),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(widget.post.user!.image)),
+                    Container(
+                        height: 60,
+                        width: 60,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Avatar.toSvg(widget.post.user!.avatar!)),
+                    // CircleAvatar(
+                    //     radius: 20,
+                    //     backgroundImage: NetworkImage(widget.post.user!.image)),
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Column(

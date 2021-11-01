@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/pages/registration/car_registration.dart';
-import 'package:smiling_earth_frontend/pages/registration/transportation_registration.dart';
+import 'package:smiling_earth_frontend/pages/registration/house_registration.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
 
-class HouseRegistrationPage extends StatefulWidget {
+class UserInformationRegistration extends StatefulWidget {
+  UserInformationRegistration({Key? key}) : super(key: key);
+
   @override
-  State<HouseRegistrationPage> createState() => _HouseRegistrationPageState();
+  _UserInformationRegistrationState createState() =>
+      _UserInformationRegistrationState();
 }
 
-class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
+class _UserInformationRegistrationState
+    extends State<UserInformationRegistration> {
   final _formKey = GlobalKey<FormState>();
-  String _registrationNo = '';
-  int _buildingYear = 2000;
-  int _lastRenovation = 2000;
-  int _typeOfHeating = 0;
-  int _size = 100;
+  String _first_name = 'Are';
+  String _last_name = 'Odin';
+  String _city = '';
+  String _gender = '';
+  String _bio = '';
+  double _weight = 80;
+  int _age = 25;
+  int _profilePicture = 0;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -26,6 +32,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
           child: Center(
               child: ListView(
             children: [
+              Text('User Information'),
               Form(
                 key: _formKey,
                 child: Container(
@@ -36,61 +43,75 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                   padding: EdgeInsets.only(top: 20),
                   child: Column(
                     children: <Widget>[
-                      Column(
-                        children: [
-                          Text('🏠'),
-                          Text(
-                              'The type of energy you use for heating and the efficiency of your heating system determine 80% of your carbon footprint from energy consumption. The building year and the year of last renovation of the house, also affect the house emissions'),
-                        ],
-                      ),
                       SizedBox(height: 30),
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: 'Building year',
+                          labelText: 'First name',
                           border: OutlineInputBorder(),
                           // hintText: "Enter the car's registration number"
                         ),
-                        onSaved: (value) => setState(
-                            () => _buildingYear = int.tryParse(value!)!),
+                        enabled: false,
+                        initialValue: _first_name,
+                        onSaved: (value) =>
+                            setState(() => _first_name = value!),
                         // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
                       ),
                       SizedBox(height: 30),
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: 'Year of last renovation',
+                          labelText: 'Last name',
+                          border: OutlineInputBorder(),
+                          // hintText: "Enter the car's registration number"
+                        ),
+                        enabled: false,
+                        initialValue: _last_name,
+                        onSaved: (value) => setState(() => _last_name = value!),
+                        // The validator receives the text that the user has entered.
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'What City do you live in? (optional)',
+                          border: OutlineInputBorder(),
+                        ),
+                        onSaved: (value) => setState(() {
+                          _city = value!;
+                        }),
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'What City do you live in? (optional)',
+                          border: OutlineInputBorder(),
+                        ),
+                        onSaved: (value) => setState(() {
+                          _city = value!;
+                        }),
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'How old are you? (optional)',
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
                         maxLength: 2,
-                        onSaved: (value) => setState(() {
-                          int? valueInt = int.tryParse(value!);
-                          _lastRenovation = valueInt!;
-                          return;
-                        }),
+                        onSaved: (value) =>
+                            setState(() => _age = int.tryParse(value!)!),
                         // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
                       ),
                       SizedBox(height: 30),
                       TextFormField(
+                        enabled: false,
                         decoration: InputDecoration(
-                          labelText: 'Size of home (square meter)',
+                          labelText: 'Weight (default)',
                           border: OutlineInputBorder(),
                         ),
-                        keyboardType: TextInputType.number,
-                        maxLength: 10,
+                        initialValue: '80',
                         onSaved: (value) =>
-                            setState(() => _size = int.tryParse(value!)!),
+                            setState(() => _weight = double.tryParse(value!)!),
+                        keyboardType: TextInputType.number,
+                        maxLength: 2,
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -99,14 +120,14 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 30),
                       TextFormField(
+                        enabled: false,
                         decoration: InputDecoration(
-                          labelText: 'What kind of heating do you use?',
+                          labelText: 'Choose a profile picture',
                           border: OutlineInputBorder(),
                         ),
                         onSaved: (value) => setState(
-                            () => _typeOfHeating = int.tryParse(value!)!),
+                            () => _profilePicture = int.tryParse(value!)!),
                         keyboardType: TextInputType.number,
                         maxLength: 2,
                         // The validator receives the text that the user has entered.
@@ -125,32 +146,18 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
           )),
         ),
         bottomNavigationBar: PageIndicator(
-            index: 3,
-            previousPage: MaterialPageRoute(
-                builder: (context) => TransportationRegistrationPage()),
+            index: 1,
+            previousPage: null,
             nextPage: MaterialPageRoute(
-              builder: (context) => CarRegistrationPage(),
+              builder: (context) => HouseRegistrationPage(),
             ),
-            formSumbissionFunction: () => submitHouseInformation(context)),
+            formSumbissionFunction: () => submitUserInformation(context)),
       );
 
-  void submitHouseInformation(BuildContext context) {
+  void submitUserInformation(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      Settings settings = Settings(
-          0,
-          null,
-          _buildingYear.toString(),
-          _lastRenovation.toString(),
-          _typeOfHeating,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null);
+      Settings settings = new Settings(0, null, null, null, null, null, null,
+          null, null, _first_name, _last_name, _age, _weight, _profilePicture);
       var settingsDbm = SettingsDatabaseManager.instance;
       settingsDbm.update(settings);
 
@@ -158,11 +165,8 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
         const SnackBar(content: Text('Processing Data')),
       );
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => CarRegistrationPage()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => HouseRegistrationPage()));
     }
   }
 }
-
-// MaterialPageRoute(builder: (context) => GoalInformationPage(),
-

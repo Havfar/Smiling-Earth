@@ -29,7 +29,7 @@ class EnergyDatabaseManager {
   // }
 
   Future _onCreate(Database db, int version) async {
-    print("creating db");
+    print("creating energy table");
     await db.execute('''
       CREATE TABLE energy(
           id INTEGER PRIMARY KEY,

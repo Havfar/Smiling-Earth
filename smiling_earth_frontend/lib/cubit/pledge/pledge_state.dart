@@ -20,3 +20,5 @@ class ErrorRetrievingPledges extends PledgeState {
 
   ErrorRetrievingPledges(this.error);
 }
+
+class PledgesMade extends PledgeState {}
