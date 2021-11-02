@@ -20,7 +20,7 @@ class _FlutterMojiPageState extends State<FlutterMojiPage> {
   bool saved = false;
   late Avatar avatar;
   // final Map<String, dynamic> emoji =
-  final Map<String, dynamic> emoji = {
+  final Map<String?, dynamic> emoji = {
     "topType": 20,
     "accessoriesType": 1,
     "hairColor": 3,
@@ -111,33 +111,5 @@ class _FlutterMojiPageState extends State<FlutterMojiPage> {
       });
       // AvatarCubit()..updateAvatar(avatar);
     });
-  }
-}
-
-class NewPage extends StatelessWidget {
-  const NewPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30),
-            child: FluttermojiCircleAvatar(
-              radius: 100,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
-            child: FluttermojiCustomizer(
-              //scaffoldHeight: 400,
-              showSaveWidget: true,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

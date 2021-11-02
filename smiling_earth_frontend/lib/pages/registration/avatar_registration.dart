@@ -54,19 +54,11 @@ class _AvatarRegistrationPageState extends State<AvatarRegistrationPage> {
       );
 
   void submitPledges(BuildContext context) {
-    var _fluttermojiController;
-    Get.put(FluttermojiController());
-    _fluttermojiController = Get.find<FluttermojiController>();
+    var _fluttermojiController = Get.find<FluttermojiController>();
     _fluttermojiController.setFluttermoji();
-    var selectedIndexes = _fluttermojiController.selectedIndexes;
-    FluttermojiFunctions().encodeMySVGtoMap().then((avatarMap) {
-      Avatar avatar = Avatar.fromJson(avatarMap);
-      AvatarCubit()..updateAvatar(avatar);
-    });
-
-    var route =
-        MaterialPageRoute(builder: (context) => HouseRegistrationPage());
-
-    Navigator.of(context).push(route);
+    Avatar avatar = Avatar.fromJson(_fluttermojiController.selectedIndexes);
+    AvatarCubit()..updateAvatar(avatar);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => HouseRegistrationPage()));
   }
 }
