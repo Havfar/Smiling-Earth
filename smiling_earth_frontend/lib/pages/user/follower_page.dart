@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/user/user_cubit.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/pages/user/profile_page.dart';
 import 'package:smiling_earth_frontend/pages/user/profile_preview_page.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -180,10 +181,15 @@ class _BuildList extends StatelessWidget {
                                             : ProfilePage(
                                                 userId: user.user.userId)));
                               },
-                              leading: CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage:
-                                      NetworkImage(user.user.image)),
+                              leading: Container(
+                                  height: 60,
+                                  width: 60,
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Avatar.toSvg(user.user.avatar!)),
                               title: Text(user.user.getName()),
                               trailing: user.isFollowing
                                   ? TextButton(

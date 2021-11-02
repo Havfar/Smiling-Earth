@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/pages/registration/car_registration.dart';
+import 'package:smiling_earth_frontend/pages/registration/avatar_registration.dart';
 import 'package:smiling_earth_frontend/pages/registration/transportation_registration.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
@@ -14,7 +14,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
   String _registrationNo = '';
   int _buildingYear = 2000;
   int _lastRenovation = 2000;
-  int _typeOfHeating = 0;
+  String _typeOfHeating = 'Electric';
   int _size = 100;
 
   @override
@@ -105,10 +105,9 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                           labelText: 'What kind of heating do you use?',
                           border: OutlineInputBorder(),
                         ),
-                        onSaved: (value) => setState(
-                            () => _typeOfHeating = int.tryParse(value!)!),
+                        onSaved: (value) =>
+                            setState(() => _typeOfHeating = value!),
                         keyboardType: TextInputType.number,
-                        maxLength: 2,
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -127,9 +126,9 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
         bottomNavigationBar: PageIndicator(
             index: 3,
             previousPage: MaterialPageRoute(
-                builder: (context) => TransportationRegistrationPage()),
+                builder: (context) => AvatarRegistrationPage()),
             nextPage: MaterialPageRoute(
-              builder: (context) => CarRegistrationPage(),
+              builder: (context) => TransportationRegistrationPage(),
             ),
             formSumbissionFunction: () => submitHouseInformation(context)),
       );
@@ -158,8 +157,8 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
         const SnackBar(content: Text('Processing Data')),
       );
 
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => CarRegistrationPage()));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => TransportationRegistrationPage()));
     }
   }
 }

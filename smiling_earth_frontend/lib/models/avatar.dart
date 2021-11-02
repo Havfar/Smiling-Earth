@@ -68,12 +68,14 @@ class Avatar {
         json);
   }
 
+// Map<String, String> toJson(){
+//   return
+// }
+
   // String toJson(){
   //   return JsonEncoder()
   // }
   static SvgPicture toSvg(Avatar avatar) {
-    print('toSvg');
-    print(avatar.jsonValue);
     try {
       String svg = FluttermojiFunctions()
           .decodeFluttermojifromString(jsonEncode(avatar.jsonValue));

@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:get/get.dart';
+import 'package:smiling_earth_frontend/cubit/user/avatar_cubit.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 
 class FlutterMojiPage extends StatefulWidget {
   final String title;
@@ -13,6 +17,8 @@ class FlutterMojiPage extends StatefulWidget {
 }
 
 class _FlutterMojiPageState extends State<FlutterMojiPage> {
+  bool saved = false;
+  late Avatar avatar;
   // final Map<String, dynamic> emoji =
   final Map<String, dynamic> emoji = {
     "topType": 20,
@@ -29,93 +35,60 @@ class _FlutterMojiPageState extends State<FlutterMojiPage> {
     "style": 0,
     "graphicType": 0
   };
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.green),
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          SizedBox(
-            height: 25,
-          ),
+        children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Use your Fluttermoji anywhere\nwith the below widget",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-              textAlign: TextAlign.center,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: FluttermojiCircleAvatar(
+              radius: 100,
             ),
           ),
-          SizedBox(
-            height: 25,
-          ),
-          // FluttermojiCircleAvatar(
-          //   backgroundColor: Colors.grey[200],
-          //   radius: 100,
-          // ),
-          Container(
-            width: 100,
-            height: 100,
-            child: getEmoji(),
-          ),
-          SizedBox(
-            height: 25,
-          ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "and create your own page to customize them using our widgets",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
-              textAlign: TextAlign.center,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+            child: FluttermojiCustomizer(
+              outerTitleText: '',
+              //scaffoldHeight: 400,
+              showSaveWidget: false,
             ),
           ),
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            children: [
-              Spacer(flex: 2),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  height: 35,
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.edit),
-                    label: Text("Customize"),
-                    onPressed: () => Navigator.push(context,
-                        new MaterialPageRoute(builder: (context) => NewPage())),
-                  ),
-                ),
-              ),
-              Spacer(flex: 2),
-            ],
-          ),
-          ElevatedButton.icon(
-            icon: Icon(Icons.edit),
-            label: Text("Save"),
-            onPressed: () {
-              String x = '';
-              FluttermojiFunctions().encodeMySVGtoString().then((value) {
-                print(value);
-                return x = value;
-              });
-              print('aha');
-              print(x);
-              print('ahahaha');
-
-              print(FluttermojiFunctions().decodeFluttermojifromString(x));
-            },
-          ),
-          SizedBox(
-            height: 100,
-          ),
+          getSaveButton()
         ],
       ),
     );
+  }
+
+  Container getSaveButton() {
+    if (saved) {
+      return Container(
+        child: BlocProvider(
+          create: (context) => AvatarCubit()..updateAvatar(avatar),
+          child: BlocBuilder<AvatarCubit, AvatarState>(
+            builder: (context, state) {
+              print(state);
+
+              if (state is AvatarUpdated) {
+                return Center(child: Text('Avatar is updated'));
+              } else if (state is AvatarError) {
+                return Text('Error ' + state.error);
+              }
+              return CircularProgressIndicator();
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: ElevatedButton(
+            onPressed: () => submitAvatar(), child: Text('Save')),
+      );
+    }
   }
 
   SvgPicture getEmoji() {
@@ -123,6 +96,21 @@ class _FlutterMojiPageState extends State<FlutterMojiPage> {
         FluttermojiFunctions().decodeFluttermojifromString(jsonEncode(emoji));
     var s = SvgPicture.string(svg);
     return s;
+  }
+
+  void submitAvatar() {
+    var _fluttermojiController;
+    Get.put(FluttermojiController());
+    _fluttermojiController = Get.find<FluttermojiController>();
+    _fluttermojiController.setFluttermoji();
+    var selectedIndexes = _fluttermojiController.selectedIndexes;
+    FluttermojiFunctions().encodeMySVGtoMap().then((avatarMap) {
+      setState(() {
+        avatar = Avatar.fromJson(avatarMap);
+        saved = true;
+      });
+      // AvatarCubit()..updateAvatar(avatar);
+    });
   }
 }
 

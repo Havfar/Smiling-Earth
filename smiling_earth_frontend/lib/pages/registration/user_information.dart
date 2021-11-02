@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/pages/registration/house_registration.dart';
+import 'package:smiling_earth_frontend/pages/registration/avatar_registration.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
 
@@ -149,7 +149,7 @@ class _UserInformationRegistrationState
             index: 1,
             previousPage: null,
             nextPage: MaterialPageRoute(
-              builder: (context) => HouseRegistrationPage(),
+              builder: (context) => AvatarRegistrationPage(),
             ),
             formSumbissionFunction: () => submitUserInformation(context)),
       );
@@ -166,7 +166,9 @@ class _UserInformationRegistrationState
       );
 
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HouseRegistrationPage()));
+          MaterialPageRoute(builder: (context) => AvatarRegistrationPage()));
     }
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => AvatarRegistrationPage()));
   }
 }

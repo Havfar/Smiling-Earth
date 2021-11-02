@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/registration/car_registration.dart';
 import 'package:smiling_earth_frontend/pages/registration/house_registration.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
+import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
 
-class TransportationRegistrationPage extends StatelessWidget {
+class TransportationRegistrationPage extends StatefulWidget {
+  @override
+  State<TransportationRegistrationPage> createState() =>
+      _TransportationRegistrationPageState();
+}
+
+class _TransportationRegistrationPageState
+    extends State<TransportationRegistrationPage> {
+  final List<AppActivityType> selected = [];
   @override
   Widget build(BuildContext context) => Scaffold(
       // appBar: AppBar(),
@@ -36,9 +45,20 @@ class TransportationRegistrationPage extends StatelessWidget {
             ),
             Column(
                 children: getTransportationTypes()
-                    .map((activity) => CheckboxWidget(
-                          activity: activity,
-                        ))
+                    .map((activity) => Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                    BorderSide(color: Colors.grey.shade300))),
+                        child: CheckboxListTile(
+                            title: Text(
+                                getTransporationNameByActivityType(activity)),
+                            value: isSelected(activity),
+                            onChanged: (bool? value) {
+                              updateSelected(activity);
+                            },
+                            secondary: Icon(
+                                getTransporationIconByActivityType(activity)))))
                     .toList()),
           ],
         ),
@@ -50,38 +70,37 @@ class TransportationRegistrationPage extends StatelessWidget {
         ),
         nextPage:
             MaterialPageRoute(builder: (context) => CarRegistrationPage()),
+        formSumbissionFunction: () => submitForm(),
       ));
-}
 
-// MaterialPageRoute(builder: (context) => GoalInformationPage(),
+  void submitForm() {
+    String selectedIndexes = '';
+    for (var type in selected) {
+      selectedIndexes += type.index.toString() + ',';
+    }
+    print(selectedIndexes);
 
-/// This is the stateful widget that the main application instantiates.
-class CheckboxWidget extends StatefulWidget {
-  final AppActivityType activity;
-  const CheckboxWidget({Key? key, required this.activity}) : super(key: key);
+    var newSettings = Settings(0, selectedIndexes, null, null, null, null, null,
+        null, null, null, null, null, null, null);
+    SettingsDatabaseManager.instance.update(newSettings);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => CarRegistrationPage()));
+  }
 
-  @override
-  State<CheckboxWidget> createState() => _CheckboxWidgetState();
-}
+  void updateSelected(AppActivityType type) {
+    print('eho');
+    if (isSelected(type)) {
+      setState(() {
+        selected.remove(type);
+      });
+    } else {
+      setState(() {
+        selected.add(type);
+      });
+    }
+  }
 
-/// This is the private State class that goes with MyStatefulWidget.
-class _CheckboxWidgetState extends State<CheckboxWidget> {
-  bool _checked = false;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey.shade300))),
-      child: CheckboxListTile(
-        title: Text(getTransporationNameByActivityType(widget.activity)),
-        value: _checked,
-        onChanged: (bool? value) {
-          setState(() {
-            _checked = value!;
-          });
-        },
-        secondary: Icon(getTransporationIconByActivityType(widget.activity)),
-      ),
-    );
+  bool isSelected(AppActivityType type) {
+    return selected.contains(type);
   }
 }

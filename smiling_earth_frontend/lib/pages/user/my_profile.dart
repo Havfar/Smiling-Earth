@@ -53,6 +53,15 @@ class _BuildHeader extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  //  Container(
+                  //       height: 60,
+                  //       width: 60,
+                  //       padding: EdgeInsets.all(5),
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.grey.shade200,
+                  //         shape: BoxShape.circle,
+                  //       ),
+                  //       child: Avatar.toSvg(widget.post.user!.avatar!))
                   CircleAvatar(
                       radius: 30,
                       backgroundImage: NetworkImage(state.profile.image)),

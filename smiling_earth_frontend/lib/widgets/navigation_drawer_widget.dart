@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermoji.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
-import 'package:smiling_earth_frontend/pages/fluttermoji.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
@@ -77,11 +77,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.people,
                     onClicked: () => selectedItem(context, 5),
                   ),
-                  buildMenuItem(
-                    text: 'fluttermoji',
-                    icon: Icons.people,
-                    onClicked: () => selectedItem(context, 3),
-                  ),
+                  // buildMenuItem(
+                  //   text: 'fluttermoji',
+                  //   icon: Icons.people,
+                  //   onClicked: () => selectedItem(context, 3),
+                  // ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Challenges',
@@ -117,7 +117,8 @@ class NavigationDrawerWidget extends StatelessWidget {
           padding: padding.add(EdgeInsets.symmetric(vertical: 40)),
           child: Row(
             children: [
-              CircleAvatar(radius: 30, backgroundImage: NetworkImage(urlImage)),
+              Container(
+                  width: 50, height: 50, child: FluttermojiCircleAvatar()),
               SizedBox(width: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,11 +199,11 @@ class NavigationDrawerWidget extends StatelessWidget {
         ));
         break;
       case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FlutterMojiPage(
-            title: 'test',
-          ),
-        ));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => FlutterMojiPage(
+        //     title: 'test',
+        //   ),
+        // ));
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(

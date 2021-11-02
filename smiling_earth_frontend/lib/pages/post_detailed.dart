@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/posts/newcomment_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
@@ -127,9 +128,14 @@ class BuildLikes extends StatelessWidget {
           Row(
             children: likes
                 .map((like) => Container(
-                    child: CircleAvatar(
-                        radius: 15,
-                        backgroundImage: NetworkImage(like.user!.image))))
+                    height: 60,
+                    width: 60,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Avatar.toSvg(like.user!.avatar!)))
                 .toList(),
           )
         ]));
@@ -185,15 +191,22 @@ class CommentWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          CircleAvatar(
-              radius: 20, backgroundImage: NetworkImage(comment.user!.image)),
+          Container(
+              height: 60,
+              width: 60,
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                shape: BoxShape.circle,
+              ),
+              child: Avatar.toSvg(comment.user!.avatar!)),
           Container(
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  comment.user!.firstName,
+                  comment.user!.getName(),
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 Text(comment.comment)

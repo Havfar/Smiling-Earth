@@ -61,9 +61,6 @@ class _PostWidgetState extends State<PostWidget> {
                           shape: BoxShape.circle,
                         ),
                         child: Avatar.toSvg(widget.post.user!.avatar!)),
-                    // CircleAvatar(
-                    //     radius: 20,
-                    //     backgroundImage: NetworkImage(widget.post.user!.image)),
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Column(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
@@ -77,5 +78,22 @@ class UserClient {
     final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
     final profile = UserProfileDetailedDto.fromJson(json.first);
     return profile;
+  }
+
+  Future<int> updateAvatar(Avatar avatar) async {
+    String endpoint = '/user/avatar/';
+    final token = await UserSecureStorage.getToken();
+    print(jsonEncode(avatar.jsonValue));
+    String json = jsonEncode(avatar.jsonValue);
+    final uri = Uri.parse(_url + endpoint);
+    final response = await http.put(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: json);
+
+    return response.statusCode;
   }
 }
