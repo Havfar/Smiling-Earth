@@ -8,6 +8,7 @@ import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
+import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -50,6 +51,11 @@ class _HomeState extends State<HomePage> {
               time: null,
             ),
             BuildChart(),
+            TextButton.icon(
+              onPressed: () => SettingsDatabaseManager.instance.delete(),
+              label: Text("delete settings"),
+              icon: Icon(Icons.delete),
+            ),
             BuildEmissionEstimation(),
             BuildFeed(),
           ],

@@ -19,6 +19,7 @@ class SmilingEarthIcon {
     return Image(
         height: 60,
         width: 60,
-        image: AssetImage('assets/img/smiling-earth/earth1.png'));
+        image: AssetImage(
+            'assets/img/smiling-earth/earth' + imageIndex.toString() + '.png'));
   }
 }

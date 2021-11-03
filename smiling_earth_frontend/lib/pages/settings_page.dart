@@ -77,6 +77,15 @@ class SettingsPage extends StatelessWidget {
                         ),
                       )),
                     ),
+                    ListTile(
+                      title: Text('Edit Pledges'),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => FlutterMojiPage(
+                          title: 'test',
+                        ),
+                      )),
+                    ),
                   ],
                 );
               } else {

@@ -25,11 +25,11 @@ class GoalInformationPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SmilingEarthIcon.getSmallIcon(0),
                   SmilingEarthIcon.getSmallIcon(1),
                   SmilingEarthIcon.getSmallIcon(2),
                   SmilingEarthIcon.getSmallIcon(3),
                   SmilingEarthIcon.getSmallIcon(4),
+                  SmilingEarthIcon.getSmallIcon(5),
                 ],
               ),
               SizedBox(

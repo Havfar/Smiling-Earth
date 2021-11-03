@@ -16,8 +16,8 @@ class Settings {
   final int? car_planned_ownership;
   final String? first_name;
   final String? last_name;
-  final int? age;
-  final double? weight;
+  final String? age;
+  final String? weight;
   final int? profile_picture_index;
 
   Settings(
@@ -142,46 +142,47 @@ class SettingsDatabaseManager {
     //     null, null, null, null, null));
   }
 
+  Future<bool> hasRegistered() async {
+    Database db = await instance.database;
+    var result = await db.rawQuery(
+      'SELECT EXISTS(SELECT 1 FROM settings WHERE id=0)',
+    );
+    int? exists = Sqflite.firstIntValue(result);
+    print(1 == exists);
+    return exists == 1;
+  }
+
   Future<Settings> get() async {
-    print('inne');
     Database db = await instance.database;
     List<Map<String, Object?>> settingsQuery =
         await db.query('settings', where: 'id = 0');
-    print('getting Setting');
-    print(settingsQuery.first);
     Map<String, dynamic> json = settingsQuery.first;
-    int id = json['id'];
-    print(id);
-    print(json['preferred_transport']);
-    String? pt = json['preferred_transport'];
-    print('ok');
+    // String? pt = json['preferred_transport'];
 
-    int? by = json['building_year'] == null
-        ? null
-        : int.tryParse(json['building_year']);
-    print(by.toString());
+    // int? by = json['building_year'] == null
+    //     ? null
+    //     : int.tryParse(json['building_year']);
+    // print(by.toString());
 
-    int? ly = int.tryParse(json['last_renocation_year']);
-    print('1/4');
+    // int? ly = int.tryParse(json['last_renocation_year']);
 
-    String? ht = json['heating_type'];
-    String? creg = json['car_reg_no'];
-    int? cv =
-        json['car_value'] == null ? null : int.tryParse(json['car_value']);
-    int? cyd = json['car_yearly_drive'] == null
-        ? null
-        : int.tryParse(json['car_yearly_drive']);
-    print('ned eller opp?');
-    int? cpo = json['car_planned_ownership'] == null
-        ? null
-        : int.tryParse(json['car_planned_ownership']);
-    String? fn = json['first_name'];
-    String? ln = json['last_name'];
-    int? age = json['age'] == null ? null : int.tryParse(json['age']);
-    int? w = json['weight'] == null ? null : int.tryParse(json['weight']);
-    int? ppi = json['profile_picture_index'] == null
-        ? null
-        : int.tryParse(json['profile_picture_index']);
+    // String? ht = json['heating_type'];
+    // String? creg = json['car_reg_no'];
+    // int? cv =
+    //     json['car_value'] == null ? null : int.tryParse(json['car_value']);
+    // int? cyd = json['car_yearly_drive'] == null
+    //     ? null
+    //     : int.tryParse(json['car_yearly_drive']);
+    // int? cpo = json['car_planned_ownership'] == null
+    //     ? null
+    //     : int.tryParse(json['car_planned_ownership']);
+    // String? fn = json['first_name'];
+    // String? ln = json['last_name'];
+    // int? age = json['age'] == null ? null : int.tryParse(json['age']);
+    // int? w = json['weight'] == null ? null : int.tryParse(json['weight']);
+    // int? ppi = json['profile_picture_index'] == null
+    //     ? null
+    //     : int.tryParse(json['profile_picture_index']);
     Settings settings = Settings.fromMap(settingsQuery.first);
     return settings;
   }
@@ -189,10 +190,24 @@ class SettingsDatabaseManager {
   Future<int> add(Settings settings) async {
     print('inserte new settings ' + settings.toString());
     Database db = await instance.database;
+    await db.delete('settings', where: 'id=0');
     return await db.insert('settings', settings.toMap());
   }
 
+  Future<int> reset(Settings settings) async {
+    print('clearing settings');
+    Database db = await instance.database;
+    return await db.update('settings', settings.toMap(), where: "id = 0");
+  }
+
+  Future<int> delete() async {
+    print('clearing settings');
+    Database db = await instance.database;
+    return await db.delete('settings', where: "id = 0");
+  }
+
   Future<int> update(Settings newSettings) async {
+    print('updating');
     Database db = await instance.database;
     var oldSettings = await get();
 
@@ -202,6 +217,8 @@ class SettingsDatabaseManager {
 
   Settings _compareOldAndNewSettings(
       Settings oldSettings, Settings newSettings) {
+    print(oldSettings.toMap());
+    print(newSettings.toMap());
     int? _id = 0;
     String? _preferredTransport = newSettings.preferredTransport == null
         ? oldSettings.preferredTransport
@@ -233,8 +250,8 @@ class SettingsDatabaseManager {
     String? _last_name = newSettings.last_name == null
         ? oldSettings.last_name
         : newSettings.last_name;
-    int? _age = newSettings.age == null ? oldSettings.age : newSettings.age;
-    double? _weight =
+    String? _age = newSettings.age == null ? oldSettings.age : newSettings.age;
+    String? _weight =
         newSettings.weight == null ? oldSettings.weight : newSettings.weight;
     int? _profile_picture_index = newSettings.profile_picture_index == null
         ? oldSettings.profile_picture_index

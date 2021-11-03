@@ -88,7 +88,6 @@ class _TransportationRegistrationPageState
   }
 
   void updateSelected(AppActivityType type) {
-    print('eho');
     if (isSelected(type)) {
       setState(() {
         selected.remove(type);

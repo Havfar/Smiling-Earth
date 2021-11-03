@@ -4,9 +4,11 @@ import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/bloc/login/repository/user_repository.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/log_in_page.dart';
+import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/pages/splash_page.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
 import 'package:smiling_earth_frontend/utils/services/background_services.dart';
+import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/loading_indicator.dart';
 
 // void main() {
@@ -79,11 +81,21 @@ class App extends StatelessWidget {
             return SplashPage();
           }
           if (state is AuthenticationAuthenticated) {
-            initializeWorkManagerAndPushNotification();
-            print('skal berre vise ein gong');
-            startActivityMonitor();
+            return FutureBuilder<bool>(
+                future: SettingsDatabaseManager.instance.hasRegistered(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!) {
+                      initializeWorkManagerAndPushNotification();
+                      startActivityMonitor();
+                      return HomePage();
+                    } else {
+                      return WelcomePage();
+                    }
+                  }
 
-            return HomePage();
+                  return SplashPage();
+                });
           }
           if (state is AuthenticationUnauthenticated) {
             return LoginPage(

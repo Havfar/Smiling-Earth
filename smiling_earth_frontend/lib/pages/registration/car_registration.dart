@@ -52,8 +52,8 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           // hintText: "Enter the car's registration number"
                         ),
                         enabled: _ownsCar,
-                        onSaved: (value) =>
-                            setState(() => _registrationNo = value!),
+                        onChanged: (value) =>
+                            setState(() => _registrationNo = value),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -71,8 +71,8 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                         keyboardType: TextInputType.number,
                         maxLength: 2,
                         enabled: _ownsCar,
-                        onSaved: (value) => setState(() {
-                          int? valueInt = int.tryParse(value!);
+                        onChanged: (value) => setState(() {
+                          int? valueInt = int.tryParse(value);
                           _estimatedValueOfCar = valueInt!;
                           return;
                         }),
@@ -93,8 +93,8 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                         keyboardType: TextInputType.number,
                         maxLength: 10,
                         enabled: _ownsCar,
-                        onSaved: (value) => setState(() =>
-                            _estimatedDrivingDistance = int.tryParse(value!)!),
+                        onChanged: (value) => setState(() =>
+                            _estimatedDrivingDistance = int.tryParse(value)!),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -110,8 +110,8 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           border: OutlineInputBorder(),
                         ),
                         enabled: _ownsCar,
-                        onSaved: (value) => setState(
-                            () => _estimatedOwnership = int.tryParse(value!)!),
+                        onChanged: (value) => setState(
+                            () => _estimatedOwnership = int.tryParse(value)!),
                         keyboardType: TextInputType.number,
                         maxLength: 2,
                         // The validator receives the text that the user has entered.
@@ -157,6 +157,7 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
             null,
             null,
             null);
+        print(settings.toMap());
         var settingsDbm = SettingsDatabaseManager.instance;
         settingsDbm.update(settings);
 

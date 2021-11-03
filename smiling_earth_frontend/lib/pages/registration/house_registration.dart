@@ -11,11 +11,11 @@ class HouseRegistrationPage extends StatefulWidget {
 
 class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
   final _formKey = GlobalKey<FormState>();
-  String _registrationNo = '';
   int _buildingYear = 2000;
-  int _lastRenovation = 2000;
+  int _lastRenovation = 0;
   String _typeOfHeating = 'Electric';
-  int _size = 100;
+  int _size = 9;
+  int _heatIndex = 0;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -50,8 +50,9 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                           border: OutlineInputBorder(),
                           // hintText: "Enter the car's registration number"
                         ),
-                        onSaved: (value) => setState(
-                            () => _buildingYear = int.tryParse(value!)!),
+                        initialValue: _buildingYear.toString(),
+                        onChanged: (value) => setState(
+                            () => _buildingYear = int.tryParse(value)!),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -67,19 +68,11 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
-                        maxLength: 2,
-                        onSaved: (value) => setState(() {
-                          int? valueInt = int.tryParse(value!);
+                        onChanged: (value) => setState(() {
+                          int? valueInt = int.tryParse(value);
                           _lastRenovation = valueInt!;
                           return;
                         }),
-                        // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
                       ),
                       SizedBox(height: 30),
                       TextFormField(
@@ -88,9 +81,8 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
-                        maxLength: 10,
-                        onSaved: (value) =>
-                            setState(() => _size = int.tryParse(value!)!),
+                        onChanged: (value) =>
+                            setState(() => _size = int.tryParse(value)!),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -100,21 +92,45 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                         },
                       ),
                       SizedBox(height: 30),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'What kind of heating do you use?',
-                          border: OutlineInputBorder(),
-                        ),
-                        onSaved: (value) =>
-                            setState(() => _typeOfHeating = value!),
-                        keyboardType: TextInputType.number,
-                        // The validator receives the text that the user has entered.
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('What kind of heating do you user? (default)'),
+                          RadioListTile<int>(
+                            title: const Text(
+                              'Electric',
+                              style: TextStyle(color: Colors.black54),
+                            ),
+                            value: 0,
+                            groupValue: _heatIndex,
+                            toggleable: false,
+                            onChanged: (value) => (print(value)),
+                          ),
+                          RadioListTile<int>(
+                            title: const Text('Gas',
+                                style: TextStyle(color: Colors.black54)),
+                            value: 1,
+                            groupValue: _heatIndex,
+                            toggleable: false,
+                            onChanged: (value) => (print(value)),
+                          ),
+                          RadioListTile<int>(
+                            title: const Text('Wood',
+                                style: TextStyle(color: Colors.black54)),
+                            value: 2,
+                            groupValue: _heatIndex,
+                            toggleable: false,
+                            onChanged: (value) => (print(value)),
+                          ),
+                          RadioListTile<int>(
+                            title: const Text('Water',
+                                style: TextStyle(color: Colors.black54)),
+                            value: 3,
+                            groupValue: _heatIndex,
+                            toggleable: false,
+                            onChanged: (value) => (print(value)),
+                          ),
+                        ],
                       ),
                     ],
                   ),
