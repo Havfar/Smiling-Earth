@@ -203,7 +203,6 @@ class _BuildSolarEstimationState extends State<BuildSolarEstimation> {
   }
 
   setActiveIntex(int index) => setState(() {
-        print('jadda');
         selectedButton = index;
       });
 }

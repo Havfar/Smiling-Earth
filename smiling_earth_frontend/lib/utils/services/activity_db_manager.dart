@@ -57,8 +57,6 @@ class ActivityDatabaseManager {
 
       bool isInitized = false;
       for (var activityJson in activitiesQuery) {
-        // print(activityJson);
-
         Activity nextActivity = Activity.fromMap(activityJson);
 
         if (!isInitized) {
@@ -159,7 +157,6 @@ class ActivityDatabaseManager {
     double emissions = 0;
     for (var activity in activitiesQuery) {
       var e = Activity.fromMap(activity).getEmission();
-      print(e);
 
       emissions += e;
     }

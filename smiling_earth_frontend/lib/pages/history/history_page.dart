@@ -55,7 +55,6 @@ class BuildActivityListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print("noe");
     return FutureBuilder<List<ActivityGroupedByDate>>(
         future: _getActivtityGroup(),
         builder: (BuildContext context,

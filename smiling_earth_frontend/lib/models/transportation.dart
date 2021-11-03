@@ -42,7 +42,6 @@ class Transportation {
   }
 
   static double getGasolineCarEmissionByDistance(double distance) {
-    print(gasolineEmission * _getCarLiterPerKm() * distance);
     return gasolineEmission * _getCarLiterPerKm() * distance;
   }
 

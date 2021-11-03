@@ -157,7 +157,6 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
             null,
             null,
             null);
-        print(settings.toMap());
         var settingsDbm = SettingsDatabaseManager.instance;
         settingsDbm.update(settings);
 

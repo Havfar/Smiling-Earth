@@ -18,9 +18,7 @@ class PledgeClient {
           await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
-      print(response.body);
       final pledges = json.map((pledgeJson) {
-        print(pledgeJson);
         return PledgeDto.fromJson(pledgeJson);
       }).toList();
       return pledges;
@@ -92,14 +90,11 @@ class PledgeClient {
 
     try {
       final uri = Uri.parse(_url + endpoint);
-      print('for');
       var list = jsonEncode(pledges.toList());
       Map<String, dynamic> body = {"pledges": list};
-      print(body);
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token!}, body: body);
       // body: jsonEncode(body));
-      print('aja');
       if (response.statusCode == 201) {
         return true;
       }

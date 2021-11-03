@@ -83,7 +83,6 @@ class UserClient {
   Future<int> updateAvatar(Avatar avatar) async {
     String endpoint = '/user/avatar/';
     final token = await UserSecureStorage.getToken();
-    print(jsonEncode(avatar.jsonValue));
     String json = jsonEncode(avatar.jsonValue);
     final uri = Uri.parse(_url + endpoint);
     final response = await http.put(uri,

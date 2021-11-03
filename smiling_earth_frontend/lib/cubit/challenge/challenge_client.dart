@@ -39,7 +39,6 @@ class ChallengesClient {
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json = jsonDecode(utf8.decode(response.bodyBytes));
-      print(response.body);
       return DetailedChallengeDto.fromJson(json);
     } catch (e) {
       throw e;
@@ -86,7 +85,6 @@ class ChallengesClient {
           await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
-      print(json);
 
       final challenges = json.map((challengeJson) {
         return JoinedChallengeDto.fromJson(challengeJson);
@@ -107,8 +105,6 @@ class ChallengesClient {
       final response = await http.post(uri,
           headers: {"Authorization": "Token " + token!},
           body: {'challenge': challengeId.toString()});
-      print(response.body);
-      // final json = jsonDecode(utf8.decode(response.bodyBytes));
       return response.statusCode;
     } catch (e) {
       throw e;

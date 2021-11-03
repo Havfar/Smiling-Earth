@@ -104,7 +104,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                             value: 0,
                             groupValue: _heatIndex,
                             toggleable: false,
-                            onChanged: (value) => (print(value)),
+                            onChanged: (value) => (value),
                           ),
                           RadioListTile<int>(
                             title: const Text('Gas',
@@ -112,7 +112,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                             value: 1,
                             groupValue: _heatIndex,
                             toggleable: false,
-                            onChanged: (value) => (print(value)),
+                            onChanged: (value) => (value),
                           ),
                           RadioListTile<int>(
                             title: const Text('Wood',
@@ -120,7 +120,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                             value: 2,
                             groupValue: _heatIndex,
                             toggleable: false,
-                            onChanged: (value) => (print(value)),
+                            onChanged: (value) => (value),
                           ),
                           RadioListTile<int>(
                             title: const Text('Water',
@@ -128,7 +128,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                             value: 3,
                             groupValue: _heatIndex,
                             toggleable: false,
-                            onChanged: (value) => (print(value)),
+                            onChanged: (value) => (value),
                           ),
                         ],
                       ),

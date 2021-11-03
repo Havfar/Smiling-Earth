@@ -78,7 +78,6 @@ class _TransportationRegistrationPageState
     for (var type in selected) {
       selectedIndexes += type.index.toString() + ',';
     }
-    print(selectedIndexes);
 
     var newSettings = Settings(0, selectedIndexes, null, null, null, null, null,
         null, null, null, null, null, null, null);

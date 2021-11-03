@@ -13,7 +13,6 @@ abstract class ActivityInterface {
   ActivityInterface(this.id, this.title, this.startDate);
 
   double getEmission() {
-    print('jaha');
     return 0.0;
   }
 }

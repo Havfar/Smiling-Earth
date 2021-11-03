@@ -45,10 +45,7 @@ void _onData(ActivityEvent activityEvent) async {
   // ].contains(activityEvent.type.index)) {
   //   if (latestActivity.type == ActivityType.UNKNOWN ||
   //       latestActivity.type == ActivityType.STILL) {
-  //     print("ein. " +
-  //         latestActivity.type.toString() +
-  //         " " +
-  //         activityEvent.type.toString());
+
   //     await DatabaseHelper.instance.add(Activity(
   //         title: generateTitle(activityEvent),
   //         type: activityEvent.type.index,
@@ -56,13 +53,9 @@ void _onData(ActivityEvent activityEvent) async {
   //         endDate: activityEvent.timeStamp));
   //     latestActivity = activityEvent;
   //   } else {
-  //     print("to. " +
-  //         latestActivity.type.toString() +
-  //         " " +
-  //         activityEvent.type.toString());
 
   //     if (latestActivity.type != activityEvent.type) {
-  //       print("tre");
+  //
 
   //       await DatabaseHelper.instance.add(Activity(
   //           title: generateTitle(latestActivity),
@@ -77,14 +70,12 @@ void _onData(ActivityEvent activityEvent) async {
 
   // if (activityEvent.type == ActivityType.STILL) {
   //   if (latestActivity.type == ActivityType.ON_FOOT) {
-  //     print("fira");
   //     await DatabaseHelper.instance.add(Activity(
   //         title: generateTitle(latestActivity),
   //         type: latestActivity.type.index,
   //         startDate: latestActivity.timeStamp,
   //         endDate: activityEvent.timeStamp));
   //   } else if (latestActivity.type == ActivityType.ON_BICYCLE) {
-  //     print("fem");
   //     await DatabaseHelper.instance.add(Activity(
   //         title: generateTitle(latestActivity),
   //         type: latestActivity.type.index,

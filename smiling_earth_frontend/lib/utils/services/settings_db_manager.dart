@@ -37,35 +37,6 @@ class Settings {
       this.profile_picture_index);
 
   factory Settings.fromMap(Map<String, dynamic> json) {
-    // int id = json['id'];
-    // String? pt = json['preferred_transport'];
-
-    // int? by = json['building_year'] == null
-    //     ? null
-    //     : int.tryParse(json['building_year']);
-
-    // int? ly = json['last_renocation_year'] == null
-    //     ? null
-    //     : int.tryParse(json['last_renocation_year']);
-
-    // String? ht = json['heating_type'];
-    // String? creg = json['car_reg_no'];
-    // int? cv =
-    //     json['car_value'] == null ? null : int.tryParse(json['car_value']);
-    // int? cyd = json['car_yearly_drive'] == null
-    //     ? null
-    //     : int.tryParse(json['car_yearly_drive']);
-    // print('ned eller opp?');
-    // int? cpo = json['car_planned_ownership'] == null
-    //     ? null
-    //     : int.tryParse(json['car_planned_ownership']);
-    // String? fn = json['first_name'];
-    // String? ln = json['last_name'];
-    // int? age = json['age'] == null ? null : int.tryParse(json['age']);
-    // int? w = json['weight'] == null ? null : int.tryParse(json['weight']);
-    // int? ppi = json['profile_picture_index'] == null
-    //     ? null
-    //     : int.tryParse(json['profile_picture_index']);
     return new Settings(
         json['id'],
         json['preferred_transport'],
@@ -148,7 +119,6 @@ class SettingsDatabaseManager {
       'SELECT EXISTS(SELECT 1 FROM settings WHERE id=0)',
     );
     int? exists = Sqflite.firstIntValue(result);
-    print(1 == exists);
     return exists == 1;
   }
 
@@ -157,32 +127,7 @@ class SettingsDatabaseManager {
     List<Map<String, Object?>> settingsQuery =
         await db.query('settings', where: 'id = 0');
     Map<String, dynamic> json = settingsQuery.first;
-    // String? pt = json['preferred_transport'];
 
-    // int? by = json['building_year'] == null
-    //     ? null
-    //     : int.tryParse(json['building_year']);
-    // print(by.toString());
-
-    // int? ly = int.tryParse(json['last_renocation_year']);
-
-    // String? ht = json['heating_type'];
-    // String? creg = json['car_reg_no'];
-    // int? cv =
-    //     json['car_value'] == null ? null : int.tryParse(json['car_value']);
-    // int? cyd = json['car_yearly_drive'] == null
-    //     ? null
-    //     : int.tryParse(json['car_yearly_drive']);
-    // int? cpo = json['car_planned_ownership'] == null
-    //     ? null
-    //     : int.tryParse(json['car_planned_ownership']);
-    // String? fn = json['first_name'];
-    // String? ln = json['last_name'];
-    // int? age = json['age'] == null ? null : int.tryParse(json['age']);
-    // int? w = json['weight'] == null ? null : int.tryParse(json['weight']);
-    // int? ppi = json['profile_picture_index'] == null
-    //     ? null
-    //     : int.tryParse(json['profile_picture_index']);
     Settings settings = Settings.fromMap(settingsQuery.first);
     return settings;
   }
@@ -201,7 +146,7 @@ class SettingsDatabaseManager {
   }
 
   Future<int> delete() async {
-    print('clearing settings');
+    print('delete settings');
     Database db = await instance.database;
     return await db.delete('settings', where: "id = 0");
   }
@@ -217,8 +162,6 @@ class SettingsDatabaseManager {
 
   Settings _compareOldAndNewSettings(
       Settings oldSettings, Settings newSettings) {
-    print(oldSettings.toMap());
-    print(newSettings.toMap());
     int? _id = 0;
     String? _preferredTransport = newSettings.preferredTransport == null
         ? oldSettings.preferredTransport

@@ -71,8 +71,6 @@ class _FlutterMojiPageState extends State<FlutterMojiPage> {
           create: (context) => AvatarCubit()..updateAvatar(avatar),
           child: BlocBuilder<AvatarCubit, AvatarState>(
             builder: (context, state) {
-              print(state);
-
               if (state is AvatarUpdated) {
                 return Center(child: Text('Avatar is updated'));
               } else if (state is AvatarError) {

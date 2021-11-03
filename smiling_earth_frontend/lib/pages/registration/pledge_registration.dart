@@ -30,7 +30,6 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
                 create: (context) => PledgeCubit()..getPledes(),
                 child: Container(child: BlocBuilder<PledgeCubit, PledgeState>(
                     builder: (context, state) {
-                  print(state);
                   if (state is RetrievedPledges) {
                     if (sendtPledgeRequest) {
                       return FinishedPage();
