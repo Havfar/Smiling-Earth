@@ -37,16 +37,19 @@ class ChallengeWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          challenge.title,
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                        Container(
+                          width: 200,
+                          child: Text(
+                            challenge.title,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w500),
+                          ),
                         ),
-                        Text(
-                          "2 weeks and 5 days left",
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w300),
-                        ),
+                        // Text(
+                        //   "2 weeks and 5 days left",
+                        //   style: TextStyle(
+                        //       fontSize: 12, fontWeight: FontWeight.w300),
+                        // ),
                       ],
                     ),
                   ),

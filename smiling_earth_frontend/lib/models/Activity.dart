@@ -157,6 +157,10 @@ class Activity extends ActivityInterface {
   int getTotalDurationInMinutes() {
     return this.endDate!.difference(this.startDate!).inMinutes;
   }
+
+  int getTotalDurationInSeconds() {
+    return this.endDate!.difference(this.startDate!).inSeconds;
+  }
 }
 
 class ActivityGroupedByDate {

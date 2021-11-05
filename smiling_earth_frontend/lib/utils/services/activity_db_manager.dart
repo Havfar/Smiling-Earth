@@ -145,6 +145,55 @@ class ActivityDatabaseManager {
     return distance / days;
   }
 
+  Future<double> getDurationOfActivity(int activityType) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query(
+      'activities',
+      orderBy: 'id',
+      where: 'type=' + activityType.toString(),
+    );
+    double duration = 0;
+
+    for (var activityQ in activitiesQuery) {
+      var activity = Activity.fromMap(activityQ);
+      duration += activity.getTotalDurationInSeconds();
+    }
+    return duration;
+  }
+
+  Future<double> getDurationOfActivityGroup(List<int> activityTypes) async {
+    Database db = await instance.database;
+    // var list = await db.query('my_table',
+    // where: 'name IN (${List.filled(inArgs.length, '?').join(',')})',
+    // whereArgs: inArgs);
+    var activitiesQuery = await db.query('activities',
+        where: 'type IN(${List.filled(activityTypes.length, '?').join(',')})',
+        whereArgs: activityTypes);
+    double duration = 0;
+
+    for (var activityQ in activitiesQuery) {
+      var activity = Activity.fromMap(activityQ);
+      duration += activity.getTotalDurationInSeconds();
+    }
+    return duration;
+  }
+
+  Future<double> getDurationOfActivityWithTag(String tag) async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query(
+      'activities',
+      orderBy: 'id',
+      where: 'tag=' + tag,
+    );
+    double duration = 0;
+
+    for (var activityQ in activitiesQuery) {
+      var activity = Activity.fromMap(activityQ);
+      duration += activity.getTotalDurationInSeconds();
+    }
+    return duration;
+  }
+
   Future<double> geEmissionMonthByDate(DateTime date) async {
     Database db = await instance.database;
     var activitiesQuery = await db.query('activities',

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/avatar.dart';
+import 'package:smiling_earth_frontend/models/emission.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
@@ -86,6 +87,32 @@ class UserClient {
     String json = jsonEncode(avatar.jsonValue);
     final uri = Uri.parse(_url + endpoint);
     final response = await http.put(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: json);
+
+    return response.statusCode;
+  }
+
+  Future<int> updateEmissions(
+      EmissionDto transportEmission, EmissionDto energyEmission) async {
+    String endpoint = '/emissions/update/';
+    final token = await UserSecureStorage.getToken();
+    Map<String, dynamic> data = {
+      "weekNo": transportEmission.weekNo,
+      "year": transportEmission.year,
+      "month": transportEmission.month,
+      "emissions": [
+        {"emission": transportEmission.emissions, "isTransport": true},
+        {"emission": energyEmission.emissions, "isTransport": false}
+      ]
+    };
+    String json = jsonEncode(data);
+    final uri = Uri.parse(_url + endpoint);
+    final response = await http.post(uri,
         headers: {
           'Accept': 'application/json',
           "Authorization": "Token " + token!,

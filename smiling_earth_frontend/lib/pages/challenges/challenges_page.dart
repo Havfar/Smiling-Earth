@@ -4,6 +4,8 @@ import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
+import 'package:smiling_earth_frontend/utils/challenges_util.dart';
+import 'package:smiling_earth_frontend/utils/string_utils.dart';
 import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -19,6 +21,14 @@ class ChallengesPage extends StatelessWidget {
         body: Container(
           margin: EdgeInsets.all(15),
           child: ListView(children: [
+            BlocProvider(
+              create: (context) => ChallengeCubit()..getMyCompletedChallenges(),
+              child: _BuildCompletedChallenges(),
+            ),
+            IconButton(
+                onPressed: () => ChallengesUtil().updateChallenges(),
+                icon: Icon(Icons.sync)),
+            SizedBox(height: 30),
             BlocProvider(
               create: (context) => ChallengeCubit()..getJoinedChallenges(),
               child: _BuildJoinedChallenges(),
@@ -45,7 +55,7 @@ class _BuildJoinedChallenges extends StatelessWidget {
       children: [
         Text(
           "My challenges",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),
         BlocBuilder<ChallengeCubit, ChallengeState>(
@@ -103,7 +113,7 @@ class _BuildChallenges extends StatelessWidget {
       children: [
         Text(
           "New challenges",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),
         BlocBuilder<ChallengeCubit, ChallengeState>(
@@ -149,6 +159,68 @@ class _BuildChallenges extends StatelessWidget {
   }
 }
 
+class _BuildCompletedChallenges extends StatelessWidget {
+  const _BuildCompletedChallenges({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Completed challenges",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        SizedBox(height: 10),
+        BlocBuilder<ChallengeCubit, ChallengeState>(
+          builder: (context, state) {
+            print(state);
+            if (state is RetrievedChallenges) {
+              if (state.challenges.isEmpty) {
+                return Container(
+                  height: 50,
+                  margin: EdgeInsets.only(top: 30),
+                  child:
+                      Center(child: Text("Not completed any challenges yet")),
+                );
+              }
+              return Row(
+                children: state.challenges
+                    .map((challenge) => Container(
+                          margin: EdgeInsets.only(right: 15),
+                          child: Column(
+                            children: [
+                              CircleIcon(
+                                  backgroundColor: Colors.amber,
+                                  emoji: challenge.symbol),
+                              Container(
+                                  width: 90,
+                                  child: Text(
+                                    truncate(challenge.title, 23),
+                                    textAlign: TextAlign.center,
+                                  ))
+                            ],
+                          ),
+                        ))
+                    .toList(),
+              );
+            } else if (state is RetrievedChallengesError) {
+              return Text('Error: ' + state.error);
+            }
+            return SkeletonAnimation(
+                // borderRadius: BorderRadius.circular(10.0),
+                shimmerColor: Colors.white38,
+                shimmerDuration: 4000,
+                child: CircleIconSkeleton());
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class ChallengeJoinedWidget extends StatelessWidget {
   final bool showJoinButton;
   final JoinedChallengeDto challenge;
@@ -185,16 +257,19 @@ class ChallengeJoinedWidget extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          this.challenge.challenge.title,
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                        Container(
+                          width: 200,
+                          child: Text(
+                            this.challenge.challenge.title,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w500),
+                          ),
                         ),
-                        Text(
-                          "2 weeks and 5 days left",
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w300),
-                        ),
+                        // Text(
+                        //   "2 weeks and 5 days left",
+                        //   style: TextStyle(
+                        //       fontSize: 12, fontWeight: FontWeight.w300),
+                        // ),
                         Container(
                           margin: EdgeInsets.only(top: 10),
                           child: ClipRRect(
@@ -204,7 +279,7 @@ class ChallengeJoinedWidget extends StatelessWidget {
                               height: 10,
                               // margin: EdgeInsets.only(top: 10),
                               child: LinearProgressIndicator(
-                                  value: double.tryParse("0.3")),
+                                  value: challenge.calulateProgress()),
                             ),
                           ),
                         ),

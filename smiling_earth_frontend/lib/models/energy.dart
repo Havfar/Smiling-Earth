@@ -9,6 +9,32 @@ class Energy {
   static double irradiance = 0.6;
   static double pvOutput = 0.516;
   static double energyTariff = 0.44;
+  static List<double> outsideTemperatureByHours = [
+    7,
+    7,
+    8,
+    8,
+    8,
+    8,
+    7,
+    7,
+    7,
+    7,
+    70,
+    8,
+    8,
+    10,
+    11,
+    11,
+    11,
+    10,
+    9,
+    9,
+    9,
+    9,
+    8,
+    8
+  ];
 
   static double calculateElectricityCost(double heat) {
     return heat * electricityPrice;
@@ -35,8 +61,10 @@ class Energy {
   static double calculateElectricityCostWithSolar(double pvSystemSize) {
     double electricityCost = 0;
     for (var hour = 0; hour < 24; hour++) {
-      electricityCost +=
-          (Heat.getCurrentHeat(0) - pvOutput * pvSystemSize) * electricityPrice;
+      electricityCost += (Heat.getCurrentHeatByOutsideTemperature(
+                  Energy.outsideTemperatureByHours[hour]) -
+              pvOutput * pvSystemSize) *
+          electricityPrice;
     }
     return electricityCost.roundToDouble();
   }
@@ -94,7 +122,14 @@ class Heat {
   static double pvOutput1kw = 3;
   static double defaultElectricityLoad = 0.4;
 
-  static double getCurrentHeat(double outsideTemp) {
+  static double getCurrentHeat(DateTime time) {
+    //should fetch outside temperature of the hour
+    double outsideTemp = Energy.outsideTemperatureByHours.elementAt(time.hour);
+    return getCurrentHeatByOutsideTemperature(outsideTemp);
+    // return (roomTemperature - temp[hour]) * heatingConstant;
+  }
+
+  static double getCurrentHeatByOutsideTemperature(double outsideTemp) {
     //should fetch outside temperature of the hour
     return (roomTemperature - outsideTemperature) * heatingConstant;
     // return (roomTemperature - temp[hour]) * heatingConstant;
@@ -107,15 +142,19 @@ class Heat {
   }
 
   static double getCurrentHeatingCost() {
-    return getCurrentHeat(0) * Energy.electricityPrice;
+    return getCurrentHeat(DateTime.now()) * Energy.electricityPrice;
   }
 
   static double getCurrentHeatingCO2(int hour) {
-    return getCurrentHeat(0) * Energy.co2Factor;
+    return getCurrentHeat(DateTime.now()) * Energy.co2Factor;
   }
 
   static double getCurrentHeatingCO2PerDay() {
-    return getCurrentHeat(0) * Energy.co2Factor * 24;
+    return getCurrentHeat(DateTime.now()) * Energy.co2Factor * 24;
+  }
+
+  static double getHeatingCO2ByLoad(double heatload) {
+    return heatload * Energy.co2Factor * 24;
   }
 }
 

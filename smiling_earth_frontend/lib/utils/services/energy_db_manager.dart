@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:smiling_earth_frontend/models/energy.dart';
 import 'package:sqflite/sqflite.dart';
 
 class EnergyDatabaseManager {
@@ -109,9 +110,26 @@ class EnergyDatabaseManager {
     return heatLoad / days;
   }
 
+  Future<double> getTotalHeatLoad() async {
+    Database db = await instance.database;
+    var activitiesQuery = await db.query(
+      'energy',
+      orderBy: 'id',
+    );
+    double heatLoad = 0.0;
+    DateTime previousDay = DateTime(0);
+    for (var activityJson in activitiesQuery) {
+      EnergyActivity activity = EnergyActivity.fromMap(activityJson);
+      heatLoad += activity.heatLoad;
+    }
+    return Heat.getHeatingCO2ByLoad(heatLoad);
+  }
+
   Future<int> add(EnergyActivity activity) async {
     print("Adding activity " + activity.title);
     Database db = await instance.database;
+    print('toMap');
+    print(activity.toMap());
     return await db.insert('energy', activity.toMap());
   }
 

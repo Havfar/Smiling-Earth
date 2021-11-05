@@ -110,4 +110,25 @@ class ChallengesClient {
       throw e;
     }
   }
+
+  Future<void> updateProgress(ChallengeDto challenge, int progress) async {
+    String endpoint = "/challenge/user/${challenge.id}/";
+    final token = await UserSecureStorage.getToken();
+    Map<String, dynamic> data = {
+      "score": progress,
+      "progress": progress,
+    };
+    String json = jsonEncode(data);
+    final uri = Uri.parse(_url + endpoint);
+    final response = await http.put(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: json);
+    if (response.statusCode != 200) {
+      throw Exception('Error when updating progress');
+    }
+  }
 }

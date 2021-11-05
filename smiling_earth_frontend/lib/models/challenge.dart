@@ -6,16 +6,29 @@ class ChallengeDto {
   final String description;
   final String symbol;
   final String backgroundColor;
+  final int goal;
+  final int challengeType;
+  final List<dynamic> challengeTypeFeature;
 
   ChallengeDto(
-      this.id, this.title, this.description, this.symbol, this.backgroundColor);
+      this.id,
+      this.title,
+      this.description,
+      this.symbol,
+      this.backgroundColor,
+      this.goal,
+      this.challengeType,
+      this.challengeTypeFeature);
 
   factory ChallengeDto.fromJson(Map<String, dynamic> json) => (new ChallengeDto(
       json['id'],
       json['title'],
       json['description'],
       json['symbol'],
-      json['background_color']));
+      json['background_color'],
+      json['goal'],
+      json['challenge_type'],
+      json['feature_list']));
 }
 
 class JoinedChallengeDto {
@@ -29,6 +42,13 @@ class JoinedChallengeDto {
   factory JoinedChallengeDto.fromJson(Map<String, dynamic> json) =>
       (new JoinedChallengeDto(json['id'], json['score'], json['progress'],
           ChallengeDto.fromJson(json['challenge'])));
+
+  double calulateProgress() {
+    if (challenge.goal == 0) {
+      return 0;
+    }
+    return progress.toDouble() / challenge.goal.toDouble();
+  }
 }
 
 class DetailedChallengeDto {
