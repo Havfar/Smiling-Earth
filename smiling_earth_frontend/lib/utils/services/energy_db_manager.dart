@@ -43,10 +43,13 @@ class EnergyDatabaseManager {
 
   Future<List<EnergyActivity>> getHeat() async {
     Database db = await instance.database;
-    var activitiesQuery = await db.query('energy', orderBy: 'id', limit: 1000);
+    var activitiesQuery = await db.rawQuery(
+        "SELECT id, STRFTIME('%Y-%m-%d', date) as date, SUM(heat_load) as heat_load, SUM(heat_load_forecast) as heat_load_forecast FROM energy GROUP BY STRFTIME('%Y-%m-%d', date)");
+    // var activitiesQuery = await db.query('energy', orderBy: 'id', limit: 1000);
 
     List<EnergyActivity> activites = [];
     for (var activityJson in activitiesQuery) {
+      print(activityJson);
       EnergyActivity activity = EnergyActivity.fromMap(activityJson);
       activites.add(activity);
     }

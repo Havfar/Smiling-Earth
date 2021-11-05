@@ -16,11 +16,28 @@ class EditActivity extends StatefulWidget {
   _EditActivityState createState() => _EditActivityState();
 }
 
+// getTransportationTypes()
+//                     .map((activity) => Container(
+//                         decoration: BoxDecoration(
+//                             border: Border(
+//                                 bottom:
+//                                     BorderSide(color: Colors.grey.shade300))),
+//                         child: CheckboxListTile(
+//                             title: Text(
+//                                 getTransporationNameByActivityType(activity)),
+//                             value: isSelected(activity),
+//                             onChanged: (bool? value) {
+//                               updateSelected(activity);
+//                             },
+//                             secondary: Icon(
+//                                 getTransporationIconByActivityType(activity)))))
+//                     .toList()),
+
 List<DropdownSelectElement> _createList() {
   var list = <DropdownSelectElement>[];
-  for (AppActivityType activityType in AppActivityType.values) {
+  for (AppActivityType activityType in getTransportationTypes()) {
     list.add(new DropdownSelectElement(
-        title: getActivityNameByActivityType(activityType),
+        title: getTransporationNameByActivityType(activityType),
         icon: getIconByActivityType(activityType),
         indexValue: activityType.index));
   }

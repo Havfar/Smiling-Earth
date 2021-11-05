@@ -3,33 +3,26 @@ import 'package:smiling_earth_frontend/models/activity.dart';
 
 String getActivityNameByActivity(Activity activity) {
   var activityType = AppActivityType.values[activity.type];
-  switch (activityType) {
-    case AppActivityType.IN_VEHICLE:
-      return "Drive";
-    case AppActivityType.WALKING:
-      return "Walk";
-    case AppActivityType.RUNNING:
-      return "Run";
-    case AppActivityType.ON_BICYCLE:
-      return "Bicycle";
-    case AppActivityType.ON_FOOT:
-      return "Walk";
-    default:
-      return "Other";
-  }
+  return getActivityNameByActivityType(activityType);
 }
 
 String getActivityNameByActivityType(AppActivityType type) {
   switch (type) {
     case AppActivityType.IN_VEHICLE:
       return "Drive";
-    case AppActivityType.WALKING:
-      return "Walk";
+    case AppActivityType.IN_CAR:
+      return "Drive";
+    case AppActivityType.IN_ELECTRIC_CAR:
+      return "Drive";
+    case AppActivityType.IN_BUS:
+      return "Ride";
     case AppActivityType.RUNNING:
       return "Run";
     case AppActivityType.ON_BICYCLE:
-      return "Bicycle";
+      return "Ride";
     case AppActivityType.ON_FOOT:
+      return "Walk";
+    case AppActivityType.WALKING:
       return "Walk";
     default:
       return "Other";
@@ -52,6 +45,12 @@ String getTransporationNameByActivityType(AppActivityType type) {
       return "Train";
     case AppActivityType.ON_ELECTRIC_SCOOTER:
       return "Electric Scooter";
+    case AppActivityType.ON_FOOT:
+      return "Walk";
+    case AppActivityType.WALKING:
+      return "Walk";
+    case AppActivityType.RUNNING:
+      return "Run";
     default:
       return "Other";
   }
@@ -171,13 +170,15 @@ enum AppActivityType {
 
 List<AppActivityType> getTransportationTypes() {
   return [
+    AppActivityType.WALKING,
+    AppActivityType.RUNNING,
+    AppActivityType.ON_BICYCLE,
     AppActivityType.IN_CAR,
+    AppActivityType.ON_ELECTRIC_SCOOTER,
     AppActivityType.IN_ELECTRIC_CAR,
     AppActivityType.IN_BUS,
     // AppActivityType.IN_PLANE,
     AppActivityType.IN_TRAIN,
-    AppActivityType.ON_BICYCLE,
-    AppActivityType.ON_ELECTRIC_SCOOTER
   ];
 }
 

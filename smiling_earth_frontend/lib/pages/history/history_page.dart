@@ -8,6 +8,7 @@ import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
+import 'package:smiling_earth_frontend/utils/string_utils.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -81,18 +82,19 @@ class BuildActivityListWidget extends StatelessWidget {
                                 children: [
                                   Text(
                                       DateFormat('EEEE, d MMM')
-                                          .format(DateTime.parse(group.date)),
+                                          .format(group.date),
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       )),
                                   Row(
                                     children: [
-                                      Text("1234,12 kgCO2"),
+                                      Text(
+                                          "${group.emissions.roundToDouble()} kgCO2"),
                                       SizedBox(
                                         width: 15,
                                       ),
-                                      SmilingEarthIcon.getIcon(1234),
+                                      SmilingEarthIcon.getIcon(group.emissions),
                                     ],
                                   )
                                 ],
@@ -142,10 +144,10 @@ class _BuildActivityListTile extends StatelessWidget {
           );
         },
         leading: Icon(getIconByActivity(activity)),
-        title: Text(
-            activity.runtimeType is EnergyActivity ? "Haloi" : activity.title),
+        title: Text(activity.title),
         subtitle: Text(Activity.formatActivityForListTile(activity)),
-        trailing: Text((13).toString() + " kgCO2"));
+        trailing:
+            Text("${activity.getEmission().roundToDouble().toString()} kgCO2"));
   }
 }
 
@@ -163,7 +165,7 @@ class _BuildEnergyListTile extends StatelessWidget {
         leading: Icon(Icons.power),
         title: Text(activity.title),
         // subtitle: Text(Activity.formatActivityForListTile(activity)),
-        trailing: Text((13).toString() + " kgCO2"));
+        trailing: Text("${roundOffToXDecimal(activity.getEmission())} kgCO2"));
   }
 }
 
@@ -181,10 +183,24 @@ Future<List<ActivityGroupedByDate>> _getActivtityGroup() async {
   List<ActivityGroupedByDate> activity = [];
   for (var key in groupedBy.keys) {
     activity.add(new ActivityGroupedByDate(
-        date: key, activities: groupedBy[key]!.toList()));
+        date: DateTime.parse(key),
+        activities: groupedBy[key]!.toList(),
+        emissions: sumActivityGroupEmission(groupedBy[key]!.toList())));
   }
-  // ignore: deprecated_member_use
+
+  activity.sort((a, b) {
+    return -a.date.compareTo(b.date);
+  });
+
   return activity;
+}
+
+double sumActivityGroupEmission(List<ActivityInterface> activities) {
+  double emissions = 0;
+  for (var activity in activities) {
+    emissions += activity.getEmission();
+  }
+  return emissions;
 }
 
 double getEmissions(Activity activity) {

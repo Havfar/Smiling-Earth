@@ -164,10 +164,12 @@ class Activity extends ActivityInterface {
 }
 
 class ActivityGroupedByDate {
-  final String date;
+  final DateTime date;
   final List<ActivityInterface> activities;
+  final double emissions;
 
-  ActivityGroupedByDate({required this.date, required this.activities});
+  ActivityGroupedByDate(
+      {required this.date, required this.activities, required this.emissions});
 }
 
 class ActivityDto {
