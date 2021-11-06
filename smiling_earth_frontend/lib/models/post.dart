@@ -132,7 +132,7 @@ class LikeDto {
 class CommentDto {
   final int? id;
   final UserProfileDto? user;
-  final PostDto? post;
+  final int? post;
   // final String timestamp;
   final String comment;
 
@@ -151,5 +151,5 @@ class CommentDto {
       comment: json['content']);
 
   Map<String, dynamic> toJson() =>
-      {"post": this.post!.id.toString(), 'content': this.comment};
+      {"post": this.post!.toString(), 'content': this.comment};
 }

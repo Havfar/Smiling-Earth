@@ -45,7 +45,7 @@ class PublishPostPage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      DetailedPostPage(post: state.post))),
+                                      DetailedPostPage(postId: state.post.id))),
                           child: Text("Go to Post"))
                     ],
                   );

@@ -6,11 +6,12 @@ import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
+import 'package:smiling_earth_frontend/widgets/circle_avatar.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class DetailedPostPage extends StatefulWidget {
-  final PostDto post;
-  DetailedPostPage({Key? key, required this.post}) : super(key: key);
+  final int postId;
+  DetailedPostPage({Key? key, required this.postId}) : super(key: key);
 
   @override
   _DetailedPostPageState createState() => _DetailedPostPageState();
@@ -34,9 +35,9 @@ class _DetailedPostPageState extends State<DetailedPostPage> {
             padding: MediaQuery.of(context).viewInsets,
             child: BlocProvider<NewcommentCubit>(
                 create: (context) => NewcommentCubit(),
-                child: BuildCommentField(post: widget.post))),
+                child: BuildCommentField(post: widget.postId))),
         body: BlocProvider<PostDetailedCubit>(
-            create: (context) => PostDetailedCubit()..getPost(widget.post.id),
+            create: (context) => PostDetailedCubit()..getPost(widget.postId),
             child: Container(
               child: BlocBuilder<PostDetailedCubit, List<DetailedPostDto>>(
                   builder: (context, posts) {
@@ -63,7 +64,7 @@ class _DetailedPostPageState extends State<DetailedPostPage> {
 }
 
 class BuildCommentField extends StatelessWidget {
-  final PostDto post;
+  final int post;
   const BuildCommentField({
     Key? key,
     required this.post,
@@ -97,7 +98,8 @@ class BuildCommentField extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DetailedPostPage(post: this.post)),
+                      builder: (context) =>
+                          DetailedPostPage(postId: this.post)),
                 ); // push it back in
               },
               icon: Icon(Icons.send))
@@ -191,15 +193,7 @@ class CommentWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
-              height: 60,
-              width: 60,
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                shape: BoxShape.circle,
-              ),
-              child: Avatar.toSvg(comment.user!.avatar!)),
+          UserAvatar(avatar: comment.user!.avatar!),
           Container(
             width: 300,
             child: Column(

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/notifications/notifications_cubit.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
+import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
 import 'package:smiling_earth_frontend/pages/user/my_profile.dart';
+import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -120,20 +123,52 @@ class NavigationDrawerWidget extends StatelessWidget {
               Container(
                   width: 50, height: 50, child: FluttermojiCircleAvatar()),
               SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    email,
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
+              FutureBuilder<String>(
+                  future: SettingsDatabaseManager.instance.getName(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: 130,
+                        child: Text(
+                          snapshot.data!,
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      );
+                    }
+                    return Text(
+                      'Loading.. ',
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    );
+                  }),
+              Container(
+                  child: BlocProvider(
+                create: (context) =>
+                    NotificationsCubit()..getNotificationCount(),
+                child: BlocBuilder<NotificationsCubit, NotificationsState>(
+                  builder: (context, state) {
+                    if (state is NotificationCountRetrived &&
+                        state.notificaitonCount > 0) {
+                      return IconButton(
+                          iconSize: 30,
+                          onPressed: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => NotificationsPage(),
+                              )),
+                          icon: Icon(Icons.notifications_active,
+                              color: Colors.deepOrangeAccent));
+                    }
+                    return IconButton(
+                        iconSize: 30,
+                        onPressed: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => NotificationsPage(),
+                            )),
+                        icon: Icon(Icons.notifications),
+                        color: Colors.white);
+                  },
+                ),
+              ))
             ],
           ),
         ),

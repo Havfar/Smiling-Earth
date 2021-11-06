@@ -132,6 +132,14 @@ class SettingsDatabaseManager {
     return settings;
   }
 
+  Future<String> getName() async {
+    Database db = await instance.database;
+    List<Map<String, Object?>> settingsQuery = await db.query('settings',
+        columns: ['first_name', 'last_name'], where: 'id = 0');
+    Map<String, dynamic> json = settingsQuery.first;
+    return json['first_name'] + ' ' + json['last_name'];
+  }
+
   Future<int> add(Settings settings) async {
     print('inserte new settings ' + settings.toString());
     Database db = await instance.database;
