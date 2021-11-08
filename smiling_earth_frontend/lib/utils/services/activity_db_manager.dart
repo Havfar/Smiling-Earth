@@ -48,7 +48,7 @@ class ActivityDatabaseManager {
   Future<List<Activity>> getActivities() async {
     Database db = await instance.database;
     var activitiesQuery =
-        await db.query('activities', orderBy: 'id', limit: 1000);
+        await db.query('activities', orderBy: '-id', limit: 1000);
 
     List<Activity> activitiesList = [];
 
@@ -67,13 +67,17 @@ class ActivityDatabaseManager {
             Duration difference =
                 nextActivity.startDate!.difference(newActivity.endDate!);
             if (difference.inMinutes > 5) {
-              activitiesList.add(newActivity);
+              if (newActivity.getTotalDurationInMinutes() > 2) {
+                activitiesList.add(newActivity);
+              }
               newActivity = nextActivity;
             } else {
               newActivity.endDate = nextActivity.startDate;
             }
           } else {
-            activitiesList.add(newActivity);
+            if (newActivity.getTotalDurationInMinutes() > 2) {
+              activitiesList.add(newActivity);
+            }
             newActivity = nextActivity;
           }
         }

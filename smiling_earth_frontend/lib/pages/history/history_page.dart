@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/pages/history/activity_detailed.dart';
 import 'package:smiling_earth_frontend/pages/history/activity_new.dart';
-import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
@@ -143,7 +142,7 @@ class _BuildActivityListTile extends StatelessWidget {
             ),
           );
         },
-        leading: Icon(getIconByActivity(activity)),
+        leading: Icon(activity.getIcon()),
         title: Text(activity.title),
         subtitle: Text(Activity.formatActivityForListTile(activity)),
         trailing:
@@ -162,7 +161,7 @@ class _BuildEnergyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: Icon(Icons.power),
+        leading: Icon(Icons.bolt),
         title: Text(activity.title),
         // subtitle: Text(Activity.formatActivityForListTile(activity)),
         trailing: Text("${roundOffToXDecimal(activity.getEmission())} kgCO2"));

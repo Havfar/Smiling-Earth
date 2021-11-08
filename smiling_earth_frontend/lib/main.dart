@@ -8,35 +8,9 @@ import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/pages/splash_page.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
 import 'package:smiling_earth_frontend/utils/services/background_services.dart';
+import 'package:smiling_earth_frontend/utils/services/local_notifications_service.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/loading_indicator.dart';
-
-// void main() {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   runApp(new SmilingEarthHome());
-// }
-
-// class SmilingEarthHome extends StatefulWidget {
-//   @override
-//   _SmilingEarthHomeState createState() => new _SmilingEarthHomeState();
-// }
-
-// class _SmilingEarthHomeState extends State<SmilingEarthHome> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     startActivityMonitor();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (false) {
-//       return HomePage();
-//     } else {
-//       return MaterialApp(home: SplashPage());
-//     }
-//   }
-// }
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -46,9 +20,9 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await NotificationService().init(); //
   Bloc.observer = SimpleBlocDelegate();
 
   final userRepository = UserRepository();
@@ -63,6 +37,8 @@ void main() {
   //todo: if authenticated
 }
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 class App extends StatelessWidget {
   final UserRepository userRepository;
 
@@ -71,6 +47,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.light,

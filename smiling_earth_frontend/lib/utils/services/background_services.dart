@@ -2,6 +2,7 @@ import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/energy.dart';
 import 'package:smiling_earth_frontend/utils/challenges_util.dart';
 import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
+import 'package:smiling_earth_frontend/utils/services/local_notifications_service.dart';
 import 'package:smiling_earth_frontend/utils/update_emissions_util.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -9,6 +10,7 @@ const fetchEnergyUsageTask = "fetchEnergy";
 const updateEmissionTask = "updateEmissionEnergy";
 const updateChallengeProgressTask = "updateChallengeProgress";
 const fetchNotificationsTask = "fetchNotifications";
+const sendLocalUpdate = "localUpdate";
 UpdateEmissionsUtil emissionsUtil = UpdateEmissionsUtil();
 ChallengesUtil challengesUtil = ChallengesUtil();
 
@@ -39,9 +41,11 @@ void callbackDispatcher() {
         print('challenges updated');
 
         return Future.value(true);
-      case fetchNotificationsTask:
-        print("Native called background task: $fetchNotificationsTask");
+      case sendLocalUpdate:
+        print("Native called background task: $sendLocalUpdate");
+        await NotificationService().showNotifications();
         return Future.value(true);
+
       default:
         return Future.value(true);
     }
@@ -68,9 +72,9 @@ initializeWorkManagerAndPushNotification() {
   ); //to true if still in testing lev turn it to false whenever you are launching the app
   Workmanager().registerPeriodicTask(
     "1", fetchEnergyUsageTask,
-    frequency: Duration(minutes: 15), //when should it check the link
+    frequency: Duration(hours: 1), //when should it check the link
     initialDelay:
-        Duration(seconds: 90), //duration before showing the notification
+        Duration(minutes: 3), //duration before showing the notification
     // constraints: Constraints(
     //   networkType: NetworkType.connected,
     // ),
@@ -78,9 +82,9 @@ initializeWorkManagerAndPushNotification() {
 
   Workmanager().registerPeriodicTask(
     "2", updateEmissionTask,
-    frequency: Duration(minutes: 15), //when should it check the link
+    frequency: Duration(hours: 6), //when should it check the link
     initialDelay:
-        Duration(seconds: 60), //duration before showing the notification
+        Duration(minutes: 5), //duration before showing the notification
     // constraints: Constraints(
     //   networkType: NetworkType.connected,
     // ),
@@ -88,19 +92,17 @@ initializeWorkManagerAndPushNotification() {
 
   Workmanager().registerPeriodicTask(
     "3", updateChallengeProgressTask,
-    frequency: Duration(minutes: 15), //when should it check the link
-    initialDelay:
-        Duration(seconds: 120), //duration before showing the notification
+    frequency: Duration(hours: 4), //when should it check the link
+    initialDelay: Duration(hours: 1), //duration before showing the notification
     // constraints: Constraints(
     //   networkType: NetworkType.connected,
     // ),
   );
 
   Workmanager().registerPeriodicTask(
-    "3", fetchNotificationsTask,
-    frequency: Duration(minutes: 15), //when should it check the link
-    initialDelay:
-        Duration(seconds: 200), //duration before showing the notification
+    "4", sendLocalUpdate,
+    frequency: Duration(days: 1), //when should it check the link
+    initialDelay: Duration(hours: 2), //duration before showing the notification
     // constraints: Constraints(
     //   networkType: NetworkType.connected,
     // ),

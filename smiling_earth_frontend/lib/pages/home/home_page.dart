@@ -8,6 +8,7 @@ import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
+import 'package:smiling_earth_frontend/utils/services/local_notifications_service.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/emission_header.dart';
@@ -30,8 +31,7 @@ class _HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: new Scaffold(
+    return new Scaffold(
       //drawer: NavigationDrawerWidget(),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.green),
@@ -56,12 +56,17 @@ class _HomeState extends State<HomePage> {
               label: Text("delete settings"),
               icon: Icon(Icons.delete),
             ),
+            TextButton.icon(
+                onPressed: () async =>
+                    await NotificationService().showNotifications(),
+                label: Text("show notification"),
+                icon: Icon(Icons.notification_add)),
             BuildEmissionEstimation(),
             BuildFeed(),
           ],
         ),
       ),
-    ));
+    );
   }
 }
 

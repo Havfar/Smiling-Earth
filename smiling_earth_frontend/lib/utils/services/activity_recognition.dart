@@ -93,17 +93,8 @@ void _onData(ActivityEvent activityEvent) async {
       ActivityType.TILTING.index,
       ActivityType.UNKNOWN.index,
     ].contains(latestActivity.type.index)) {
-      Duration dur =
-          latestActivity.timeStamp.difference(activityEvent.timeStamp);
-      print("Save Transistion from:" +
-          latestActivity.type.toString() +
-          " to " +
-          activityEvent.toString() +
-          ". Duration: " +
-          dur.inSeconds.toString() +
-          " seconds");
       await ActivityDatabaseManager.instance.add(Activity(
-          title: "new: " + generateTitle(latestActivity),
+          title: generateTitle(latestActivity),
           type: latestActivity.type.index,
           startDate: latestActivity.timeStamp,
           endDate: activityEvent.timeStamp));
@@ -141,7 +132,7 @@ String getActivityNameByActivityType(ActivityType type) {
     case ActivityType.RUNNING:
       return "Run";
     case ActivityType.ON_BICYCLE:
-      return "Bicycle";
+      return "Bicycle ride";
     case ActivityType.ON_FOOT:
       return "Walk";
     case ActivityType.INVALID:

@@ -155,11 +155,11 @@ class Activity extends ActivityInterface {
   }
 
   int getTotalDurationInMinutes() {
-    return this.endDate!.difference(this.startDate!).inMinutes;
+    return this.startDate!.difference(this.endDate!).inMinutes.abs();
   }
 
   int getTotalDurationInSeconds() {
-    return this.endDate!.difference(this.startDate!).inSeconds;
+    return this.startDate!.difference(this.endDate!).inSeconds.abs();
   }
 }
 

@@ -155,8 +155,30 @@ class NavigationDrawerWidget extends StatelessWidget {
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => NotificationsPage(),
                               )),
-                          icon: Icon(Icons.notifications_active,
-                              color: Colors.deepOrangeAccent));
+                          icon: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                child: Icon(Icons.notifications_active,
+                                    color: Colors.white),
+                              ),
+                              Positioned(
+                                top: 20,
+                                left: 17,
+                                width: 20,
+                                height: 20,
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: Colors.grey.shade100),
+                                        color: Colors.deepOrangeAccent),
+                                    child: Text(
+                                        state.notificaitonCount.toString())),
+                              ),
+                            ],
+                          ));
                     }
                     return IconButton(
                         iconSize: 30,
