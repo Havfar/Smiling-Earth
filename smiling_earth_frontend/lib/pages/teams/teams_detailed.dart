@@ -72,7 +72,11 @@ class TeamsDetailedPage extends StatelessWidget {
                 return Column(
                   children: [
                     BuildPageHeader(team: state.teams),
-                    BuildChart(state.teams),
+                    BlocProvider(
+                      create: (context) =>
+                          DetailedTeamCubit()..getTeamEmission(this.id!),
+                      child: BuildChart(state.teams),
+                    ),
                   ],
                 );
               } else if (state is ErrorRetrievingTeam) {
@@ -253,7 +257,8 @@ class BuildTeamScoreList extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border(bottom: BorderSide(color: Colors.black12))),
                 child: Column(
-                    children: state.members
+                    children: state
+                        .getLeaderboard()
                         .map((member) => (Container(
                               padding: EdgeInsets.only(top: 10, bottom: 10),
                               decoration: BoxDecoration(
@@ -355,26 +360,30 @@ class BuildChart extends StatelessWidget {
     final double goal = 1000.0;
     return Container(
       margin: EdgeInsets.only(left: 15),
-      child: Column(children: [
-        Row(
-          children: [
-            Text("Emissions",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                )),
-          ],
-        ),
-        Center(
-          child: SmilingEarthEmissionChart(
-              energyEmission: 10, transportEmission: 20, goal: 100),
-        ),
-        Text(this.team.emissions.getTotalEmissions().toString() + " kg Co2",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-      ]),
+      child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
+        builder: (context, state) {
+          if (state is RetrievedTeamEmission) {
+            return Column(children: [
+              Row(
+                children: [
+                  Text("Emissions",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      )),
+                ],
+              ),
+              Center(
+                child: SmilingEarthEmissionChart(
+                    energyEmission: state.energyEmission.toDouble(),
+                    transportEmission: state.transportEmission.toDouble(),
+                    goal: 100),
+              )
+            ]);
+          }
+          return Text('loading');
+        },
+      ),
     );
   }
 }

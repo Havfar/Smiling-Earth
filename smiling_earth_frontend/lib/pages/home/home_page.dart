@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/bloc/login/dao/UserDao.dart';
+import 'package:smiling_earth_frontend/cubit/notifications/notifications_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
+import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/utils/services/local_notifications_service.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
@@ -43,6 +45,11 @@ class _HomeState extends State<HomePage> {
         margin: EdgeInsets.all(10),
         child: ListView(
           children: [
+            Container(
+                child: BlocProvider(
+              create: (context) => NotificationsCubit()..getNotificationCount(),
+              child: BuildNotificationBell(),
+            )),
             BuildHeaderToolbar(
               distance: null,
               electricity: null,
@@ -66,6 +73,56 @@ class _HomeState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BuildNotificationBell extends StatelessWidget {
+  const BuildNotificationBell({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<NotificationsCubit, NotificationsState>(
+      builder: (context, state) {
+        if (state is NotificationCountRetrived && state.notificaitonCount > 0) {
+          return IconButton(
+              iconSize: 30,
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => NotificationsPage(),
+                  )),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    child: Icon(Icons.notifications_active,
+                        color: Colors.grey.shade900),
+                  ),
+                  Positioned(
+                    top: 20,
+                    left: 17,
+                    width: 20,
+                    height: 20,
+                    child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey.shade100),
+                            color: Colors.deepOrangeAccent),
+                        child: Text(state.notificaitonCount.toString())),
+                  ),
+                ],
+              ));
+        }
+        return IconButton(
+            iconSize: 30,
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NotificationsPage(),
+                )),
+            icon: Icon(Icons.notifications),
+            color: Colors.grey.shade900);
+      },
     );
   }
 }

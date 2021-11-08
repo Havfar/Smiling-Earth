@@ -63,24 +63,17 @@ class TeamsClient {
     }
   }
 
-  // Future<List<TeamEmissionDto>> getTeamEmission(int id) async {
-  //   String endpoint = '/teams/' + id.toString() + '/emissions/';
-  //   try {
-  //     final uri = Uri.parse(_url + endpoint);
-  //     final response =
-  //         await http.get(uri, headers: {"Authorization": "Token " + token});
-  //     final json =
-  //         jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
-  //     print(json);
-  //     final emissions = json
-  //         .map((teamEmission) => TeamEmissionDto.fromJson(teamEmission))
-  //         .toList();
-  //     print(emissions.toString());
-  //     return emissions;
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
+  Future<List<double>> getTeamEmission(int id) async {
+    String endpoint = '/teams/' + id.toString() + '/emissions/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    List<double> emissions = [json['transport'], json['energy']];
+    return emissions;
+  }
 
   Future<List<TeamMemberDto>> getTeamMembers(int id) async {
     String endpoint = '/teams/' + id.toString() + '/members/';
