@@ -20,6 +20,17 @@ class ChallengeCubit extends Cubit<ChallengeState> {
     }
   }
 
+  void getTeamChallenges(int teamId) {
+    emit(RetrivingChallenges());
+    try {
+      _client
+          .getTeamChallenges(teamId)
+          .then((challenges) => emit(RetrievedChallenges(challenges)));
+    } catch (e) {
+      emit(RetrievedChallengesError(e.toString()));
+    }
+  }
+
   void getJoinedChallenges() {
     emit(RetrivingChallenges());
     try {
@@ -31,10 +42,31 @@ class ChallengeCubit extends Cubit<ChallengeState> {
     }
   }
 
+  void getJoinedTeamChallenges(int teamId) {
+    emit(RetrivingChallenges());
+    try {
+      _client
+          .getJoinedTeamChallenges(teamId)
+          .then((challenges) => emit(RetrievedJoinedChallenges(challenges)));
+    } catch (e) {
+      emit(RetrievedChallengesError(e.toString()));
+    }
+  }
+
   void getCompletedChallenges(int userId) {
     try {
       _client
           .getCompletedChallenges(userId)
+          .then((challenges) => emit(RetrievedChallenges(challenges)));
+    } catch (e) {
+      emit(RetrievedChallengesError(e.toString()));
+    }
+  }
+
+  void getCompletedTeamChallenges(int teamId) {
+    try {
+      _client
+          .getTeamCompletedChallenges(teamId)
           .then((challenges) => emit(RetrievedChallenges(challenges)));
     } catch (e) {
       emit(RetrievedChallengesError(e.toString()));

@@ -1,3 +1,4 @@
+import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 
 class ChallengeDto {
@@ -57,10 +58,19 @@ class DetailedChallengeDto {
   final String description;
   final String symbol;
   final String backgroundColor;
-  final List<UserChallengeDto> leaderboard;
+  final bool isTeamChallenge;
+  final List<dynamic> leaderboard;
+  // final List<TeamChallengeDto>? teamLeaderboard;
 
-  DetailedChallengeDto(this.id, this.title, this.description, this.symbol,
-      this.backgroundColor, this.leaderboard);
+  DetailedChallengeDto(
+      this.id,
+      this.title,
+      this.description,
+      this.symbol,
+      this.backgroundColor,
+      this.isTeamChallenge,
+      // this.userLeaderboard,
+      this.leaderboard);
 
   factory DetailedChallengeDto.fromJson(Map<String, dynamic> json) =>
       (new DetailedChallengeDto(
@@ -69,9 +79,14 @@ class DetailedChallengeDto {
           json['description'],
           json['symbol'],
           json['background_color'],
-          (json['leaderboard'] as List)
-              .map((userJson) => UserChallengeDto.fromJson(userJson))
-              .toList()));
+          json['is_team_challenge'],
+          (json['leaderboard'] as List).map((listItemJson) {
+            if (json['is_team_challenge']) {
+              return TeamChallengeDto.fromJson(listItemJson);
+            } else {
+              return UserChallengeDto.fromJson(listItemJson);
+            }
+          }).toList()));
 }
 
 class UserChallengeDto {
@@ -84,5 +99,18 @@ class UserChallengeDto {
 
   factory UserChallengeDto.fromJson(Map<String, dynamic> json) =>
       (new UserChallengeDto(json['id'], UserProfileDto.fromJson(json['user']),
+          json['score'], json['progress']));
+}
+
+class TeamChallengeDto {
+  final int? id;
+  final TeamsDto team;
+  final int score;
+  final int progress;
+
+  TeamChallengeDto(this.id, this.team, this.score, this.progress);
+
+  factory TeamChallengeDto.fromJson(Map<String, dynamic> json) =>
+      (new TeamChallengeDto(json['id'], TeamsDto.fromJson(json['team']),
           json['score'], json['progress']));
 }

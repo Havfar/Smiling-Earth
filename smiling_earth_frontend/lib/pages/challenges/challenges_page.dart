@@ -23,7 +23,7 @@ class ChallengesPage extends StatelessWidget {
           child: ListView(children: [
             BlocProvider(
               create: (context) => ChallengeCubit()..getMyCompletedChallenges(),
-              child: _BuildCompletedChallenges(),
+              child: BuildCompletedChallenges(),
             ),
             IconButton(
                 onPressed: () => ChallengesUtil().updateChallenges(),
@@ -31,7 +31,7 @@ class ChallengesPage extends StatelessWidget {
             SizedBox(height: 30),
             BlocProvider(
               create: (context) => ChallengeCubit()..getJoinedChallenges(),
-              child: _BuildJoinedChallenges(),
+              child: BuildJoinedChallenges(),
             ),
             SizedBox(height: 30),
             BlocProvider(
@@ -43,8 +43,8 @@ class ChallengesPage extends StatelessWidget {
       );
 }
 
-class _BuildJoinedChallenges extends StatelessWidget {
-  const _BuildJoinedChallenges({
+class BuildJoinedChallenges extends StatelessWidget {
+  const BuildJoinedChallenges({
     Key? key,
   }) : super(key: key);
 
@@ -54,7 +54,7 @@ class _BuildJoinedChallenges extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "My challenges",
+          "Joined challenges",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),
@@ -159,8 +159,8 @@ class _BuildChallenges extends StatelessWidget {
   }
 }
 
-class _BuildCompletedChallenges extends StatelessWidget {
-  const _BuildCompletedChallenges({
+class BuildCompletedChallenges extends StatelessWidget {
+  const BuildCompletedChallenges({
     Key? key,
   }) : super(key: key);
 

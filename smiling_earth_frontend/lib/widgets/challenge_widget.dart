@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenges_preview.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
@@ -107,6 +108,81 @@ class ChallengeSkeletonWidget extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChallengeJoinedWidget extends StatelessWidget {
+  final bool showJoinButton;
+  final JoinedChallengeDto challenge;
+  const ChallengeJoinedWidget(this.challenge,
+      {Key? key, required this.showJoinButton})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DetailedChallengesPage(id: challenge.challenge.id!)),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Stack(children: [
+                Row(
+                  children: [
+                    CircleIcon(
+                      emoji: this.challenge.challenge.symbol,
+                      backgroundColor: Colors.greenAccent,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: 200,
+                          child: Text(
+                            this.challenge.challenge.title,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        // Text(
+                        //   "2 weeks and 5 days left",
+                        //   style: TextStyle(
+                        //       fontSize: 12, fontWeight: FontWeight.w300),
+                        // ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: 250,
+                              height: 10,
+                              // margin: EdgeInsets.only(top: 10),
+                              child: LinearProgressIndicator(
+                                  value: challenge.calulateProgress()),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ]),
+            ],
+          ),
         ),
       ),
     );

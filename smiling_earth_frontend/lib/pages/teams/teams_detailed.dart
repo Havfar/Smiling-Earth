@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/rivals_cubit.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/models/rivals.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
@@ -265,10 +266,15 @@ class BuildTeamScoreList extends StatelessWidget {
                                   border: Border(
                                       top: BorderSide(color: Colors.black12))),
                               child: ListTile(
-                                  leading: CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage:
-                                          NetworkImage(member.user.image)),
+                                  leading: Container(
+                                      height: 60,
+                                      width: 60,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Avatar.toSvg(member.user.avatar!)),
                                   title: Text(member.user.getName()),
                                   trailing: Text(member.emissions.toString())),
                             )))

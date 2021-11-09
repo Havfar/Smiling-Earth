@@ -28,7 +28,25 @@ class ChallengesClient {
     }
   }
 
-  // http://127.0.0.1:8000/challenges/user/1/completed
+  Future<List<ChallengeDto>> getTeamChallenges(int teamId) async {
+    String endpoint = "/challenges/team/$teamId/";
+    final token = await UserSecureStorage.getToken();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+
+      final challenges = json.map((challengeJson) {
+        return ChallengeDto.fromJson(challengeJson);
+      }).toList();
+      return challenges;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   Future<DetailedChallengeDto> getChallengeDetailed(int challengeId) async {
     String endpoint = '/challenges/' + challengeId.toString() + '/';
@@ -61,7 +79,22 @@ class ChallengesClient {
   }
 
   Future<List<ChallengeDto>> getMyCompletedChallenges() async {
-    String endpoint = '/challenges/user/self/completed';
+    String endpoint = '/challenges/user/self/completed/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+
+    final challenges = json.map((challengeJson) {
+      return ChallengeDto.fromJson(challengeJson);
+    }).toList();
+    return challenges;
+  }
+
+  Future<List<ChallengeDto>> getTeamCompletedChallenges(int teamId) async {
+    String endpoint = '/challenges/team/$teamId/completed/';
     final token = await UserSecureStorage.getToken();
 
     final uri = Uri.parse(_url + endpoint);
@@ -77,6 +110,26 @@ class ChallengesClient {
 
   Future<List<JoinedChallengeDto>> getJoinedChallenges() async {
     String endpoint = '/challenges/user/';
+    final token = await UserSecureStorage.getToken();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+
+      final challenges = json.map((challengeJson) {
+        return JoinedChallengeDto.fromJson(challengeJson);
+      }).toList();
+      return challenges;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<JoinedChallengeDto>> getJoinedTeamChallenges(int teamId) async {
+    String endpoint = "/challenges/team/$teamId/joined";
     final token = await UserSecureStorage.getToken();
 
     try {

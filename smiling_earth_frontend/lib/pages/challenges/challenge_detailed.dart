@@ -41,7 +41,8 @@ class _BuildDetailed extends StatelessWidget {
             children: [
               _BuildHeader(state.challenge),
               _BuildProgressBar(progress: 12, goal: 20),
-              _BuildLeaderboard(state.challenge.leaderboard)
+              _BuildLeaderboard(
+                  state.challenge.leaderboard, state.challenge.isTeamChallenge)
             ],
           );
         }
@@ -103,8 +104,12 @@ class _BuildHeader extends StatelessWidget {
                   backgroundColor: Colors.blueAccent,
                   emoji: this.challenge.symbol),
               SizedBox(width: 20),
-              Text(this.challenge.title,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              Container(
+                width: 250,
+                child: Text(this.challenge.title,
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              ),
             ],
           ),
           SizedBox(height: 20),
@@ -126,9 +131,11 @@ class _BuildHeader extends StatelessWidget {
 }
 
 class _BuildLeaderboard extends StatelessWidget {
-  final List<UserChallengeDto> leaderboard;
+  final List<dynamic> leaderboard;
+  final bool isTeamChallenge;
   const _BuildLeaderboard(
-    this.leaderboard, {
+    this.leaderboard,
+    this.isTeamChallenge, {
     Key? key,
   }) : super(key: key);
 
@@ -162,7 +169,13 @@ class _BuildLeaderboard extends StatelessWidget {
                                 bottom: BorderSide(color: Colors.black12))),
                         child: ListTile(
                             leading: Text(score.id.toString()),
-                            title: Text(score.user.getName()),
+                            title: Row(
+                              children: [
+                                Text(isTeamChallenge
+                                    ? score.team.name
+                                    : score.user.getName()),
+                              ],
+                            ),
                             trailing: Text(score.score.toString())),
                       ))
                   .toList())

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_text/skeleton_text.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_posts.dart';
+import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class TeamChallenges extends StatelessWidget {
@@ -54,7 +59,23 @@ class TeamChallenges extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.green),
       ),
       drawer: NavigationDrawerWidget(),
-      body: Text("challenges"),
+      body: ListView(
+        children: [
+          BlocProvider(
+            create: (context) =>
+                ChallengeCubit()..getCompletedTeamChallenges(id!),
+            child: BuildCompletedChallenges(),
+          ),
+          BlocProvider(
+            create: (context) => ChallengeCubit()..getJoinedTeamChallenges(id!),
+            child: BuildJoinedChallenges(),
+          ),
+          BlocProvider(
+            create: (context) => ChallengeCubit()..getTeamChallenges(id!),
+            child: _BuildChallenges(),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: 2,
           type: BottomNavigationBarType.fixed,
@@ -80,4 +101,62 @@ class TeamChallenges extends StatelessWidget {
               label: 'About',
             ),
           ]));
+}
+
+class _BuildChallenges extends StatelessWidget {
+  const _BuildChallenges({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "New challenges",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        SizedBox(height: 10),
+        BlocBuilder<ChallengeCubit, ChallengeState>(
+          builder: (context, state) {
+            if (state is RetrievedChallenges) {
+              if (state.challenges.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: Center(
+                      child: Text("You have joined all the challenges! 🏆💪")),
+                );
+              }
+              return Column(
+                children: state.challenges
+                    .map((challenge) => ChallengeWidget(challenge))
+                    .toList(),
+              );
+            } else if (state is RetrievedChallengesError) {
+              return Text('Error: ' + state.error);
+            }
+            return SkeletonAnimation(
+                // borderRadius: BorderRadius.circular(10.0),
+                shimmerColor: Colors.white38,
+                shimmerDuration: 4000,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                      SizedBox(width: 20),
+                      ChallengeSkeletonWidget(),
+                    ],
+                  ),
+                ));
+          },
+        ),
+      ],
+    );
+  }
 }
