@@ -9,8 +9,10 @@ import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class PreviewChallengesPage extends StatelessWidget {
   final int id;
+  final int? teamId;
 
-  const PreviewChallengesPage({Key? key, required this.id}) : super(key: key);
+  const PreviewChallengesPage({Key? key, required this.id, this.teamId})
+      : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -24,17 +26,18 @@ class PreviewChallengesPage extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   ChallengeCubit()..getDetailedChallenge(this.id),
-              child: _BuildDetailed()),
-          BlocProvider(
-            create: (context) => JoinChallengeCubit(),
-            child: _BuildJoinButton(this.id),
-          )
+              child: Column(
+                children: [_BuildDetailed(this.teamId)],
+              )),
         ]),
       ));
 }
 
 class _BuildDetailed extends StatelessWidget {
-  const _BuildDetailed({
+  final int? teamId;
+
+  const _BuildDetailed(
+    this.teamId, {
     Key? key,
   }) : super(key: key);
 
@@ -46,6 +49,8 @@ class _BuildDetailed extends StatelessWidget {
           return Column(
             children: [
               _BuildHeader(state.challenge),
+              _BuildJoinButton(state.challenge.id!,
+                  state.challenge.isTeamChallenge, this.teamId),
             ],
           );
         }
@@ -56,45 +61,58 @@ class _BuildDetailed extends StatelessWidget {
 }
 
 class _BuildJoinButton extends StatelessWidget {
-  final int id;
-  const _BuildJoinButton(
-    this.id, {
-    Key? key,
-  }) : super(key: key);
+  final int challengeId;
+  final bool isTeamChallenge;
+  final int? teamId;
+
+  _BuildJoinButton(this.challengeId, this.isTeamChallenge, this.teamId,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<JoinChallengeCubit, JoinChallengeState>(
-      builder: (context, state) {
-        if (state is JoiningChallenge) {
-          return CircularProgressIndicator();
-        } else if (state is ChallengeJoined) {
-          return Column(
-            children: [
-              Text('You have now joined the challenge'),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DetailedChallengesPage(id: this.id)),
-                    ); // push it back in
-                  },
-                  child: Text('Go to Challenge'))
-            ],
-          );
-        } else if (state is ChallengeJoinedError) {
-          return Text('Error' + state.error);
-        }
-        return ElevatedButton(
-          child: Text('Join'),
-          onPressed: () {
-            BlocProvider.of<JoinChallengeCubit>(context).joinChallenge(this.id);
+    return BlocProvider(
+        create: (context) => JoinChallengeCubit(),
+        child: BlocBuilder<JoinChallengeCubit, JoinChallengeState>(
+          builder: (context, state) {
+            if (state is JoiningChallenge) {
+              return CircularProgressIndicator();
+            } else if (state is ChallengeJoined) {
+              return Column(
+                children: [
+                  Text('You have now joined the challenge'),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailedChallengesPage(
+                                    id: this.challengeId))); // push it back in
+                      },
+                      child: Text('Go to Challenge'))
+                ],
+              );
+            } else if (state is ChallengeJoinedError) {
+              return Text('Error' + state.error);
+            }
+            if (isTeamChallenge) {
+              return ElevatedButton(
+                child: Text('Join Team Challenge'),
+                onPressed: () {
+                  BlocProvider.of<JoinChallengeCubit>(context)
+                      .joinTeamChallenge(this.challengeId, this.teamId!);
+                },
+              );
+            }
+            return ElevatedButton(
+              child: Text('Join'),
+              onPressed: () {
+                BlocProvider.of<JoinChallengeCubit>(context)
+                    .joinChallenge(this.challengeId);
+              },
+            );
           },
-        );
-      },
-    );
+        ));
   }
 }
 

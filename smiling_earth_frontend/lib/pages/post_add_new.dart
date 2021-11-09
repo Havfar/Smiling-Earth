@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
-import 'package:smiling_earth_frontend/models/user.dart';
 import 'package:smiling_earth_frontend/pages/new_post_publish_page.dart';
 
 class NewPostPage extends StatelessWidget {
@@ -49,12 +48,7 @@ class NewPostPage extends StatelessWidget {
                                 commentsCount: 0,
                                 content: _controller.value.text,
                                 likesCount: 0,
-                                user: UserProfileDto(
-                                  firstName: "Name",
-                                  lastName: 'Name',
-                                  userId: -1,
-                                  avatar: null,
-                                ),
+                                user: null,
                                 timestamp: ''))),
                       ),
                   child: Text("Preview Post"))

@@ -184,4 +184,20 @@ class ChallengesClient {
       throw Exception('Error when updating progress');
     }
   }
+
+  joinTeamChallenge(int challengeId, int teamId) async {
+    String endpoint = '/challenges/team/join/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+
+    final response = await http.post(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({'challenge': challengeId, 'team': teamId}));
+    return response.statusCode;
+  }
 }

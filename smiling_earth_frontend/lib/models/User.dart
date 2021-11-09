@@ -1,23 +1,10 @@
 import 'package:smiling_earth_frontend/models/avatar.dart';
 
-UserProfile mockUser = UserProfile(
-    name: "John Doe",
-    image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80");
-
-class UserProfile {
-  final String name;
-  final String image;
-  UserProfile({required this.name, required this.image});
-}
-
 class UserProfileDto {
   final String firstName;
   final String lastName;
   final int userId;
-  final Avatar? avatar;
-  String image =
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
+  final Avatar avatar;
 
   UserProfileDto(
       {required this.firstName,
@@ -45,9 +32,7 @@ class MyProfileDetailedDto {
   final int followerCount;
   final int followingCount;
   final String bio;
-
-  final String image =
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
+  final Avatar avatar;
 
   MyProfileDetailedDto(
       {this.userId,
@@ -55,7 +40,8 @@ class MyProfileDetailedDto {
       required this.lastName,
       required this.followerCount,
       required this.followingCount,
-      required this.bio});
+      required this.bio,
+      required this.avatar});
 
   factory MyProfileDetailedDto.fromJson(Map<String, dynamic> json) {
     return new MyProfileDetailedDto(
@@ -64,7 +50,8 @@ class MyProfileDetailedDto {
         userId: json['user_id'],
         followerCount: json['followers_count'],
         followingCount: json['followingCount'],
-        bio: json['bio']);
+        bio: json['bio'],
+        avatar: Avatar.fromJson(json['avatar']));
   }
 
   String getName() {
@@ -79,8 +66,7 @@ class UserProfileDetailedDto {
   final int? followerCount;
   final int? followingCount;
   final String bio;
-  final String image =
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80";
+  final Avatar avatar;
 
   UserProfileDetailedDto(
       {this.userId,
@@ -88,10 +74,12 @@ class UserProfileDetailedDto {
       this.followingCount,
       required this.firstName,
       required this.lastName,
-      required this.bio});
+      required this.bio,
+      required this.avatar});
 
   factory UserProfileDetailedDto.fromJson(Map<String, dynamic> json) {
     return new UserProfileDetailedDto(
+        avatar: Avatar.fromJson(json['avatar']),
         firstName: json['first_name'],
         lastName: json['last_name'],
         userId: json['user_id'],

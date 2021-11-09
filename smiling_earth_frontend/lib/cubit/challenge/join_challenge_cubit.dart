@@ -18,4 +18,15 @@ class JoinChallengeCubit extends Cubit<JoinChallengeState> {
       emit(ChallengeJoinedError(e.toString()));
     }
   }
+
+  void joinTeamChallenge(int challengeId, int teamId) {
+    try {
+      emit(JoiningChallenge());
+      _client
+          .joinTeamChallenge(challengeId, teamId)
+          .then((value) => emit(ChallengeJoined(value)));
+    } catch (e) {
+      emit(ChallengeJoinedError(e.toString()));
+    }
+  }
 }

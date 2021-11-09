@@ -6,7 +6,9 @@ import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
 class ChallengeWidget extends StatelessWidget {
   final ChallengeDto challenge;
-  const ChallengeWidget(this.challenge, {Key? key}) : super(key: key);
+  final int? teamsId;
+  const ChallengeWidget(this.challenge, this.teamsId, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +18,8 @@ class ChallengeWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    PreviewChallengesPage(id: this.challenge.id!)),
+                builder: (context) => PreviewChallengesPage(
+                    id: this.challenge.id!, teamId: this.teamsId)),
           );
         },
         child: Padding(

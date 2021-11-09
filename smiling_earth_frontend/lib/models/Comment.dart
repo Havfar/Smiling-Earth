@@ -1,13 +1,7 @@
 import 'package:smiling_earth_frontend/models/user.dart';
 
-Comment mockComment = Comment(
-    comment:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Enim in eros, sapien neque nulla cursus eget.",
-    user: mockUser,
-    dateTime: DateTime.now());
-
 class Comment {
-  final UserProfile user;
+  final UserProfileDto user;
   final String comment;
   final DateTime dateTime;
 

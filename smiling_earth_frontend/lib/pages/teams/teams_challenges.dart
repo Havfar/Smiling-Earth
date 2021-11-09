@@ -72,7 +72,7 @@ class TeamChallenges extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ChallengeCubit()..getTeamChallenges(id!),
-            child: _BuildChallenges(),
+            child: _BuildChallenges(teamId: id!),
           ),
         ],
       ),
@@ -104,8 +104,10 @@ class TeamChallenges extends StatelessWidget {
 }
 
 class _BuildChallenges extends StatelessWidget {
+  final int teamId;
   const _BuildChallenges({
     Key? key,
+    required this.teamId,
   }) : super(key: key);
 
   @override
@@ -130,7 +132,7 @@ class _BuildChallenges extends StatelessWidget {
               }
               return Column(
                 children: state.challenges
-                    .map((challenge) => ChallengeWidget(challenge))
+                    .map((challenge) => ChallengeWidget(challenge, teamId))
                     .toList(),
               );
             } else if (state is RetrievedChallengesError) {

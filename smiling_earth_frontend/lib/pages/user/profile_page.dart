@@ -7,6 +7,7 @@ import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/user/profile_cubit.dart';
+import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
@@ -29,7 +30,7 @@ class ProfilePage extends StatelessWidget {
             children: [
               BlocProvider(
                 create: (context) => ProfileCubit()..getProfile(this.userId),
-                child: _BuildHeader(),
+                child: BuildProfileHeader(),
               ),
               BlocProvider(
                 create: (context) => PledgeCubit()..getUserPledges(this.userId),
@@ -55,8 +56,8 @@ class ProfilePage extends StatelessWidget {
       );
 }
 
-class _BuildHeader extends StatelessWidget {
-  const _BuildHeader({
+class BuildProfileHeader extends StatelessWidget {
+  const BuildProfileHeader({
     Key? key,
   }) : super(key: key);
 
@@ -69,9 +70,15 @@ class _BuildHeader extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(state.profile.image)),
+                  Container(
+                      height: 60,
+                      width: 60,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Avatar.toSvg(state.profile.avatar)),
                   SizedBox(width: 30),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

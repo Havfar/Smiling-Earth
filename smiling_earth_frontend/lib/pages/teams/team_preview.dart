@@ -52,7 +52,35 @@ class _BuildPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      CircleIcon(backgroundColor: Colors.cyanAccent, emoji: this.team.symbol),
+      Container(
+        margin: EdgeInsets.only(top: 50),
+        width: 300,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CircleIcon(
+                    backgroundColor: Colors.cyanAccent,
+                    emoji: this.team.symbol),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(this.team.name,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ))
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(this.team.description!),
+          ],
+        ),
+      ),
       BlocBuilder<JoinTeamCubit, JoinTeamState>(
         builder: (context, state) {
           if (state is TeamJoined) {

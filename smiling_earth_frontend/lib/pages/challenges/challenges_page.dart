@@ -128,7 +128,7 @@ class _BuildChallenges extends StatelessWidget {
               }
               return Column(
                 children: state.challenges
-                    .map((challenge) => ChallengeWidget(challenge))
+                    .map((challenge) => ChallengeWidget(challenge, null))
                     .toList(),
               );
             } else if (state is RetrievedChallengesError) {
