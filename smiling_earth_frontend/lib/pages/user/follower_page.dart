@@ -176,9 +176,9 @@ class _BuildList extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => user.isFollowing
-                                            ? ProfilePreviewPage(
+                                            ? ProfilePage(
                                                 userId: user.user.userId)
-                                            : ProfilePage(
+                                            : ProfilePreviewPage(
                                                 userId: user.user.userId)));
                               },
                               leading: Container(

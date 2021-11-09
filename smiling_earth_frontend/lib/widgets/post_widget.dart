@@ -99,21 +99,7 @@ class _PostWidgetState extends State<PostWidget> {
                     )
                   : Text(""),
               this.widget.post.challenge != null
-                  ? Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              widget.post.challenge!.symbol +
-                                  ' ' +
-                                  widget.post.challenge!.title,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400)),
-                        ],
-                      ),
-                    )
+                  ? ChallengesPost(widget: widget)
                   : Text(""),
               this.widget.isPreview
                   ? Text("")
@@ -131,6 +117,43 @@ class _PostWidgetState extends State<PostWidget> {
                       ],
                     )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChallengesPost extends StatelessWidget {
+  const ChallengesPost({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final PostWidget widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: InkWell(
+        child: Card(
+          color: Colors.blue.shade100,
+          child: Container(
+            width: 250,
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleIcon(
+                    emoji: widget.post.challenge!.symbol,
+                    backgroundColor: Colors.white),
+                Text(widget.post.challenge!.title,
+                    textAlign: TextAlign.left,
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+              ],
+            ),
           ),
         ),
       ),
