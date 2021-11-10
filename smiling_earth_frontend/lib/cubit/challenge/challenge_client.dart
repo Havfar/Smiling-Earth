@@ -164,6 +164,17 @@ class ChallengesClient {
     }
   }
 
+  Future<void> leaveChallenge(int challengeId) async {
+    String endpoint = '/challenges/$challengeId/leave/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+
+    final response = await http.delete(uri, headers: {
+      "Authorization": "Token " + token!,
+    });
+  }
+
   Future<void> updateProgress(ChallengeDto challenge, int progress) async {
     String endpoint = "/challenge/user/${challenge.id}/";
     final token = await UserSecureStorage.getToken();
@@ -185,7 +196,7 @@ class ChallengesClient {
     }
   }
 
-  joinTeamChallenge(int challengeId, int teamId) async {
+  Future<int> joinTeamChallenge(int challengeId, int teamId) async {
     String endpoint = '/challenges/team/join/';
     final token = await UserSecureStorage.getToken();
 
@@ -199,5 +210,16 @@ class ChallengesClient {
         },
         body: jsonEncode({'challenge': challengeId, 'team': teamId}));
     return response.statusCode;
+  }
+
+  Future<void> leaveTeamChallenge(int challengeId, int teamId) async {
+    String endpoint = '/challenges/$challengeId/team/$teamId/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+
+    final response = await http.delete(uri, headers: {
+      "Authorization": "Token " + token!,
+    });
   }
 }

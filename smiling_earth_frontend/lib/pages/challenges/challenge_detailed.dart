@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/challenge_client.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
+import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -39,6 +41,8 @@ class _BuildDetailed extends StatelessWidget {
         if (state is RetrievedDetailedChallenge) {
           return Column(
             children: [
+              _BuildLeaveButton(
+                  state.challenge.isTeamChallenge, state.challenge.id!),
               _BuildHeader(state.challenge),
               _BuildProgressBar(progress: 12, goal: 20),
               _BuildLeaderboard(
@@ -48,6 +52,47 @@ class _BuildDetailed extends StatelessWidget {
         }
         return CircularProgressIndicator();
       },
+    );
+  }
+}
+
+class _BuildLeaveButton extends StatelessWidget {
+  final bool isTeamChallenge;
+  final int challengeId;
+  const _BuildLeaveButton(
+    this.isTeamChallenge,
+    this.challengeId, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (this.isTeamChallenge) {
+      return SizedBox(height: 20);
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          height: 40,
+          margin: EdgeInsets.only(top: 4, right: 2),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.red)),
+          child: TextButton(
+              onPressed: () {
+                ChallengesClient().leaveChallenge(challengeId);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+              child: Text(
+                'leave',
+                style: TextStyle(color: Colors.red),
+              )),
+        )
+      ],
     );
   }
 }
@@ -94,7 +139,7 @@ class _BuildHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 0, left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

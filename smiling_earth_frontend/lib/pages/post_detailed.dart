@@ -137,7 +137,7 @@ class BuildLikes extends StatelessWidget {
                       color: Colors.grey.shade200,
                       shape: BoxShape.circle,
                     ),
-                    child: Avatar.toSvg(like.user!.avatar!)))
+                    child: Avatar.toSvg(like.user!.avatar)))
                 .toList(),
           )
         ]));
@@ -193,7 +193,7 @@ class CommentWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          UserAvatar(avatar: comment.user!.avatar!),
+          UserAvatar(avatar: comment.user!.avatar),
           Container(
             width: 300,
             child: Column(

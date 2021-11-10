@@ -189,7 +189,7 @@ class _BuildList extends StatelessWidget {
                                     color: Colors.grey.shade200,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Avatar.toSvg(user.user.avatar!)),
+                                  child: Avatar.toSvg(user.user.avatar)),
                               title: Text(user.user.getName()),
                               trailing: user.isFollowing
                                   ? TextButton(

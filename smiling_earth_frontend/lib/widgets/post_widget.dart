@@ -61,7 +61,7 @@ class _PostWidgetState extends State<PostWidget> {
                           color: Colors.grey.shade200,
                           shape: BoxShape.circle,
                         ),
-                        child: Avatar.toSvg(widget.post.user!.avatar!)),
+                        child: Avatar.toSvg(widget.post.user!.avatar)),
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Column(

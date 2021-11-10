@@ -34,6 +34,10 @@ class TeamsCubit extends Cubit<TeamsState> {
     }
   }
 
+  void leaveTeam(int teamId) {
+    _client.leaveTeam(teamId);
+  }
+
   // void getTeamEmissions(int teamId) {
   //   try {
   //     _client

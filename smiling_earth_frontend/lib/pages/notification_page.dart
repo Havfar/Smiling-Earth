@@ -68,7 +68,7 @@ class _buildNotification extends StatelessWidget {
     switch (notification.notificationType) {
       case 0:
         return ListTile(
-          leading: UserAvatar(avatar: notification.fromUser!.avatar!),
+          leading: UserAvatar(avatar: notification.fromUser!.avatar),
           title: Text(
               "${notification.fromUser!.getName()} commented on your post"),
           subtitle: Text(notification.timestamp.toString()),
@@ -83,7 +83,7 @@ class _buildNotification extends StatelessWidget {
         );
       case 1:
         return ListTile(
-          leading: UserAvatar(avatar: notification.fromUser!.avatar!),
+          leading: UserAvatar(avatar: notification.fromUser!.avatar),
           title: Text("${notification.fromUser!.getName()} liked your post"),
           subtitle: Text(notification.timestamp.toString()),
           tileColor: notification.userHasSeen ? _readColor : _notReadColor,
@@ -115,7 +115,7 @@ class _buildNotification extends StatelessWidget {
 
       case 3:
         return ListTile(
-          leading: UserAvatar(avatar: notification.fromUser!.avatar!),
+          leading: UserAvatar(avatar: notification.fromUser!.avatar),
           title:
               Text("${notification.fromUser!.getName()} is now following you"),
           tileColor: notification.userHasSeen ? _readColor : _notReadColor,

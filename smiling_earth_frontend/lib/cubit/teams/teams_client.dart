@@ -124,20 +124,97 @@ class TeamsClient {
     }
   }
 
-  Future<List<RivalDto>> getRivals(int teamId) async {
-    String endpoint = '/rivals/' + teamId.toString();
+  Future<List<TeamsDto>> getRivals(int teamId) async {
+    String endpoint = '/rivals/$teamId/';
     final token = await UserSecureStorage.getToken();
 
-    try {
-      final uri = Uri.parse(_url + endpoint);
-      final response =
-          await http.get(uri, headers: {"Authorization": "Token " + token!});
-      final json =
-          jsonDecode(utf8.decode(response.bodyBytes))['results'] as List;
-      final rivals = json.map((rival) => RivalDto.fromJson(rival)).toList();
-      return rivals;
-    } catch (e) {
-      throw e;
-    }
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))['results'] as List;
+    final rivals = json.map((rival) {
+      var rivalry = RivalDto.fromJson(rival);
+      if (rivalry.sender.id == teamId) {
+        return rivalry.receiver;
+      }
+      return rivalry.sender;
+    }).toList();
+    return rivals;
+  }
+
+  Future<List<TeamsDto>> getOtherTeams(int teamId) async {
+    String endpoint = '/rivals/$teamId/other/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
+    final json = jsonDecode(utf8.decode(response.bodyBytes))['results'] as List;
+    final teams = json.map((team) => TeamsDto.fromJson(team)).toList();
+    return teams;
+  }
+
+  Future<void> leaveTeam(int teamId) async {
+    String endpoint = '/teams/$teamId/leave/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.delete(uri, headers: {"Authorization": "Token " + token!});
+  }
+
+  Future<List<RivalDto>> getRivalRequests(int teamId) async {
+    String endpoint = '/rival_requests/$teamId/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.get(uri, headers: {"Authorization": "Token " + token!});
+    print(response.body);
+    final json = jsonDecode(utf8.decode(response.bodyBytes))['results'] as List;
+    final rivals = json.map((rival) {
+      return RivalDto.fromJson(rival);
+    }).toList();
+    return rivals;
+  }
+
+  Future<int> sendRivalryRequest(SimpleRivalDto rivalry) async {
+    String endpoint = '/rival_requests/new/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response = await http.post(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(rivalry.toMap()));
+    return response.statusCode;
+  }
+
+  Future<int> updateRivalryRequest(RivalDto rivalry) async {
+    String endpoint = '/rival_requests/${rivalry.id}/update/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response = await http.put(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(rivalry.toMap()));
+    return response.statusCode;
+  }
+
+  Future<int> deleteRivalryRequest(RivalDto rivalry) async {
+    String endpoint = '/rival_requests/${rivalry.id}/update/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.delete(uri, headers: {"Authorization": "Token " + token!});
+    return response.statusCode;
   }
 }

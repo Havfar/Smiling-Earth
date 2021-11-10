@@ -4,7 +4,6 @@ import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/rivals_cubit.dart';
 import 'package:smiling_earth_frontend/models/avatar.dart';
-import 'package:smiling_earth_frontend/models/rivals.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
@@ -274,7 +273,7 @@ class BuildTeamScoreList extends StatelessWidget {
                                         color: Colors.grey.shade200,
                                         shape: BoxShape.circle,
                                       ),
-                                      child: Avatar.toSvg(member.user.avatar!)),
+                                      child: Avatar.toSvg(member.user.avatar)),
                                   title: Text(member.user.getName()),
                                   trailing: Text(member.emissions.toString())),
                             )))
@@ -338,8 +337,7 @@ class BuildRivalryLeaderboard extends StatelessWidget {
     );
   }
 
-  Container rivalListItem(RivalDto rival, int id) {
-    TeamsDto rivalTeam = rival.sender.id == id ? rival.receiver : rival.sender;
+  Container rivalListItem(TeamsDto rivalTeam, int id) {
     return Container(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       decoration:

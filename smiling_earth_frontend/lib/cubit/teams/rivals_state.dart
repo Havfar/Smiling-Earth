@@ -10,7 +10,7 @@ abstract class RivalsState extends Equatable {
 class RivalsInitial extends RivalsState {}
 
 class RivalsFetched extends RivalsState {
-  final List<RivalDto> rivals;
+  final List<TeamsDto> rivals;
 
   RivalsFetched(this.rivals);
 }
