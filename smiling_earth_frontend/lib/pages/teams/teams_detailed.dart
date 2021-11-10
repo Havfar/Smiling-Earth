@@ -47,7 +47,7 @@ class TeamsDetailedPage extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamAbout(id: id),
+              TeamAbout(teamId: id),
           transitionDuration: Duration.zero,
         ));
         break;

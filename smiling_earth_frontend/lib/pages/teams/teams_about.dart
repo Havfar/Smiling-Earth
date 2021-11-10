@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/leave_challenge_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
+import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/not_implemented.dart';
 import 'package:smiling_earth_frontend/pages/teams/team_rivalries.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
@@ -14,8 +16,8 @@ import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class TeamAbout extends StatelessWidget {
-  final int? id;
-  TeamAbout({required this.id});
+  final int? teamId;
+  TeamAbout({required this.teamId});
 
   void _onTap(BuildContext context, int index) {
     switch (index) {
@@ -24,7 +26,7 @@ class TeamAbout extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamsDetailedPage(id: id),
+              TeamsDetailedPage(id: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -32,7 +34,7 @@ class TeamAbout extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamPosts(id: id),
+              TeamPosts(id: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -40,7 +42,7 @@ class TeamAbout extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamChallenges(id: id),
+              TeamChallenges(id: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -48,7 +50,7 @@ class TeamAbout extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamAbout(id: id),
+              TeamAbout(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -63,18 +65,36 @@ class TeamAbout extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.green),
       ),
       drawer: NavigationDrawerWidget(),
-      body: ListView(
-        children: [
-          SizedBox(height: 20),
-          _BuildTeamSettings(),
-          SizedBox(height: 20),
-          _BuildMembersSettings(),
-          SizedBox(height: 20),
-          _BuildRivalriesSettings(),
-          SizedBox(height: 20),
-          _BuildChallengesSettings(1)
-        ],
-      ),
+      body: ListView(children: [
+        BlocProvider(
+          create: (context) => DetailedTeamCubit()..getTeams(teamId!),
+          child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
+            builder: (context, state) {
+              if (state is RetrievedTeam) {
+                return Column(
+                  children: [
+                    SizedBox(height: 20),
+                    _BuildTeamSettings(state.teams),
+                    SizedBox(height: 20),
+                    _BuildMembersSettings(),
+                    SizedBox(height: 20),
+                    _BuildRivalriesSettings(),
+                    SizedBox(height: 20),
+                    _BuildChallengesSettings(teamId!)
+                  ],
+                );
+              }
+              return Container(
+                margin: EdgeInsets.only(top: 50),
+                child: Center(
+                    widthFactor: 1,
+                    heightFactor: 1,
+                    child: CircularProgressIndicator()),
+              );
+            },
+          ),
+        )
+      ]),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: 3,
           type: BottomNavigationBarType.fixed,
@@ -306,7 +326,9 @@ class _BuildMembersSettings extends StatelessWidget {
 }
 
 class _BuildTeamSettings extends StatelessWidget {
-  const _BuildTeamSettings({
+  final TeamDetailedDto team;
+  const _BuildTeamSettings(
+    this.team, {
     Key? key,
   }) : super(key: key);
 
@@ -329,23 +351,23 @@ class _BuildTeamSettings extends StatelessWidget {
                 children: [
                   Container(width: 100, child: Text('Name: ')),
                   SizedBox(width: 30),
-                  Text('Name Name'),
+                  Text(team.name),
                 ],
               ),
             )),
-        Container(
-            decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.grey.shade200))),
-            child: ListTile(
-              title: Row(
-                children: [
-                  Container(width: 100, child: Text('Team Admin: ')),
-                  SizedBox(width: 30),
-                  Text('Name Name'),
-                ],
-              ),
-            )),
+        // Container(
+        //     decoration: BoxDecoration(
+        //         border:
+        //             Border(bottom: BorderSide(color: Colors.grey.shade200))),
+        //     child: ListTile(
+        //       title: Row(
+        //         children: [
+        //           Container(width: 100, child: Text('Team Admin: ')),
+        //           SizedBox(width: 30),
+        //           Text(team.),
+        //         ],
+        //       ),
+        //     )),
         Container(
             decoration: BoxDecoration(
                 border:
@@ -356,10 +378,9 @@ class _BuildTeamSettings extends StatelessWidget {
                   Container(width: 100, child: Text('Description: ')),
                   SizedBox(width: 30),
                   Container(
-                    width: 220,
-                    child: Text(
-                        'Name Mattis molestie rhoncus fringilla nostra velit cubilia ligula proin lorem laoreet imperdiet phasellus facilisi sollicitudin cras sed urna euismod mauris'),
-                  ),
+                      width: 220,
+                      child: Text(
+                          team.description == null ? '' : team.description!)),
                 ],
               ),
             )),

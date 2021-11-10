@@ -213,7 +213,7 @@ class _BuildLeaderboard extends StatelessWidget {
                             border: Border(
                                 bottom: BorderSide(color: Colors.black12))),
                         child: ListTile(
-                            leading: Text(score.id.toString()),
+                            leading: Text(score.teamId.toString()),
                             title: Row(
                               children: [
                                 Text(isTeamChallenge
