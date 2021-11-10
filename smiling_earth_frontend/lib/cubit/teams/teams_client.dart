@@ -76,7 +76,7 @@ class TeamsClient {
   }
 
   Future<List<TeamMemberDto>> getTeamMembers(int id) async {
-    String endpoint = '/teams/' + id.toString() + '/members/';
+    String endpoint = '/teams/$id/members/';
     final token = await UserSecureStorage.getToken();
 
     try {

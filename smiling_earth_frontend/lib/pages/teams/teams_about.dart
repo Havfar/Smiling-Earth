@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/leave_challenge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
 import 'package:smiling_earth_frontend/pages/not_implemented.dart';
 import 'package:smiling_earth_frontend/pages/teams/team_rivalries.dart';
@@ -69,7 +72,7 @@ class TeamAbout extends StatelessWidget {
           SizedBox(height: 20),
           _BuildRivalriesSettings(),
           SizedBox(height: 20),
-          _BuildChallengesSettings()
+          _BuildChallengesSettings(1)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -100,7 +103,9 @@ class TeamAbout extends StatelessWidget {
 }
 
 class _BuildChallengesSettings extends StatelessWidget {
-  const _BuildChallengesSettings({
+  final int teamId;
+  const _BuildChallengesSettings(
+    this.teamId, {
     Key? key,
   }) : super(key: key);
 
@@ -114,18 +119,65 @@ class _BuildChallengesSettings extends StatelessWidget {
           child: Text('Challenges',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
-        Container(
-          decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
-          child: ListTile(
-              trailing: IconButton(
-                  onPressed: () => (print('ok')
-                      // ChallengesClient().leaveChallenge(challengeId)
-                      ),
-                  icon: Icon(Icons.delete, color: Colors.red)),
-              title: Text('Rivalries Requests'),
-              leading: CircleIcon(backgroundColor: Colors.white, emoji: 'ok')),
-        ),
+        BlocProvider(
+            create: (context) =>
+                ChallengeCubit()..getJoinedTeamChallenges(teamId),
+            child: BlocBuilder<ChallengeCubit, ChallengeState>(
+                builder: (context, state) {
+              if (state is RetrievedJoinedChallenges) {
+                if (state.challenges.isEmpty) {
+                  return Container(
+                    margin: EdgeInsets.only(top: 30),
+                    child: Center(
+                        child: Text(
+                            "The team has not joined any challenges yet..")),
+                  );
+                }
+                return Column(
+                    children: state.challenges
+                        .map(
+                          (challenge) => Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.grey.shade200))),
+                            child: ListTile(
+                                trailing: Container(
+                                  child: BlocProvider(
+                                    create: (context) => LeaveChallengeCubit(),
+                                    child: BlocBuilder<LeaveChallengeCubit,
+                                        LeaveChallengeState>(
+                                      builder: (context, state) {
+                                        if (state is LeaveChallengeLeft) {
+                                          return Text('left');
+                                        } else if (state
+                                            is LeaveChallengeSending) {
+                                          return CircularProgressIndicator();
+                                        }
+                                        return IconButton(
+                                            onPressed: () => BlocProvider.of<
+                                                        LeaveChallengeCubit>(
+                                                    context)
+                                                .leaveTeamChallenge(teamId,
+                                                    challenge.challenge.id!),
+                                            icon: Icon(Icons.delete,
+                                                color: Colors.red));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                title: Text(challenge.challenge.title),
+                                leading: CircleIcon(
+                                    backgroundColor: Colors.white,
+                                    emoji: challenge.challenge.symbol)),
+                          ),
+                        )
+                        .toList());
+              } else if (state is RetrievedChallengesError) {
+                return Text('Error: ' + state.error);
+              }
+              return Text('loading');
+            }))
       ],
     );
   }
@@ -200,6 +252,12 @@ class _BuildMembersSettings extends StatelessWidget {
           child: ListTile(
             trailing: Icon(Icons.chevron_right),
             title: Text('Members (12) '),
+            onTap: () => (Navigator.of(context).push(PageRouteBuilder(
+              pageBuilder: (BuildContext context, Animation<double> animation,
+                      Animation<double> secondaryAnimation) =>
+                  NotImplementedPage(),
+              transitionDuration: Duration.zero,
+            ))),
           ),
         ),
         Container(
