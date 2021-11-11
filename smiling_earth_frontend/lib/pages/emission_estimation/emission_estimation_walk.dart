@@ -130,6 +130,8 @@ class _BuildWalkingEstimationState extends State<BuildWalkingEstimation> {
           time: ActiveMinutes.calculateActiveMinutesFromWalking(
                   (_sliderValue * 100))
               .round(),
+          showPersonalMessage: false,
+          isTeam: false,
         ),
         Text('See how much you can save by walking instead of driving'),
         Row(
@@ -171,6 +173,7 @@ class _BuildWalkingEstimationState extends State<BuildWalkingEstimation> {
           ],
         ),
         SmilingEarthEmissionChart(
+          hideTitle: true,
           energyEmission: 0,
           transportEmission: Transportation.getGasolineCarEmissionByDistance(
               (1 - _sliderValue) * 100),

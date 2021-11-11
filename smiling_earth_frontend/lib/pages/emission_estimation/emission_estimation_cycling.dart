@@ -72,6 +72,8 @@ class _CyclingEmissionEstimatePageState
               kcal: null,
               money: null,
               time: null,
+              showPersonalMessage: false,
+              isTeam: false,
             ),
           ],
         ),

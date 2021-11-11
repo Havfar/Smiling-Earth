@@ -4,7 +4,6 @@ import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
-import 'package:smiling_earth_frontend/utils/challenges_util.dart';
 import 'package:smiling_earth_frontend/utils/string_utils.dart';
 import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
@@ -25,9 +24,6 @@ class ChallengesPage extends StatelessWidget {
               create: (context) => ChallengeCubit()..getMyCompletedChallenges(),
               child: BuildCompletedChallenges(),
             ),
-            IconButton(
-                onPressed: () => ChallengesUtil().updateChallenges(),
-                icon: Icon(Icons.sync)),
             SizedBox(height: 30),
             BlocProvider(
               create: (context) => ChallengeCubit()..getJoinedChallenges(),

@@ -116,16 +116,22 @@ class BuildElectricCarEstimation extends StatelessWidget {
           return Column(
             children: <Widget>[
               BuildHeaderToolbar(
-                  distance: snapshot.data!.round(),
-                  electricity: null,
-                  kcal: null,
-                  money: Transportation.compareCostElectricVsGasolineCar(
-                          snapshot.data!)
-                      .round(),
-                  time: null),
+                distance: snapshot.data!.round(),
+                electricity: null,
+                kcal: null,
+                money: Transportation.compareCostElectricVsGasolineCar(
+                        snapshot.data!)
+                    .round(),
+                time: null,
+                showPersonalMessage: false,
+                isTeam: false,
+              ),
               Text('See how much you can save by changing to an electric car'),
               SmilingEarthEmissionChart(
-                  energyEmission: 10, transportEmission: 20, goal: 100),
+                  hideTitle: true,
+                  energyEmission: 10,
+                  transportEmission: 20,
+                  goal: 100),
               ListTile(
                 leading: Text('🌳', style: TextStyle(fontSize: 22)),
                 title: Text('By changing to an electric car you would save '),

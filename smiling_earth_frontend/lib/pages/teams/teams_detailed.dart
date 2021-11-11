@@ -379,6 +379,7 @@ class BuildChart extends StatelessWidget {
               ),
               Center(
                 child: SmilingEarthEmissionChart(
+                    hideTitle: true,
                     energyEmission: state.energyEmission.toDouble(),
                     transportEmission: state.transportEmission.toDouble(),
                     goal: 100),

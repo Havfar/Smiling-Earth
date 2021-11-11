@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class SmilingEarthEmissionChart extends StatelessWidget {
+  final bool hideTitle;
   final double? energyEmission;
   final double? transportEmission;
   final double goal;
@@ -11,6 +12,7 @@ class SmilingEarthEmissionChart extends StatelessWidget {
     this.energyEmission,
     required this.transportEmission,
     required this.goal,
+    required this.hideTitle,
   }) : super(key: key);
 
   @override
@@ -18,91 +20,96 @@ class SmilingEarthEmissionChart extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 300,
-          width: 300,
+          height: 220,
+          width: 220,
           child: CustomPaint(
               foregroundPainter: EmissionChart(
                   energyEmission! / goal, transportEmission! / goal),
               child: Container(
-                height: 300,
-                width: 300,
+                height: 250,
+                width: 250,
                 child: Center(
                     child: Image(
-                        height: 160,
-                        width: 160,
+                        height: 150,
+                        width: 150,
                         image: _getSmilingEarth(
                             (transportEmission! + energyEmission!) / goal))),
               )),
         ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        Column(
+          children: [
+            BuildTitle(hideTitle),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                      width: 12,
-                      height: 5,
-                      decoration: BoxDecoration(color: Colors.blue)),
-                  SizedBox(width: 5),
-                  Text('Energy'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 12,
+                          height: 5,
+                          decoration: BoxDecoration(color: Colors.blue)),
+                      SizedBox(width: 5),
+                      Text('Energy'),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                      energyEmission != null
+                          ? energyEmission!.roundToDouble().toString()
+                          : '-',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                  Text('kg CO2'),
                 ],
               ),
-              SizedBox(height: 10),
-              Text(
-                  energyEmission != null
-                      ? energyEmission!.roundToDouble().toString()
-                      : '-',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  )),
-              Text('kg CO2'),
-            ],
-          ),
-          SizedBox(width: 40),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              SizedBox(width: 40),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                      width: 12,
-                      height: 5,
-                      decoration: BoxDecoration(color: Colors.green)),
-                  SizedBox(width: 5),
-                  Text('Transport'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 12,
+                          height: 5,
+                          decoration: BoxDecoration(color: Colors.green)),
+                      SizedBox(width: 5),
+                      Text('Transport'),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                      transportEmission != null
+                          ? transportEmission!.roundToDouble().toString()
+                          : '-',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                  Text('kg CO2'),
                 ],
               ),
-              SizedBox(height: 10),
-              Text(
-                  transportEmission != null
-                      ? transportEmission!.roundToDouble().toString()
-                      : '-',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  )),
-              Text('kg CO2'),
-            ],
-          ),
-          SizedBox(width: 40),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Total'),
-              SizedBox(height: 10),
-              Text(_getCombinedEmission().toString(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  )),
-              Text('kg CO2'),
-            ],
-          )
-        ])
+              SizedBox(width: 40),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Total'),
+                  SizedBox(height: 10),
+                  Text(_getCombinedEmission().toString(),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                  Text('kg CO2'),
+                ],
+              )
+            ]),
+          ],
+        )
       ],
     );
   }
@@ -133,14 +140,39 @@ class SmilingEarthEmissionChart extends StatelessWidget {
   }
 }
 
+class BuildTitle extends StatelessWidget {
+  final bool hide;
+  const BuildTitle(
+    this.hide, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (this.hide) {
+      return SizedBox(height: 10);
+    }
+    return Column(
+      children: [
+        Text("So far this month you have emitted ",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            )),
+        SizedBox(height: 10)
+      ],
+    );
+  }
+}
+
 class SmilingEarthChartSkeleton extends StatelessWidget {
   const SmilingEarthChartSkeleton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
-      width: 300,
+      height: 220,
+      width: 220,
       child: CustomPaint(
           foregroundPainter: EmissionChart(0, 0),
           child: Container(
@@ -167,9 +199,9 @@ class EmissionChart extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double angleEnergy = 2 * pi * energyEmissionPercentage;
     double angleTransport = 2 * pi * transportEmissionPercentage;
-    double strokeWidth = 30;
+    double strokeWidth = 22;
     Offset center = Offset(size.width * 0.5, size.height * 0.5);
-    double radius = 110;
+    double radius = 90;
     double startAngle = 4.7;
 
     var paint = Paint()

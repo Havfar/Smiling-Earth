@@ -57,6 +57,7 @@ class ChallengesClient {
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token!});
       final json = jsonDecode(utf8.decode(response.bodyBytes));
+      print(response.body);
       return DetailedChallengeDto.fromJson(json);
     } catch (e) {
       throw e;

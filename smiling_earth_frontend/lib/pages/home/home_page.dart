@@ -10,8 +10,6 @@ import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estima
 import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
-import 'package:smiling_earth_frontend/utils/services/local_notifications_service.dart';
-import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -36,39 +34,53 @@ class _HomeState extends State<HomePage> {
     return new Scaffold(
       //drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.green),
-        backgroundColor: Colors.white,
-      ),
+          iconTheme: IconThemeData(color: Colors.green),
+          backgroundColor: Colors.white,
+          actions: [
+            Container(
+                child: BlocProvider(
+              create: (context) => NotificationsCubit()..getNotificationCount(),
+              child: BuildNotificationBell(),
+            )),
+          ]),
       drawer: NavigationDrawerWidget(),
       body: Container(
         height: 800,
         margin: EdgeInsets.all(10),
         child: ListView(
           children: [
-            Container(
-                child: BlocProvider(
-              create: (context) => NotificationsCubit()..getNotificationCount(),
-              child: BuildNotificationBell(),
-            )),
-            BuildHeaderToolbar(
-              distance: null,
-              electricity: null,
-              kcal: null,
-              money: null,
-              time: null,
+            SizedBox(height: 25),
+            Card(
+              margin: EdgeInsets.only(left: 2, right: 2),
+              child: Container(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Column(
+                  children: [
+                    BuildHeaderToolbar(
+                      distance: 132,
+                      electricity: 132,
+                      kcal: 132,
+                      money: 133,
+                      time: 133,
+                      showPersonalMessage: true,
+                      isTeam: false,
+                    ),
+                    BuildChart(),
+                    // TextButton.icon(
+                    //   onPressed: () => SettingsDatabaseManager.instance.delete(),
+                    //   label: Text("delete settings"),
+                    //   icon: Icon(Icons.delete),
+                    // ),
+                    // TextButton.icon(
+                    //     onPressed: () async =>
+                    //         await NotificationService().showNotifications(),
+                    //     label: Text("show notification"),
+                    //     icon: Icon(Icons.notification_add)),
+                    BuildEmissionEstimation(),
+                  ],
+                ),
+              ),
             ),
-            BuildChart(),
-            TextButton.icon(
-              onPressed: () => SettingsDatabaseManager.instance.delete(),
-              label: Text("delete settings"),
-              icon: Icon(Icons.delete),
-            ),
-            TextButton.icon(
-                onPressed: () async =>
-                    await NotificationService().showNotifications(),
-                label: Text("show notification"),
-                icon: Icon(Icons.notification_add)),
-            BuildEmissionEstimation(),
             BuildFeed(),
           ],
         ),
@@ -109,7 +121,7 @@ class BuildNotificationBell extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey.shade100),
-                            color: Colors.deepOrangeAccent),
+                            color: Colors.red.shade700),
                         child: Text(state.notificaitonCount.toString())),
                   ),
                 ],
@@ -137,21 +149,13 @@ class BuildChart extends StatelessWidget {
     double emissionGoal = 50;
     return Container(
       child: Column(children: [
-        Row(
-          children: [
-            Text("Emissions",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                )),
-          ],
-        ),
         FutureBuilder<ChartData>(
           future: getChartDataByMonth(DateTime.now()),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Center(
                 child: SmilingEarthEmissionChart(
+                    hideTitle: false,
                     energyEmission: snapshot.data!.energy,
                     transportEmission: snapshot.data!.transport,
                     goal: emissionGoal),
@@ -205,8 +209,8 @@ class _BuildFeedState extends State<BuildFeed> {
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            "Feed",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            "See what other users are doing",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           TextButton.icon(
               onPressed: () => Navigator.push(
@@ -260,12 +264,9 @@ class BuildEmissionEstimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 30, bottom: 10),
-      decoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(color: Colors.black12),
-              bottom: BorderSide(color: Colors.black12))),
+      margin: EdgeInsets.only(top: 15),
       child: ListTile(
+        leading: Text('☁️'),
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => EmissionEstimatePage()),

@@ -68,6 +68,8 @@ class _EmissionEstimatePageState extends State<EmissionEstimatePage> {
               kcal: null,
               money: null,
               time: null,
+              showPersonalMessage: false,
+              isTeam: false,
             ),
             BuildSolarEstimation()
           ],

@@ -186,6 +186,8 @@ class _BuildLeaderboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int counter = 0;
+
     return Container(
       margin: EdgeInsets.only(top: 50, right: 20, left: 20),
       child: Column(
@@ -206,24 +208,25 @@ class _BuildLeaderboard extends StatelessWidget {
                 trailing: Text('Score')),
           ),
           Column(
-              children: this
-                  .leaderboard
-                  .map((score) => Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.black12))),
-                        child: ListTile(
-                            leading: Text(score.teamId.toString()),
-                            title: Row(
-                              children: [
-                                Text(isTeamChallenge
-                                    ? score.team.name
-                                    : score.user.getName()),
-                              ],
-                            ),
-                            trailing: Text(score.score.toString())),
-                      ))
-                  .toList())
+              children: this.leaderboard.map((
+            score,
+          ) {
+            counter++;
+            return Container(
+              decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Colors.black12))),
+              child: ListTile(
+                  leading: Text(counter.toString()),
+                  title: Row(
+                    children: [
+                      Text(isTeamChallenge
+                          ? score.team.name
+                          : score.user.getName()),
+                    ],
+                  ),
+                  trailing: Text(score.score.toString())),
+            );
+          }).toList())
         ],
       ),
     );
