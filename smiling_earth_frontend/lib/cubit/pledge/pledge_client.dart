@@ -27,6 +27,25 @@ class PledgeClient {
     }
   }
 
+  Future<List<PledgeDto>> getNotJoinedPledges() async {
+    String endpoint = '/pledge/other/';
+    final token = await UserSecureStorage.getToken();
+
+    try {
+      final uri = Uri.parse(_url + endpoint);
+      final response =
+          await http.get(uri, headers: {"Authorization": "Token " + token!});
+      final json =
+          jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
+      final pledges = json.map((pledgeJson) {
+        return PledgeDto.fromJson(pledgeJson);
+      }).toList();
+      return pledges;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<List<PledgeDto>> getTeamPledges(int teamId) async {
     String endpoint = '/pledge/team/' + teamId.toString();
     final token = await UserSecureStorage.getToken();
@@ -102,5 +121,16 @@ class PledgeClient {
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<bool> deleteUserPledge(int pledgeId) async {
+    String endpoint = '/pledge/user/delete/$pledgeId/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.delete(uri, headers: {"Authorization": "Token " + token!});
+    return response.statusCode == 200;
+    // body: jsonEncode(body));
   }
 }

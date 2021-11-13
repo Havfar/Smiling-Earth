@@ -62,6 +62,7 @@ class _BuildPreview extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CircleIcon(
+                    onTap: null,
                     backgroundColor: Colors.cyanAccent,
                     emoji: this.team.symbol),
                 SizedBox(

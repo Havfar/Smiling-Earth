@@ -5,6 +5,7 @@ import 'package:smiling_earth_frontend/cubit/challenge/leave_challenge_cubit.dar
 import 'package:smiling_earth_frontend/cubit/teams/detailed_team_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
 import 'package:smiling_earth_frontend/models/teams.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
 import 'package:smiling_earth_frontend/pages/not_implemented.dart';
 import 'package:smiling_earth_frontend/pages/teams/team_rivalries.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
@@ -188,6 +189,13 @@ class _BuildChallengesSettings extends StatelessWidget {
                                 ),
                                 title: Text(challenge.challenge.title),
                                 leading: CircleIcon(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailedChallengesPage(
+                                                    id: challenge
+                                                        .challenge.id!))),
                                     backgroundColor: Colors.white,
                                     emoji: challenge.challenge.symbol)),
                           ),

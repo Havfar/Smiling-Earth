@@ -8,6 +8,9 @@ import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/user/profile_cubit.dart';
 import 'package:smiling_earth_frontend/models/avatar.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
+import 'package:smiling_earth_frontend/pages/pledges/detailed_pledges.dart';
+import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
@@ -142,6 +145,12 @@ class BuildPledges extends StatelessWidget {
                                 margin: EdgeInsets.only(right: 10),
                                 child: Column(children: [
                                   CircleIcon(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailedPledgePage(
+                                                    pledge: pledge))),
                                     emoji: pledge.icon,
                                     backgroundColor: Colors.blueAccent,
                                   ),
@@ -209,6 +218,11 @@ class _BuildAchievements extends StatelessWidget {
                             child: Column(
                               children: [
                                 CircleIcon(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChallengesPage())),
                                   emoji: challenge.symbol,
                                   backgroundColor: Colors.blueAccent,
                                 ),
@@ -277,6 +291,10 @@ class _BuildTeamsList extends StatelessWidget {
                               child: Column(
                                 children: [
                                   CircleIcon(
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => TeamsPage())),
                                     emoji: team.symbol,
                                     backgroundColor: Colors.blueAccent,
                                   ),

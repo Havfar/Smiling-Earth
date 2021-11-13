@@ -68,7 +68,7 @@ initializeWorkManagerAndPushNotification() {
 
   Workmanager().initialize(
     callbackDispatcher,
-    isInDebugMode: true,
+    isInDebugMode: false,
   ); //to true if still in testing lev turn it to false whenever you are launching the app
   Workmanager().registerPeriodicTask(
     "1", fetchEnergyUsageTask,

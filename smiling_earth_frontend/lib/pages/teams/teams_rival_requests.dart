@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/teams/rival_request_cubit.dart';
 import 'package:smiling_earth_frontend/models/rivals.dart';
+import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
 class RivalryRequestsPage extends StatelessWidget {
@@ -62,7 +63,12 @@ class _BuildRequests extends StatelessWidget {
                                     BorderSide(color: Colors.grey.shade200))),
                         child: ListTile(
                           leading: CircleIcon(
-                              backgroundColor: Colors.blue, emoji: team.symbol),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TeamsPage())),
+                              backgroundColor: Colors.blue,
+                              emoji: team.symbol),
                           title: Text(team.name),
                           trailing: Container(
                             width: 200,
@@ -148,7 +154,9 @@ class _BuildRequests extends StatelessWidget {
                               bottom: BorderSide(color: Colors.grey.shade200))),
                       child: ListTile(
                           leading: CircleIcon(
-                              backgroundColor: Colors.blue, emoji: team.symbol),
+                              onTap: null,
+                              backgroundColor: Colors.blue,
+                              emoji: team.symbol),
                           title: Text(team.name),
                           trailing: Container(
                               width: 110,

@@ -146,6 +146,7 @@ class ChallengesPost extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleIcon(
+                    onTap: null,
                     emoji: widget.post.challenge!.symbol,
                     backgroundColor: Colors.white),
                 Text(widget.post.challenge!.title,

@@ -5,6 +5,7 @@ import 'package:smiling_earth_frontend/cubit/pledge/pledge_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/user/profile_cubit.dart';
 import 'package:smiling_earth_frontend/models/avatar.dart';
+import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
 import 'package:smiling_earth_frontend/pages/user/profile_page.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -70,34 +71,56 @@ class _BuildHeader extends StatelessWidget {
                       Text(state.profile.getName(),
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w500)),
-                      Text('200 kg CO2 /day',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.green)),
+                      // Text('200 kg CO2 /day',
+                      //     style: TextStyle(
+                      //         fontSize: 14,
+                      //         fontWeight: FontWeight.w500,
+                      //         color: Colors.green)),
                       SizedBox(height: 10),
                       Container(width: 250, child: Text(state.profile.bio)),
                       SizedBox(height: 10),
-                      Row(children: [
-                        Container(
-                          padding: EdgeInsets.only(right: 25),
-                          child: Column(
-                            children: [
-                              Text(state.profile.followerCount.toString()),
-                              Text('Followers'),
-                            ],
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FollowerPage())),
+                            child: Container(
+                                width: 200,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('See Followers'),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Icon(Icons.chevron_right)
+                                  ],
+                                )),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 25),
-                          child: Column(
-                            children: [
-                              Text(state.profile.followingCount.toString()),
-                              Text('Following'),
-                            ],
-                          ),
-                        ),
-                      ])
+                        ],
+                      )
+                      // Row(children: [
+                      //   Container(
+                      //     padding: EdgeInsets.only(right: 25),
+                      //     child: Column(
+                      //       children: [
+                      //         Text(state.profile.followerCount.toString()),
+                      //         Text('Followers'),
+                      //       ],
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     padding: EdgeInsets.only(left: 25),
+                      //     child: Column(
+                      //       children: [
+                      //         Text(state.profile.followingCount.toString()),
+                      //         Text('Following'),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ])
                     ],
                   ),
                 ],

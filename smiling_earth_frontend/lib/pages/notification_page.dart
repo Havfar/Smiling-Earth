@@ -98,6 +98,7 @@ class _buildNotification extends StatelessWidget {
       case 2:
         return ListTile(
           leading: CircleIcon(
+            onTap: null,
             backgroundColor: Colors.lightBlueAccent,
             emoji: '🏆',
           ),
@@ -130,6 +131,7 @@ class _buildNotification extends StatelessWidget {
       default:
         return ListTile(
           leading: CircleIcon(
+            onTap: null,
             backgroundColor: Colors.lightGreenAccent,
             emoji: '❗️',
           ),

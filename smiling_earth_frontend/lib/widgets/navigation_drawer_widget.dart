@@ -18,20 +18,12 @@ class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
   @override
   Widget build(BuildContext context) {
-    final name = 'Sarah Abs';
-    final email = 'sarah@abs.com';
-    final urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
-
     return Drawer(
       child: Material(
         color: Color.fromRGBO(50, 75, 205, 1),
         child: ListView(
           children: <Widget>[
             buildHeader(
-              urlImage: urlImage,
-              name: name,
-              email: email,
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MyProfilePage(),
               )),
@@ -107,9 +99,6 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   Widget buildHeader({
-    required String urlImage,
-    required String name,
-    required String email,
     required VoidCallback onClicked,
   }) =>
       InkWell(
@@ -128,9 +117,19 @@ class NavigationDrawerWidget extends StatelessWidget {
                     if (snapshot.hasData) {
                       return Container(
                         width: 130,
-                        child: Text(
-                          snapshot.data!,
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        child: Column(
+                          children: [
+                            Text(
+                              snapshot.data!,
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                            Text(
+                              'Go to my profile',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
+                            ),
+                          ],
                         ),
                       );
                     }

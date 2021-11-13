@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/transportation.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
+import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ActivityDatabaseManager {
@@ -163,6 +164,26 @@ class ActivityDatabaseManager {
       duration += activity.getTotalDurationInSeconds();
     }
     return duration;
+  }
+
+  Future<List<int>> getActiveMinutesDrivingDistanceAndElectricity() async {
+    List<int> activities = [
+      AppActivityType.ON_FOOT.index,
+      AppActivityType.ON_BICYCLE.index,
+      AppActivityType.WALKING.index,
+      AppActivityType.RUNNING.index
+    ];
+    double activeSeconds = await getDurationOfActivityGroup(activities);
+    double drivingSeconds =
+        await getDurationOfActivity(AppActivityType.IN_CAR.index);
+    double heatLoad = await EnergyDatabaseManager.instance.getTotalHeatLoad();
+    // double electricity = Energy.calculateEnergyConsumption();
+
+    return [
+      (activeSeconds / 60).round(),
+      (drivingSeconds / 60).round(),
+      heatLoad.round()
+    ];
   }
 
   Future<double> getDurationOfActivityGroup(List<int> activityTypes) async {

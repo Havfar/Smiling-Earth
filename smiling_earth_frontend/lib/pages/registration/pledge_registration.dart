@@ -202,7 +202,7 @@ class _BuildPledgesState extends State<BuildPledges> {
 class PledgeWidget extends StatelessWidget {
   final PledgeDto pledge;
   final bool selected;
-  final void Function() onSelect;
+  final void Function()? onSelect;
   PledgeWidget(
       {Key? key,
       required this.pledge,
@@ -218,7 +218,11 @@ class PledgeWidget extends StatelessWidget {
               side: BorderSide(color: Colors.green, width: 2),
               borderRadius: BorderRadius.circular(4.0)),
           child: InkWell(
-            onTap: () => onSelect(),
+            onTap: () {
+              if (onSelect != null) {
+                onSelect!();
+              }
+            },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Stack(
@@ -229,6 +233,7 @@ class PledgeWidget extends StatelessWidget {
                       Row(
                         children: [
                           CircleIcon(
+                              onTap: null,
                               backgroundColor: Colors.lightBlue.shade100,
                               emoji: pledge.icon),
                           SizedBox(
@@ -255,7 +260,11 @@ class PledgeWidget extends StatelessWidget {
     }
     return Card(
         child: InkWell(
-      onTap: () => onSelect(),
+      onTap: () {
+        if (onSelect != null) {
+          onSelect!();
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Stack(
@@ -266,6 +275,7 @@ class PledgeWidget extends StatelessWidget {
                 Row(
                   children: [
                     CircleIcon(
+                        onTap: null,
                         backgroundColor: Colors.lightBlue.shade100,
                         emoji: pledge.icon),
                     SizedBox(

@@ -146,7 +146,9 @@ class BuildPageHeader extends StatelessWidget {
       child: Row(
         children: [
           CircleIcon(
-              backgroundColor: Colors.blueAccent, emoji: this.team.symbol),
+              onTap: null,
+              backgroundColor: Colors.blueAccent,
+              emoji: this.team.symbol),
           SizedBox(width: 20),
           Text(this.team.name,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
@@ -344,7 +346,9 @@ class BuildRivalryLeaderboard extends StatelessWidget {
           BoxDecoration(border: Border(top: BorderSide(color: Colors.black12))),
       child: ListTile(
         leading: CircleIcon(
-            backgroundColor: Colors.greenAccent, emoji: rivalTeam.symbol),
+            onTap: null,
+            backgroundColor: Colors.greenAccent,
+            emoji: rivalTeam.symbol),
         title: Text(rivalTeam.name),
         trailing: Text(rivalTeam.emissions.toString() + " kgCO2"),
       ),
@@ -419,6 +423,7 @@ class BuildPledges extends StatelessWidget {
                           margin: EdgeInsets.only(right: 10),
                           child: Column(children: [
                             CircleIcon(
+                                onTap: null,
                                 backgroundColor: Colors.amberAccent,
                                 emoji: pledge.icon),
                             Text(pledge.title),

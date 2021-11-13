@@ -146,6 +146,7 @@ class _BuildHeader extends StatelessWidget {
           Row(
             children: [
               CircleIcon(
+                  onTap: null,
                   backgroundColor: Colors.blueAccent,
                   emoji: this.challenge.symbol),
               SizedBox(width: 20),

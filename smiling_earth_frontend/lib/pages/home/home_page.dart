@@ -4,12 +4,16 @@ import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/bloc/login/dao/UserDao.dart';
 import 'package:smiling_earth_frontend/cubit/notifications/notifications_cubit.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
+import 'package:smiling_earth_frontend/models/calories.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
+import 'package:smiling_earth_frontend/models/transportation.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
+import 'package:smiling_earth_frontend/models/vehicle_cost.dart';
 import 'package:smiling_earth_frontend/pages/emission_estimation/emission_estimation.dart';
 import 'package:smiling_earth_frontend/pages/home/home_screen_helper.dart';
 import 'package:smiling_earth_frontend/pages/notification_page.dart';
 import 'package:smiling_earth_frontend/pages/post_add_new.dart';
+import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/emission_header.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -56,14 +60,32 @@ class _HomeState extends State<HomePage> {
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: Column(
                   children: [
-                    BuildHeaderToolbar(
-                      distance: 132,
-                      electricity: 132,
-                      kcal: 132,
-                      money: 133,
-                      time: 133,
-                      showPersonalMessage: true,
-                      isTeam: false,
+                    BuildHeader(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                      title: const Text('AlertDialog Title'),
+                                      content:
+                                          const Text('AlertDialog description'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    )),
+                            icon: Icon(Icons.help))
+                      ],
                     ),
                     BuildChart(),
                     // TextButton.icon(
@@ -86,6 +108,43 @@ class _HomeState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+class BuildHeader extends StatelessWidget {
+  const BuildHeader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<int>>(
+        future: ActivityDatabaseManager.instance
+            .getActiveMinutesDrivingDistanceAndElectricity(),
+        builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
+          if (snapshot.hasData) {
+            int walkingDuration = snapshot.data![0];
+            int drivingDuration = snapshot.data![1];
+            int electricity = snapshot.data![2];
+            int walkingDistance = walkingDuration * 5;
+
+            return BuildHeaderToolbar(
+              distance: Transportation.getCarDrivingDistanceFromMinutes(
+                  drivingDuration),
+              electricity: electricity,
+              kcal: Calories(null, null, null)
+                  .calculateCaloriesFromWalkingDuration(walkingDuration)
+                  .round(),
+              money:
+                  (walkingDistance * VehicleCost.defaultVehicle().avgCostPrKm)
+                      .round(),
+              time: walkingDuration,
+              showPersonalMessage: true,
+              isTeam: false,
+            );
+          }
+          return Text('loading');
+        });
   }
 }
 

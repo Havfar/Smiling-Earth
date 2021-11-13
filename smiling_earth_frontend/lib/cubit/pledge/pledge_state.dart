@@ -22,3 +22,9 @@ class ErrorRetrievingPledges extends PledgeState {
 }
 
 class PledgesMade extends PledgeState {}
+
+class PledgesDeleted extends PledgeState {}
+
+class PledgesDeleting extends PledgeState {}
+
+class PledgesDeletingError extends PledgeState {}

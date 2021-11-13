@@ -64,6 +64,7 @@ class _BuildOtherRivals extends StatelessWidget {
                                 title: Row(
                                   children: [
                                     CircleIcon(
+                                        onTap: null,
                                         backgroundColor: Colors.blue,
                                         emoji: rival.symbol),
                                     SizedBox(width: 30),
@@ -139,6 +140,7 @@ class _BuildRivals extends StatelessWidget {
                               title: Row(
                                 children: [
                                   CircleIcon(
+                                      onTap: null,
                                       backgroundColor: Colors.blue,
                                       emoji: team.symbol),
                                   SizedBox(width: 30),

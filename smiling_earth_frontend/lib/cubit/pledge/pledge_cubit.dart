@@ -39,6 +39,16 @@ class PledgeCubit extends Cubit<PledgeState> {
     }
   }
 
+  void getNotJoinedPledges() {
+    try {
+      _client
+          .getNotJoinedPledges()
+          .then((pledges) => emit(RetrievedPledges(pledges)));
+    } catch (e) {
+      emit(ErrorRetrievingPledges(e.toString()));
+    }
+  }
+
   void getPledes() {
     try {
       _client.getPledges().then((pledges) => emit(RetrievedPledges(pledges)));
@@ -52,6 +62,21 @@ class PledgeCubit extends Cubit<PledgeState> {
       _client.createUserPledge(pledges).then((value) => emit(PledgesMade()));
     } catch (e) {
       emit(ErrorRetrievingPledges(e.toString()));
+    }
+  }
+
+  void deletePledge(int pledgeId) {
+    try {
+      emit(PledgesDeleting());
+      _client.deleteUserPledge(pledgeId).then((statusOk) {
+        if (statusOk) {
+          emit(PledgesDeleted());
+        } else {
+          emit(PledgesDeletingError());
+        }
+      });
+    } catch (e) {
+      emit(PledgesDeletingError());
     }
   }
 }

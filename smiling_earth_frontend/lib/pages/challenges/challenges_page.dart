@@ -189,6 +189,7 @@ class BuildCompletedChallenges extends StatelessWidget {
                           child: Column(
                             children: [
                               CircleIcon(
+                                  onTap: null,
                                   backgroundColor: Colors.amber,
                                   emoji: challenge.symbol),
                               Container(
@@ -244,6 +245,7 @@ class ChallengeJoinedWidget extends StatelessWidget {
                 Row(
                   children: [
                     CircleIcon(
+                      onTap: null,
                       emoji: this.challenge.challenge.symbol,
                       backgroundColor: Colors.greenAccent,
                     ),

@@ -38,6 +38,7 @@ class TeamWidget extends StatelessWidget {
                 Row(
                   children: [
                     CircleIcon(
+                      onTap: null,
                       emoji: team.symbol,
                       backgroundColor: Colors.blueAccent.shade100,
                     ),

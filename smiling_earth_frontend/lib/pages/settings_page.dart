@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/fluttermoji.dart';
+import 'package:smiling_earth_frontend/pages/pledges/edit_my_pledges.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -81,9 +82,7 @@ class SettingsPage extends StatelessWidget {
                       title: Text('Edit Pledges'),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => FlutterMojiPage(
-                          title: 'test',
-                        ),
+                        builder: (context) => (PledgeSettings()),
                       )),
                     ),
                   ],

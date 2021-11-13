@@ -27,10 +27,14 @@ class Transportation {
     return defualtConsumption;
   }
 
+  static int getCarDrivingDistanceFromMinutes(int minutes) {
+    var speed = 50;
+    var distance = minutes / 60 * speed;
+    return distance.round();
+  }
+
   static double getDieselCarEmission(Duration duration) {
-    //Future versions should track distance covered.
-    var speed = duration.inMinutes.abs() > 30 ? highwaySpeed : citySpeed;
-    var distance = duration.inMinutes / 60 * speed;
+    var distance = convertCarDurationToDistance(duration.inMinutes.abs());
     return dieselEmission * _getCarLiterPerKm() * distance;
   }
 
