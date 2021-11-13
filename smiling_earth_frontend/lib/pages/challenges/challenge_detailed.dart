@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_client.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
+import 'package:smiling_earth_frontend/cubit/challenge/challenge_progress_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class DetailedChallengesPage extends StatelessWidget {
-  final int id;
+  final int challengeId;
+  final int? teamId;
 
-  const DetailedChallengesPage({Key? key, required this.id}) : super(key: key);
+  const DetailedChallengesPage(
+      {Key? key, required this.challengeId, required this.teamId})
+      : super(key: key);
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -23,37 +27,53 @@ class DetailedChallengesPage extends StatelessWidget {
         child: ListView(children: [
           BlocProvider(
               create: (context) =>
-                  ChallengeCubit()..getDetailedChallenge(this.id),
-              child: _BuildDetailed())
+                  ChallengeCubit()..getDetailedChallenge(this.challengeId),
+              child: BlocBuilder<ChallengeCubit, ChallengeState>(
+                builder: (context, state) {
+                  if (state is RetrievedDetailedChallenge) {
+                    return Column(
+                      children: [
+                        _BuildLeaveButton(state.challenge.isTeamChallenge,
+                            state.challenge.id!),
+                        _BuildHeader(state.challenge),
+                        BlocProvider(
+                          create: (context) {
+                            if (state.challenge.isTeamChallenge) {
+                              return ChallengeProgressCubit()
+                                ..getTeamProgress(this.challengeId, teamId!);
+                            }
+                            return ChallengeProgressCubit()
+                              ..getUserProgress(this.challengeId);
+                          },
+                          child: BlocBuilder<ChallengeProgressCubit,
+                              ChallengeProgressState>(
+                            builder: (context, state) {
+                              if (state is RetrivedProgress) {
+                                return _BuildProgressBar(
+                                  progress: state.progress,
+                                  goal: state.goal,
+                                );
+                              } else if (state is RetrivedProgressError) {
+                                return Center(
+                                  child: Text('Could not fetch progress'),
+                                );
+                              }
+                              return Center(
+                                child: Text('Loading'),
+                              );
+                            },
+                          ),
+                        ),
+                        _BuildLeaderboard(state.challenge.leaderboard,
+                            state.challenge.isTeamChallenge)
+                      ],
+                    );
+                  }
+                  return CircularProgressIndicator();
+                },
+              ))
         ]),
       ));
-}
-
-class _BuildDetailed extends StatelessWidget {
-  const _BuildDetailed({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ChallengeCubit, ChallengeState>(
-      builder: (context, state) {
-        if (state is RetrievedDetailedChallenge) {
-          return Column(
-            children: [
-              _BuildLeaveButton(
-                  state.challenge.isTeamChallenge, state.challenge.id!),
-              _BuildHeader(state.challenge),
-              _BuildProgressBar(progress: 12, goal: 20),
-              _BuildLeaderboard(
-                  state.challenge.leaderboard, state.challenge.isTeamChallenge)
-            ],
-          );
-        }
-        return CircularProgressIndicator();
-      },
-    );
-  }
 }
 
 class _BuildLeaveButton extends StatelessWidget {
@@ -104,7 +124,9 @@ class _BuildProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double percent = this.progress / this.goal;
+    if (progress == null) {
+      return SizedBox(height: 10);
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -121,7 +143,7 @@ class _BuildProgressBar extends StatelessWidget {
                 width: 350,
                 height: 30,
                 // margin: EdgeInsets.only(top: 10),
-                child: LinearProgressIndicator(value: percent),
+                child: LinearProgressIndicator(value: progress / goal),
               ),
             )),
       ],
@@ -158,15 +180,6 @@ class _BuildHeader extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
-          Row(children: [
-            Icon(Icons.calendar_today_outlined),
-            Text("17. oct - 17.may")
-          ]),
-          Row(children: [
-            Icon(Icons.flag_outlined),
-            Text("Commute 20 days by using a zero emissions vehicle")
-          ]),
           SizedBox(height: 20),
           Text(this.challenge.description),
           SizedBox(height: 20),

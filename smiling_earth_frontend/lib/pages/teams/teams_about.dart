@@ -194,8 +194,10 @@ class _BuildChallengesSettings extends StatelessWidget {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 DetailedChallengesPage(
-                                                    id: challenge
-                                                        .challenge.id!))),
+                                                  challengeId:
+                                                      challenge.challenge.id!,
+                                                  teamId: teamId,
+                                                ))),
                                     backgroundColor: Colors.white,
                                     emoji: challenge.challenge.symbol)),
                           ),

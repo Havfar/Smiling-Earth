@@ -108,8 +108,10 @@ class _buildNotification extends StatelessWidget {
           onTap: () {
             client.notificationRead(notification.id!);
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  DetailedChallengesPage(id: notification.challenge!),
+              builder: (context) => DetailedChallengesPage(
+                challengeId: notification.challenge!,
+                teamId: null,
+              ),
             ));
           },
         );

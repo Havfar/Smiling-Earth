@@ -132,8 +132,8 @@ class ChallengeJoinedWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    DetailedChallengesPage(id: challenge.challenge.id!)),
+                builder: (context) => DetailedChallengesPage(
+                    challengeId: challenge.challenge.id!, teamId: null)),
           );
         },
         child: Padding(

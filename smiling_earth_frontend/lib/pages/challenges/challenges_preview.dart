@@ -87,7 +87,9 @@ class _BuildJoinButton extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DetailedChallengesPage(
-                                    id: this.challengeId))); // push it back in
+                                      challengeId: this.challengeId,
+                                      teamId: null,
+                                    ))); // push it back in
                       },
                       child: Text('Go to Challenge'))
                 ],

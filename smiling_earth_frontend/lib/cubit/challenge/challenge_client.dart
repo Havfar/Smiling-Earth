@@ -223,4 +223,39 @@ class ChallengesClient {
       "Authorization": "Token " + token!,
     });
   }
+
+  Future<List<int>> getChallengeProgress(int challengeId) async {
+    String endpoint = '/challenges/$challengeId/progress/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+
+    final response = await http.get(uri, headers: {
+      "Authorization": "Token " + token!,
+    });
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    int progress = json['progress'];
+    int score = json['score'];
+    int goal = json['goal'];
+    List<int> data = [progress, score, goal];
+    return data;
+  }
+
+  Future<List<int>> getTeamChallengeProgress(
+      int challengeId, int teamId) async {
+    String endpoint = '/challenges/$challengeId/team/$teamId/progress/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+
+    final response = await http.get(uri, headers: {
+      "Authorization": "Token " + token!,
+    });
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    int score = json['score'];
+    int progress = json['progress'];
+    int goal = json['goal'];
+    List<int> data = [progress, score, goal];
+    return data;
+  }
 }
