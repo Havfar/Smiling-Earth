@@ -39,7 +39,7 @@ class TeamsDetailedPage extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamChallenges(id: id),
+              TeamChallenges(teamId: id),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -87,11 +87,11 @@ class TeamsDetailedPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 15),
-        BlocProvider(
-          create: (context) => PledgeCubit()..getTeamPledge(this.id!),
-          child: BuildPledges(),
-        ),
-        SizedBox(height: 15),
+        // BlocProvider(
+        //   create: (context) => PledgeCubit()..getTeamPledge(this.id!),
+        //   child: BuildPledges(),
+        // ),
+        // SizedBox(height: 15),
 
         BlocProvider(
           create: (context) => DetailedTeamCubit()..getTeamMembers(this.id!),

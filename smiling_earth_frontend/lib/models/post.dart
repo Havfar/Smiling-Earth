@@ -1,4 +1,5 @@
-import 'package:smiling_earth_frontend/models/Activity.dart';
+import 'package:intl/intl.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/models/user.dart';
 
@@ -44,6 +45,11 @@ class PostDto {
       challenge: json['challenge'] != null
           ? ChallengeDto.fromJson(json['challenge'])
           : null);
+
+  String getDateWithDayOfWeek() {
+    DateTime date = DateTime.parse(timestamp);
+    return DateFormat('EEEE, d MMM, yyyy').format(date);
+  }
 }
 
 class DetailedPostDto {
@@ -53,15 +59,18 @@ class DetailedPostDto {
   final String timestamp;
   final List<LikeDto> likes;
   final List<CommentDto> comments;
+  final ActivityDto? activity;
+  final ChallengeDto? challenge;
 
-  DetailedPostDto({
-    required this.likes,
-    required this.comments,
-    required this.id,
-    required this.user,
-    required this.content,
-    required this.timestamp,
-  });
+  DetailedPostDto(
+      {required this.likes,
+      required this.comments,
+      required this.id,
+      required this.user,
+      required this.content,
+      required this.timestamp,
+      this.activity,
+      this.challenge});
 
   List<LikeDto> toLikesList(Map<String, dynamic> json) {
     List<LikeDto> likes = [];
@@ -71,34 +80,40 @@ class DetailedPostDto {
 
   PostDto toPostDto() {
     return PostDto(
-      commentsCount: comments.length,
-      content: content,
-      id: id,
-      likesCount: likes.length,
-      timestamp: timestamp,
-      user: user,
-    );
+        commentsCount: comments.length,
+        content: content,
+        id: id,
+        likesCount: likes.length,
+        timestamp: timestamp,
+        user: user,
+        activity: activity,
+        challenge: challenge);
   }
 
   factory DetailedPostDto.fromJson(Map<String, dynamic> json) {
     return new DetailedPostDto(
-      id: json['id'],
-      user: UserProfileDto.fromJson(json['user']),
-      content: json['content'],
-      timestamp: json['timestamp'],
-      likes: json['likes'].length != 0
-          ? json['likes']
-              .map((like) => LikeDto.fromJson(like))
-              .toList()
-              .cast<LikeDto>()
-          : [],
-      comments: json['comments'].length != 0
-          ? json['comments']
-              .map((comment) => CommentDto.fromJson(comment))
-              .toList()
-              .cast<CommentDto>()
-          : [],
-    );
+        id: json['id'],
+        user: UserProfileDto.fromJson(json['user']),
+        content: json['content'],
+        timestamp: json['timestamp'],
+        likes: json['likes'].length != 0
+            ? json['likes']
+                .map((like) => LikeDto.fromJson(like))
+                .toList()
+                .cast<LikeDto>()
+            : [],
+        comments: json['comments'].length != 0
+            ? json['comments']
+                .map((comment) => CommentDto.fromJson(comment))
+                .toList()
+                .cast<CommentDto>()
+            : [],
+        activity: json['activity'] != null
+            ? ActivityDto.fromJson(json['activity'])
+            : null,
+        challenge: json['challenge'] != null
+            ? ChallengeDto.fromJson(json['challenge'])
+            : null);
   }
 }
 

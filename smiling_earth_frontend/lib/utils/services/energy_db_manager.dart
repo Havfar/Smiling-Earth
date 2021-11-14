@@ -49,7 +49,6 @@ class EnergyDatabaseManager {
 
     List<EnergyActivity> activites = [];
     for (var activityJson in activitiesQuery) {
-      print(activityJson);
       EnergyActivity activity = EnergyActivity.fromMap(activityJson);
       activites.add(activity);
     }
@@ -131,8 +130,6 @@ class EnergyDatabaseManager {
   Future<int> add(EnergyActivity activity) async {
     print("Adding activity " + activity.title);
     Database db = await instance.database;
-    print('toMap');
-    print(activity.toMap());
     return await db.insert('energy', activity.toMap());
   }
 

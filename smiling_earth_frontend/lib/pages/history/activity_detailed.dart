@@ -28,7 +28,7 @@ class _DetailedActivityState extends State<DetailedActivity> {
             KeyInformation(widget: widget),
             StartTimeWidget(widget: widget),
             EndTimeWidget(widget: widget),
-            TagWidget(),
+            TagWidget(widget.activity.tag),
           ],
         ),
       ),
@@ -37,7 +37,9 @@ class _DetailedActivityState extends State<DetailedActivity> {
 }
 
 class TagWidget extends StatelessWidget {
-  const TagWidget({
+  final String? tag;
+  const TagWidget(
+    this.tag, {
     Key? key,
   }) : super(key: key);
 
@@ -54,11 +56,14 @@ class TagWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text('Tag'),
-          ChoiceChip(
-            selected: true,
-            label: Text("Commute"),
-            disabledColor: Colors.greenAccent,
-          ),
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: tag == null ? Colors.white : Colors.blue,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(tag == null ? 'No tag' : tag!),
+          )
         ],
       ),
     );
@@ -132,23 +137,24 @@ class KeyInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(40),
+      padding: EdgeInsets.only(top: 40, bottom: 40),
       decoration: BoxDecoration(
           border: Border(
               top: BorderSide(color: Colors.black12),
               bottom: BorderSide(color: Colors.black12))),
       child: new Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
             children: [
-              Row(children: [
-                Icon(
-                  Icons.filter_drama,
-                  size: 40,
-                ),
+              Column(children: [
                 Text(
-                  getEmissions(widget.activity).toString() + ' kg Co2',
+                  'Emitted ☁️',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 15),
+                Text(
+                  '${widget.activity.getEmission().roundToDouble()} kg Co2',
                   style: TextStyle(fontSize: 18),
                 )
               ])
@@ -156,9 +162,27 @@ class KeyInformation extends StatelessWidget {
           ),
           Column(
             children: [
-              Row(children: [
-                Icon(Icons.local_fire_department, size: 40, color: Colors.red),
-                Text('300 kcals', style: TextStyle(fontSize: 18))
+              Column(children: [
+                Text(
+                  'Burned 🔥',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 15),
+                Text('${widget.activity.getCalories().roundToDouble()} kcals',
+                    style: TextStyle(fontSize: 18))
+              ])
+            ],
+          ),
+          Column(
+            children: [
+              Column(children: [
+                Text(
+                  'Saved 💰',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 15),
+                Text('${widget.activity.getMoneySaved().roundToDouble()} kr',
+                    style: TextStyle(fontSize: 18))
               ])
             ],
           ),

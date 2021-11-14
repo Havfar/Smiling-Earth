@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:smiling_earth_frontend/cubit/activity/activity_cubit.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
+import 'package:smiling_earth_frontend/widgets/user_name_widget.dart';
 
 class PublishActivity extends StatefulWidget {
   final Activity activity;
-  final urlImage =
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
-
   const PublishActivity({required this.activity});
 
   @override
@@ -74,22 +73,17 @@ class BuildActivityCard extends StatelessWidget {
                           margin: EdgeInsets.only(bottom: 30),
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      NetworkImage(widget.urlImage)),
+                              Container(
+                                  width: 50,
+                                  height: 50,
+                                  child: FluttermojiCircleAvatar()),
                               Container(
                                 margin: EdgeInsets.only(left: 20),
                                 child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'John Doe',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
+                                      BuildLocalName(),
                                       Text(Activity.formatDatetime(
                                           widget.activity.startDate))
                                     ]),
@@ -111,13 +105,14 @@ class BuildActivityCard extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.cloud_circle),
-                                    Text('saved 130kg Co2 compared to Flying')
-                                  ],
-                                ),
-                                Text('Duration 6h 34min')
+                                Text(
+                                    '☁️ Emitted: ${widget.activity.getEmission().round()} kgCO2}'),
+                                Text(
+                                    '🔥 Burned: ${widget.activity.getCalories().round()} kcals'),
+                                Text(
+                                    '💰 Saved: ${widget.activity.getMoneySaved().round()} kr '),
+                                SizedBox(height: 5),
+                                Text(Activity.formatDuration(widget.activity))
                               ],
                             )
                           ],

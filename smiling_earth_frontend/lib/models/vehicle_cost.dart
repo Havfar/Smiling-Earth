@@ -86,8 +86,11 @@ class VehicleCost {
 
   // VehicleCost(this.yearsOwnedCar, this.carSize, this.cost, this.isNewCar, this.distancePerYear, this.fuelConsumptionPerKm);
   // factory VehicleCost.defaultVehicle() => new VehicleCost(3, 0, 300000, true, 8000);
-  factory VehicleCost.defaultVehicle() =>
-      new VehicleCost(3, 0, 300000, true, 8000);
+  factory VehicleCost.defaultVehicle() {
+    var vehcile = new VehicleCost(3, 0, 300000, true, 8000);
+    vehcile.calculateCosts();
+    return vehcile;
+  }
 
   double calcService(double dist) {
     double service = 0;

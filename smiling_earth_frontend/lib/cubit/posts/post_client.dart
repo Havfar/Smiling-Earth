@@ -195,9 +195,12 @@ class PostClient {
     final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
-      final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token!},
-          body: {"content": "Activity", "activity": newActivity.id.toString()});
+      final response = await http.post(uri, headers: {
+        "Authorization": "Token " + token!
+      }, body: {
+        "content": "Completed an activity",
+        "activity": newActivity.id.toString()
+      });
       final json = jsonDecode(response.body);
 
       final newPost = PostDto.fromJson(json);

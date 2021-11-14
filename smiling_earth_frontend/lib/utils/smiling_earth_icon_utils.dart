@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class SmilingEarthIcon {
   static Image getIcon(double emission) {
     var image = AssetImage('assets/img/smiling-earth/earth1.png');
-    if (emission > 100) {
+    if (emission > 14) {
       image = AssetImage('assets/img/smiling-earth/earth5.png');
-    } else if (emission > 80) {
-      image = AssetImage('assets/img/smiling-earth/earth4.png');
-    } else if (emission > 50) {
-      image = AssetImage('assets/img/smiling-earth/earth3.png');
     } else if (emission > 10) {
+      image = AssetImage('assets/img/smiling-earth/earth4.png');
+    } else if (emission > 6) {
+      image = AssetImage('assets/img/smiling-earth/earth3.png');
+    } else if (emission > 2) {
       image = AssetImage('assets/img/smiling-earth/earth2.png');
     } else {
       image = AssetImage('assets/img/smiling-earth/earth1.png');

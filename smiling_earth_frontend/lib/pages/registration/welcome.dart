@@ -48,7 +48,6 @@ class WelcomePage extends StatelessWidget {
                       ),
                       TextButton(
                           onPressed: () {
-                            print(state.profile.getName());
                             var settingsDbm = SettingsDatabaseManager.instance;
                             settingsDbm.add(Settings(
                                 0,

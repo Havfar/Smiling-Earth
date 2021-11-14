@@ -10,8 +10,8 @@ import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class TeamChallenges extends StatelessWidget {
-  final int? id;
-  TeamChallenges({required this.id});
+  final int? teamId;
+  TeamChallenges({required this.teamId});
 
   void _onTap(BuildContext context, int index) {
     switch (index) {
@@ -20,7 +20,7 @@ class TeamChallenges extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamsDetailedPage(id: id),
+              TeamsDetailedPage(id: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -28,7 +28,7 @@ class TeamChallenges extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamPosts(id: id),
+              TeamPosts(id: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -36,7 +36,7 @@ class TeamChallenges extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamChallenges(id: id),
+              TeamChallenges(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -44,7 +44,7 @@ class TeamChallenges extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamAbout(teamId: id),
+              TeamAbout(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -63,16 +63,17 @@ class TeamChallenges extends StatelessWidget {
         children: [
           BlocProvider(
             create: (context) =>
-                ChallengeCubit()..getCompletedTeamChallenges(id!),
+                ChallengeCubit()..getCompletedTeamChallenges(teamId!),
             child: BuildCompletedChallenges(),
           ),
           BlocProvider(
-            create: (context) => ChallengeCubit()..getJoinedTeamChallenges(id!),
-            child: BuildJoinedChallenges(),
+            create: (context) =>
+                ChallengeCubit()..getJoinedTeamChallenges(teamId!),
+            child: BuildJoinedChallenges(teamId!),
           ),
           BlocProvider(
-            create: (context) => ChallengeCubit()..getTeamChallenges(id!),
-            child: _BuildChallenges(teamId: id!),
+            create: (context) => ChallengeCubit()..getTeamChallenges(teamId!),
+            child: _BuildChallenges(teamId: teamId!),
           ),
         ],
       ),

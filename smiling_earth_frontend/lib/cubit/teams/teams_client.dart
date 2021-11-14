@@ -170,7 +170,6 @@ class TeamsClient {
     final uri = Uri.parse(_url + endpoint);
     final response =
         await http.get(uri, headers: {"Authorization": "Token " + token!});
-    print(response.body);
     final json = jsonDecode(utf8.decode(response.bodyBytes))['results'] as List;
     final rivals = json.map((rival) {
       return RivalDto.fromJson(rival);

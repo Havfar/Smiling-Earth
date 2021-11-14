@@ -27,7 +27,7 @@ class ChallengesPage extends StatelessWidget {
             SizedBox(height: 30),
             BlocProvider(
               create: (context) => ChallengeCubit()..getJoinedChallenges(),
-              child: BuildJoinedChallenges(),
+              child: BuildJoinedChallenges(null),
             ),
             SizedBox(height: 30),
             BlocProvider(
@@ -40,7 +40,9 @@ class ChallengesPage extends StatelessWidget {
 }
 
 class BuildJoinedChallenges extends StatelessWidget {
-  const BuildJoinedChallenges({
+  final int? teamId;
+  const BuildJoinedChallenges(
+    this.teamId, {
     Key? key,
   }) : super(key: key);
 
@@ -67,7 +69,7 @@ class BuildJoinedChallenges extends StatelessWidget {
               return Column(
                   children: state.challenges
                       .map((challenge) => ChallengeJoinedWidget(challenge,
-                          showJoinButton: false))
+                          showJoinButton: false, teamId: teamId))
                       .toList());
             } else if (state is RetrievedChallengesError) {
               return Text('Error: ' + state.error);
@@ -172,7 +174,6 @@ class BuildCompletedChallenges extends StatelessWidget {
         SizedBox(height: 10),
         BlocBuilder<ChallengeCubit, ChallengeState>(
           builder: (context, state) {
-            print(state);
             if (state is RetrievedChallenges) {
               if (state.challenges.isEmpty) {
                 return Container(
@@ -220,9 +221,10 @@ class BuildCompletedChallenges extends StatelessWidget {
 
 class ChallengeJoinedWidget extends StatelessWidget {
   final bool showJoinButton;
+  final int? teamId;
   final JoinedChallengeDto challenge;
   const ChallengeJoinedWidget(this.challenge,
-      {Key? key, required this.showJoinButton})
+      {Key? key, required this.showJoinButton, required this.teamId})
       : super(key: key);
 
   @override
@@ -235,7 +237,7 @@ class ChallengeJoinedWidget extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => DetailedChallengesPage(
                       challengeId: challenge.challenge.id!,
-                      teamId: null,
+                      teamId: teamId,
                     )),
           );
         },

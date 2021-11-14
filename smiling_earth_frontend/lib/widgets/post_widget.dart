@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/posts/like_cubit.dart';
+import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/avatar.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/post_detailed.dart';
+import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 
 class PostWidget extends StatefulWidget {
@@ -74,7 +76,7 @@ class _PostWidgetState extends State<PostWidget> {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            Text("2021-09-01",
+                            Text(widget.post.getDateWithDayOfWeek(),
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black54))
                           ]),
@@ -92,10 +94,8 @@ class _PostWidgetState extends State<PostWidget> {
               this.widget.post.activity != null
                   ? Container(
                       margin: EdgeInsets.only(bottom: 20),
-                      child: Text(widget.post.activity!.title,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w400)),
+                      child: BuildActivityPost(
+                          activity: (widget.post.activity!.toActivtiy())),
                     )
                   : Text(""),
               this.widget.post.challenge != null
@@ -120,6 +120,43 @@ class _PostWidgetState extends State<PostWidget> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class BuildActivityPost extends StatelessWidget {
+  const BuildActivityPost({
+    Key? key,
+    required this.activity,
+  }) : super(key: key);
+
+  final Activity activity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(activity.title,
+            textAlign: TextAlign.left,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Icon(getIconByActivity(activity), size: 50),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('☁️ Emitted: ${activity.getEmission().round()} kgCO2}'),
+                Text('🔥 Burned: ${activity.getCalories().round()} kcals'),
+                Text('💰 Saved: ${activity.getMoneySaved().round()} kr '),
+                SizedBox(height: 5),
+                Text(Activity.formatDuration(activity))
+              ],
+            )
+          ],
+        )
+      ],
     );
   }
 }

@@ -1,8 +1,9 @@
-import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smiling_earth_frontend/models/calories.dart';
 import 'package:smiling_earth_frontend/models/energy.dart';
 import 'package:smiling_earth_frontend/models/transportation.dart';
+import 'package:smiling_earth_frontend/models/vehicle_cost.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 
 abstract class ActivityInterface {
@@ -48,7 +49,18 @@ class Activity extends ActivityInterface {
   }
 
   static String formatDatetime(DateTime? time) {
-    return DateFormat('h:mm').format(time!);
+    return DateFormat('hh:mm').format(time!);
+  }
+
+  static String formatDuration(Activity activity) {
+    int hours = Activity.getDurationHours(activity);
+    int minutes = Activity.getDurationMinutes(activity);
+    String output = 'Duration: ';
+    if (hours > 0) {
+      output += '$hours h ';
+    }
+    output += '$minutes min';
+    return output;
   }
 
   // void addEmission(double emission) {
@@ -69,7 +81,7 @@ class Activity extends ActivityInterface {
   @override
   double getEmission() {
     var activity = AppActivityType.values[this.type];
-    var duration = startDate!.difference(endDate!);
+    var duration = startDate!.difference(endDate!).abs();
     switch (activity) {
       case AppActivityType.IN_CAR:
         return Transportation.getGasolineCarEmission(duration);
@@ -79,6 +91,48 @@ class Activity extends ActivityInterface {
       case AppActivityType.IN_PLANE:
         return Transportation.getFlyingEmission(duration);
 
+      default:
+        return 0;
+    }
+  }
+
+  double getCalories() {
+    var activity = AppActivityType.values[this.type];
+    var duration = startDate!.difference(endDate!).abs();
+    switch (activity) {
+      case AppActivityType.WALKING:
+        return Calories(null, null, null)
+            .calculateCaloriesFromWalkingDuration(duration.inMinutes);
+      case AppActivityType.RUNNING:
+        return Calories(null, null, null)
+            .calculateCaloriesFromRunningDuration(duration.inMinutes);
+      case AppActivityType.ON_FOOT:
+        return Calories(null, null, null)
+            .calculateCaloriesFromWalkingDuration(duration.inMinutes);
+      case AppActivityType.ON_BICYCLE:
+        return Calories(null, null, null)
+            .calculateCaloriesFromCyclingDuration(duration.inMinutes);
+      default:
+        return 0;
+    }
+  }
+
+  double getMoneySaved() {
+    var activity = AppActivityType.values[this.type];
+    var duration = startDate!.difference(endDate!).abs();
+    switch (activity) {
+      case AppActivityType.WALKING:
+        return (Calories.calculateWalkingDistance(duration.inMinutes) *
+            VehicleCost.defaultVehicle().avgCostPrKm);
+      case AppActivityType.ON_FOOT:
+        return (Calories.calculateWalkingDistance(duration.inMinutes) *
+            VehicleCost.defaultVehicle().avgCostPrKm);
+      case AppActivityType.RUNNING:
+        return (Calories.calculateRunningDistance(duration.inMinutes) *
+            VehicleCost.defaultVehicle().avgCostPrKm);
+      case AppActivityType.ON_BICYCLE:
+        return (Calories.calculateCyclingDistance(duration.inMinutes) *
+            VehicleCost.defaultVehicle().avgCostPrKm);
       default:
         return 0;
     }
@@ -128,7 +182,7 @@ class Activity extends ActivityInterface {
       'title': title,
       'start_date': startDate!.toIso8601String(),
       'end_date': endDate!.toIso8601String(),
-      'tag': tag,
+      'tag': null,
       'type': type,
     };
   }
@@ -137,18 +191,35 @@ class Activity extends ActivityInterface {
     if (this.type == -1) {
       return Icons.power;
     }
-    var activity = ActivityType.values[this.type];
-    switch (activity) {
-      case ActivityType.IN_VEHICLE:
-        return Icons.directions_car;
-      case ActivityType.WALKING:
+    var activityType = AppActivityType.values[this.type];
+    // var activityType = AppActivityType.values[activity.type];
+    switch (activityType) {
+      case AppActivityType.ELECTRICITY:
+        return Icons.power;
+      case AppActivityType.IN_VEHICLE:
+        return Icons.commute;
+      case AppActivityType.WALKING:
         return Icons.directions_walk;
-      case ActivityType.RUNNING:
+      case AppActivityType.RUNNING:
         return Icons.directions_run_outlined;
-      case ActivityType.ON_BICYCLE:
+      case AppActivityType.ON_BICYCLE:
         return Icons.directions_bike_outlined;
-      case ActivityType.ON_FOOT:
+      case AppActivityType.ON_FOOT:
         return Icons.directions_walk;
+      case AppActivityType.IN_CAR:
+        return Icons.directions_car;
+      case AppActivityType.IN_BUS:
+        return Icons.directions_bus_filled_rounded;
+      case AppActivityType.IN_TRAIN:
+        return Icons.train;
+      case AppActivityType.ON_ELECTRIC_SCOOTER:
+        return Icons.electric_scooter;
+      case AppActivityType.IN_PLANE:
+        return Icons.airplanemode_active;
+      case AppActivityType.IN_FERRY:
+        return Icons.directions_ferry;
+      case AppActivityType.IN_ELECTRIC_CAR:
+        return Icons.electric_car;
       default:
         return Icons.error;
     }
@@ -177,8 +248,8 @@ class ActivityDto {
   final String? user;
   final String title;
   final String? description;
-  final String? startTime;
-  final String? endTime;
+  final String startTime;
+  final String endTime;
   final int? tag;
   final int activityEnumValue;
 
@@ -187,8 +258,8 @@ class ActivityDto {
       this.user,
       required this.title,
       this.description,
-      this.startTime,
-      this.endTime,
+      required this.startTime,
+      required this.endTime,
       this.tag,
       required this.activityEnumValue});
 
@@ -197,19 +268,29 @@ class ActivityDto {
         "description": this.description,
         "start_time": this.startTime,
         "end_time": this.endTime,
-        // "tag": this.tag,
         "activity_enum_value": this.activityEnumValue.toString()
       };
 
-  factory ActivityDto.fromJson(Map<String, dynamic> json) => new ActivityDto(
-      id: json['id'],
-      user: json["user"],
-      title: json["title"],
-      description: json["description"],
-      // start_time: json["start_time"],
-      // end_time: json["end_time"],
-      tag: json["tag"],
-      activityEnumValue: json["activity_enum_value"]);
+  factory ActivityDto.fromJson(Map<String, dynamic> json) {
+    return new ActivityDto(
+        id: json['id'],
+        user: json["user"],
+        title: json["title"],
+        description: json["description"],
+        startTime: json["start_time"],
+        endTime: json["end_time"],
+        tag: json["tag"],
+        activityEnumValue: json["activity_enum_value"]);
+  }
+
+  Activity toActivtiy() {
+    print('start: $startTime');
+    return new Activity(
+        title: this.title,
+        startDate: DateTime.parse(startTime),
+        endDate: DateTime.parse(endTime!),
+        type: activityEnumValue);
+  }
 }
 
 class EnergyActivity extends ActivityInterface {

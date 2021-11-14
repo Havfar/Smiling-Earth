@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/pages/history/activity_detailed.dart';
+import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
@@ -16,23 +16,6 @@ class EditActivity extends StatefulWidget {
   _EditActivityState createState() => _EditActivityState();
 }
 
-// getTransportationTypes()
-//                     .map((activity) => Container(
-//                         decoration: BoxDecoration(
-//                             border: Border(
-//                                 bottom:
-//                                     BorderSide(color: Colors.grey.shade300))),
-//                         child: CheckboxListTile(
-//                             title: Text(
-//                                 getTransporationNameByActivityType(activity)),
-//                             value: isSelected(activity),
-//                             onChanged: (bool? value) {
-//                               updateSelected(activity);
-//                             },
-//                             secondary: Icon(
-//                                 getTransporationIconByActivityType(activity)))))
-//                     .toList()),
-
 List<DropdownSelectElement> _createList() {
   var list = <DropdownSelectElement>[];
   for (AppActivityType activityType in getTransportationTypes()) {
@@ -40,6 +23,17 @@ List<DropdownSelectElement> _createList() {
         title: getTransporationNameByActivityType(activityType),
         icon: getIconByActivityType(activityType),
         indexValue: activityType.index));
+  }
+  return list;
+}
+
+List<DropdownSelectElement> _createTags() {
+  var list = <DropdownSelectElement>[];
+  int counter = 0;
+  for (String tag in getActivityTags()) {
+    list.add(new DropdownSelectElement(
+        title: tag, icon: getActivityTagsIcon(tag), indexValue: counter));
+    counter++;
   }
   return list;
 }
@@ -53,10 +47,15 @@ class _EditActivityState extends State<EditActivity> {
   late String durationMinute;
 
   List<DropdownSelectElement> items = _createList();
+  List<DropdownSelectElement> tags = _createTags();
+
   DropdownSelectElement type = new DropdownSelectElement(
       title: getActivityNameByActivityType(AppActivityType.IN_CAR),
       icon: getIconByActivityType(AppActivityType.IN_CAR),
       indexValue: 0);
+
+  DropdownSelectElement tag = new DropdownSelectElement(
+      title: '', icon: getActivityTagsIcon(''), indexValue: 0);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -142,6 +141,7 @@ class _EditActivityState extends State<EditActivity> {
           const SizedBox(height: 16),
           buildDatePicker(),
           const SizedBox(height: 16),
+          buildTag(),
           const SizedBox(height: 16),
           buildSubmit()
         ]),
@@ -191,6 +191,36 @@ class _EditActivityState extends State<EditActivity> {
         }).toList(),
         decoration: InputDecoration(
           labelText: 'Activity type',
+          border: OutlineInputBorder(),
+        ),
+      );
+
+  Widget buildTag() => DropdownButtonFormField<DropdownSelectElement>(
+        icon: const Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: const TextStyle(color: Colors.deepPurple),
+        onSaved: (value) => setState(() => tag = value!),
+        onChanged: (DropdownSelectElement? newValue) {
+          setState(() {
+            type = newValue!;
+          });
+        },
+        items: tags.map<DropdownMenuItem<DropdownSelectElement>>(
+            (DropdownSelectElement element) {
+          return DropdownMenuItem<DropdownSelectElement>(
+              value: element,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(element.icon),
+                  SizedBox(width: 5),
+                  Text(element.title),
+                ],
+              ));
+        }).toList(),
+        decoration: InputDecoration(
+          labelText: 'Tag (optional)',
           border: OutlineInputBorder(),
         ),
       );
@@ -262,7 +292,7 @@ class _EditActivityState extends State<EditActivity> {
             if (isValid) {
               formKey.currentState!.save();
 
-              final message = 'Username: havfar \nPassword:';
+              final message = 'Activity Updated';
               final snackBar = SnackBar(
                 content: Text(
                   message,
@@ -270,18 +300,18 @@ class _EditActivityState extends State<EditActivity> {
                 ),
                 backgroundColor: Colors.green,
               );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Activity act = new Activity(
                   title: title,
                   startDate: widget.activity.startDate,
                   endDate: widget.activity.endDate,
                   type: type.indexValue,
-                  id: widget.activity.id);
+                  id: widget.activity.id,
+                  tag: tag.title != '' ? tag.title : null);
 
               ActivityDatabaseManager.instance.update(act);
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      DetailedActivity(activity: widget.activity)));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HistoryPage()));
             }
           },
         ),

@@ -83,6 +83,11 @@ IconData getTransporationIconByActivityType(AppActivityType type) {
   }
 }
 
+IconData getIconByActivityValue(int activity) {
+  var activityType = AppActivityType.values[activity];
+  return getIconByActivityType(activityType);
+}
+
 IconData getIconByActivity(Activity activity) {
   var activityType = AppActivityType.values[activity.type];
   switch (activityType) {
@@ -177,9 +182,33 @@ List<AppActivityType> getTransportationTypes() {
     AppActivityType.ON_ELECTRIC_SCOOTER,
     AppActivityType.IN_ELECTRIC_CAR,
     AppActivityType.IN_BUS,
-    // AppActivityType.IN_PLANE,
+    AppActivityType.IN_PLANE,
     AppActivityType.IN_TRAIN,
   ];
+}
+
+List<String> getActivityTags() {
+  return [
+    '',
+    'Commute',
+    'Workout',
+    'Travel',
+    'Work',
+  ];
+}
+
+IconData getActivityTagsIcon(String tag) {
+  if (tag == 'Commute') {
+    return Icons.commute;
+  } else if (tag == 'Workout') {
+    return Icons.fitness_center;
+  } else if (tag == 'Travel') {
+    return Icons.explore;
+  } else if (tag == 'Work') {
+    return Icons.work;
+  } else {
+    return Icons.help;
+  }
 }
 
 enum TransporationType {

@@ -34,7 +34,7 @@ class TeamPosts extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamChallenges(id: id),
+              TeamChallenges(teamId: id),
           transitionDuration: Duration.zero,
         ));
         break;

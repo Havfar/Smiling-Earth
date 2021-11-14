@@ -14,11 +14,22 @@ class NewActivity extends StatefulWidget {
 
 List<DropdownSelectElement> _createList() {
   var list = <DropdownSelectElement>[];
-  for (AppActivityType activityType in AppActivityType.values) {
+  for (AppActivityType activityType in getTransportationTypes()) {
     list.add(new DropdownSelectElement(
-        title: getActivityNameByActivityType(activityType),
+        title: getTransporationNameByActivityType(activityType),
         icon: getIconByActivityType(activityType),
         indexValue: activityType.index));
+  }
+  return list;
+}
+
+List<DropdownSelectElement> _createTags() {
+  var list = <DropdownSelectElement>[];
+  int counter = 0;
+  for (String tag in getActivityTags()) {
+    list.add(new DropdownSelectElement(
+        title: tag, icon: getActivityTagsIcon(tag), indexValue: counter));
+    counter++;
   }
   return list;
 }
@@ -31,10 +42,14 @@ class NewActivityState extends State<NewActivity> {
   late String durationHours;
   late String durationMinutes;
   List<DropdownSelectElement> items = _createList();
+  List<DropdownSelectElement> tags = _createTags();
   DropdownSelectElement type = new DropdownSelectElement(
       title: getActivityNameByActivityType(AppActivityType.IN_CAR),
       icon: getIconByActivityType(AppActivityType.IN_CAR),
       indexValue: 0);
+
+  DropdownSelectElement tag = new DropdownSelectElement(
+      title: '', icon: getActivityTagsIcon(''), indexValue: 0);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -65,6 +80,7 @@ class NewActivityState extends State<NewActivity> {
           const SizedBox(height: 16),
           buildDatePicker(),
           const SizedBox(height: 16),
+          buildTag(),
           const SizedBox(height: 16),
           buildSubmit()
         ]),
@@ -112,6 +128,36 @@ class NewActivityState extends State<NewActivity> {
         }).toList(),
         decoration: InputDecoration(
           labelText: 'Activity type',
+          border: OutlineInputBorder(),
+        ),
+      );
+
+  Widget buildTag() => DropdownButtonFormField<DropdownSelectElement>(
+        icon: const Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: const TextStyle(color: Colors.deepPurple),
+        onSaved: (value) => setState(() => tag = value!),
+        onChanged: (DropdownSelectElement? newValue) {
+          setState(() {
+            type = newValue!;
+          });
+        },
+        items: tags.map<DropdownMenuItem<DropdownSelectElement>>(
+            (DropdownSelectElement element) {
+          return DropdownMenuItem<DropdownSelectElement>(
+              value: element,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(element.icon),
+                  SizedBox(width: 5),
+                  Text(element.title),
+                ],
+              ));
+        }).toList(),
+        decoration: InputDecoration(
+          labelText: 'Tag (optional)',
           border: OutlineInputBorder(),
         ),
       );
@@ -183,7 +229,7 @@ class NewActivityState extends State<NewActivity> {
             if (isValid) {
               formKey.currentState!.save();
 
-              final message = 'Username: havfar \nPassword:';
+              final message = 'Activity Created';
               final snackBar = SnackBar(
                 content: Text(
                   message,
@@ -198,7 +244,8 @@ class NewActivityState extends State<NewActivity> {
                   endDate: date.add(Duration(
                       hours: int.tryParse(durationHours)!,
                       minutes: int.tryParse(durationMinutes)!)),
-                  type: type.indexValue);
+                  type: type.indexValue,
+                  tag: tag.title != '' ? tag.title : null);
 
               ActivityDatabaseManager.instance.add(act);
               Navigator.of(context)
