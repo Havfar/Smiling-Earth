@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:smiling_earth_frontend/cubit/posts/newpost_cubit.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/post_detailed.dart';
-import 'package:smiling_earth_frontend/widgets/post_widget.dart';
+import 'package:smiling_earth_frontend/widgets/user_name_widget.dart';
 
 class PublishPostPage extends StatelessWidget {
   final PostDto post;
@@ -34,12 +35,7 @@ class PublishPostPage extends StatelessWidget {
                       Container(
                           margin: EdgeInsets.only(bottom: 50),
                           child: Text("Post is Published")),
-                      PostWidget(
-                        post: this.post,
-                        liked: false,
-                        clickable: false,
-                        isPreview: true,
-                      ),
+                      getPostPreview(),
                       ElevatedButton(
                           onPressed: () => Navigator.push(
                               context,
@@ -59,12 +55,7 @@ class PublishPostPage extends StatelessWidget {
                     Container(
                         margin: EdgeInsets.only(bottom: 50),
                         child: Text("Publish")),
-                    PostWidget(
-                      post: this.post,
-                      liked: false,
-                      clickable: false,
-                      isPreview: true,
-                    ),
+                    getPostPreview(),
                     ElevatedButton(
                         onPressed: () {
                           BlocProvider.of<NewPostCubit>(context)
@@ -75,6 +66,43 @@ class PublishPostPage extends StatelessWidget {
                 );
               },
             )),
+      ),
+    );
+  }
+
+  Card getPostPreview() {
+    return Card(
+      margin: EdgeInsets.only(top: 15),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 30),
+              child: Row(
+                children: [
+                  Container(
+                      width: 50, height: 50, child: FluttermojiCircleAvatar()),
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BuildLocalName(),
+                        ]),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: Text(post.content,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -118,6 +118,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                       return Container(
                         width: 130,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               snapshot.data!,

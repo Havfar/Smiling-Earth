@@ -68,15 +68,11 @@ class _HomeState extends State<HomePage> {
                             onPressed: () => showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
-                                      title: const Text('AlertDialog Title'),
-                                      content:
-                                          const Text('AlertDialog description'),
+                                      title:
+                                          const Text('What does this mean? '),
+                                      content: const Text(
+                                          'This charts represents the how much CO2 you have emitted based on the activity the app has registrated. On top you can see how much kalories you have burned and time spent on walking or cycling. Next you see how much money you saved on walking instead of driving. The final column shows how much energy you have used on heating your home.'),
                                       actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel'),
-                                        ),
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.pop(context, 'OK'),
@@ -126,7 +122,7 @@ class BuildHeader extends StatelessWidget {
             int walkingDuration = snapshot.data![0];
             int drivingDuration = snapshot.data![1];
             int electricity = snapshot.data![2];
-            int walkingDistance = walkingDuration * 5;
+            int walkingDistance = (walkingDuration / 60 * 5).round();
 
             return BuildHeaderToolbar(
               distance: Transportation.getCarDrivingDistanceFromMinutes(
@@ -205,7 +201,7 @@ class BuildChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double emissionGoal = 50;
+    double emissionGoal = 4 * 30; //4 kg co2 per day *30 days
     return Container(
       child: Column(children: [
         FutureBuilder<ChartData>(

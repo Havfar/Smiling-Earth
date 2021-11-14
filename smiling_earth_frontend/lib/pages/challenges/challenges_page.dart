@@ -190,7 +190,13 @@ class BuildCompletedChallenges extends StatelessWidget {
                           child: Column(
                             children: [
                               CircleIcon(
-                                  onTap: null,
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailedChallengesPage(
+                                                  challengeId: challenge.id!,
+                                                  teamId: null))),
                                   backgroundColor: Colors.amber,
                                   emoji: challenge.symbol),
                               Container(

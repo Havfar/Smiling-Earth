@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class CircleIcon extends StatelessWidget {
   final Color backgroundColor;
+  final Color? borderColor;
   final String emoji;
   final void Function()? onTap;
   CircleIcon(
       {Key? key,
       required this.backgroundColor,
       required this.emoji,
-      required this.onTap})
+      required this.onTap,
+      this.borderColor})
       : super(key: key);
 
   @override
@@ -20,8 +22,12 @@ class CircleIcon extends StatelessWidget {
         }
       },
       child: Container(
-        decoration:
-            BoxDecoration(color: this.backgroundColor, shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            border: this.borderColor != null
+                ? Border.all(color: this.borderColor!)
+                : null,
+            color: this.backgroundColor,
+            shape: BoxShape.circle),
         child: Container(
             padding: EdgeInsets.all(8),
             child: Text(

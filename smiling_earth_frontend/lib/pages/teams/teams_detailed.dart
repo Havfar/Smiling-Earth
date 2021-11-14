@@ -251,7 +251,7 @@ class BuildTeamScoreList extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                         )),
-                    Text("Top 3 team members with the lowest emissions"),
+                    Text("Top team members with the lowest emissions"),
                   ],
                 ),
               ),

@@ -63,21 +63,6 @@ class Activity extends ActivityInterface {
     return output;
   }
 
-  // void addEmission(double emission) {
-  //   this.emissions += emission;
-  // }
-
-  // void setEmission() {
-  //   // var activity = ActivityType.values[this.type];
-  //   switch (this.type) {
-  //     case -1:
-  //       emissions = Energy.calculatePastHourElectricityCo2(this.temperature!);
-  //       break;
-  //     default:
-  //       emissions = 6;
-  //   }
-  // }
-
   @override
   double getEmission() {
     var activity = AppActivityType.values[this.type];
@@ -287,8 +272,8 @@ class ActivityDto {
     print('start: $startTime');
     return new Activity(
         title: this.title,
-        startDate: DateTime.parse(startTime),
-        endDate: DateTime.parse(endTime!),
+        startDate: DateTime.tryParse(startTime),
+        endDate: DateTime.tryParse(endTime),
         type: activityEnumValue);
   }
 }

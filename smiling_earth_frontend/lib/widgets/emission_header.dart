@@ -156,14 +156,16 @@ class BuildGreeting extends StatelessWidget {
 
   String _getTimeGreeting() {
     DateTime time = DateTime.now();
-    if (time.hour > 12) {
-      return 'Good Night 😴';
+    String greeting = '';
+    if (time.hour > 22) {
+      greeting = 'Good Night 😴';
     } else if (time.hour > 18) {
-      return 'Good Evening 🌝';
+      greeting = 'Good Evening 🌝';
     } else if (time.hour > 12) {
-      return 'Good Day! 👋';
+      greeting = 'Good Day! 👋';
     } else {
-      return 'Good Morning 🌞';
+      greeting = 'Good Morning 🌞';
     }
+    return greeting;
   }
 }

@@ -174,22 +174,26 @@ class ChallengesPost extends StatelessWidget {
     return Center(
       child: InkWell(
         child: Card(
-          color: Colors.blue.shade100,
+          // color: Colors.blue.shade100,
           child: Container(
             width: 250,
             alignment: Alignment.center,
-            margin: EdgeInsets.only(bottom: 20),
+            margin: EdgeInsets.only(top: 20, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleIcon(
                     onTap: null,
+                    borderColor: Colors.grey.shade300,
                     emoji: widget.post.challenge!.symbol,
                     backgroundColor: Colors.white),
-                Text(widget.post.challenge!.title,
-                    textAlign: TextAlign.left,
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                Container(
+                  width: 180,
+                  child: Text(widget.post.challenge!.title,
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                ),
               ],
             ),
           ),
