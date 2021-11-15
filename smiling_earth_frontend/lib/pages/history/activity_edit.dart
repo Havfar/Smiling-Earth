@@ -40,7 +40,7 @@ List<DropdownSelectElement> _createTags() {
 
 class _EditActivityState extends State<EditActivity> {
   final formKey = GlobalKey<FormState>();
-  late String title;
+  String title = '';
   late DateTime date;
   late String dateInt;
   late String durationHours;
@@ -161,7 +161,7 @@ class _EditActivityState extends State<EditActivity> {
           }
         },
         maxLength: 30,
-        onSaved: (value) => setState(() => title = value!),
+        onChanged: (value) => setState(() => title = value),
       );
 
   Widget buildActivityType() => DropdownButtonFormField<DropdownSelectElement>(
@@ -290,7 +290,7 @@ class _EditActivityState extends State<EditActivity> {
             final isValid = formKey.currentState!.validate();
 
             if (isValid) {
-              formKey.currentState!.save();
+              // formKey.currentState!.save();
 
               final message = 'Activity Updated';
               final snackBar = SnackBar(
@@ -301,7 +301,7 @@ class _EditActivityState extends State<EditActivity> {
                 backgroundColor: Colors.green,
               );
               Activity act = new Activity(
-                  title: title,
+                  title: title != '' ? title : widget.activity.title,
                   startDate: widget.activity.startDate,
                   endDate: widget.activity.endDate,
                   type: type.indexValue,

@@ -112,7 +112,15 @@ class _PostWidgetState extends State<PostWidget> {
                           child: BuildLikeButton(post: this.widget.post),
                         ),
                         IconButton(
-                            onPressed: () => print(this.liked.toString()),
+                            onPressed: () {
+                              if (widget.clickable) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => DetailedPostPage(
+                                            postId: widget.post.id)));
+                              }
+                            },
                             icon: Icon(Icons.comment))
                       ],
                     )

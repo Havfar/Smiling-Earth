@@ -160,17 +160,10 @@ class _BuildList extends StatelessWidget {
             return Column(
                 children: state.users
                     .map((user) => (Container(
-                          // padding: EdgeInsets.only(top: 10, bottom: 10),
                           decoration: BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(color: Colors.black12))),
                           child: ListTile(
-                              //               Navigator.push(
-                              // context,
-                              // MaterialPageRoute(
-                              //     builder: (context) => this.showJoinButton
-                              //         ? TeamPreview(id: team.id)
-                              //         : TeamsDetailedPage(id: team.id))
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -193,11 +186,20 @@ class _BuildList extends StatelessWidget {
                               title: Text(user.user.getName()),
                               trailing: user.isFollowing
                                   ? TextButton(
+                                      onPressed: null,
                                       child: Text('Following'),
-                                      onPressed: () => print('ok'),
                                     )
                                   : ElevatedButton(
-                                      onPressed: () => print('lol'),
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => user
+                                                      .isFollowing
+                                                  ? ProfilePage(
+                                                      userId: user.user.userId)
+                                                  : ProfilePreviewPage(
+                                                      userId:
+                                                          user.user.userId))),
                                       child: Text('Follow'))),
                         )))
                     .toList());

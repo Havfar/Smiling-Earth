@@ -11,7 +11,13 @@ class PostCubit extends Cubit<PostState> {
 
   void getPosts() {
     try {
-      _client.getPosts().then((posts) => emit(PostRetrived(posts)));
+      _client.getPosts().then((message) {
+        if (message.statusCode == -1) {
+          emit(PostError('Could not contact the server'));
+        } else {
+          emit(PostRetrived(message.posts));
+        }
+      });
     } catch (e) {
       emit(PostError(e.toString()));
     }

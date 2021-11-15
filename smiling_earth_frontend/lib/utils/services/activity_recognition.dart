@@ -4,6 +4,7 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 
 ActivityEvent latestActivity = ActivityEvent.empty();
@@ -95,9 +96,9 @@ void _onData(ActivityEvent activityEvent) async {
     ].contains(latestActivity.type.index)) {
       await ActivityDatabaseManager.instance.add(Activity(
           title: generateTitle(latestActivity),
-          type: latestActivity.type.index,
-          startDate: latestActivity.timeStamp,
-          endDate: activityEvent.timeStamp));
+          type: convertToAppActivity(latestActivity.type).index,
+          startDate: activityEvent.timeStamp,
+          endDate: latestActivity.timeStamp));
     }
     latestActivity = activityEvent;
   }
@@ -145,5 +146,23 @@ String getActivityNameByActivityType(ActivityType type) {
       return 'tilt';
     default:
       return "Other";
+  }
+}
+
+AppActivityType convertToAppActivity(ActivityType type) {
+  switch (type) {
+    case ActivityType.IN_VEHICLE:
+      return AppActivityType.IN_CAR;
+    case ActivityType.WALKING:
+      return AppActivityType.WALKING;
+    case ActivityType.RUNNING:
+      return AppActivityType.RUNNING;
+    case ActivityType.ON_BICYCLE:
+      return AppActivityType.ON_BICYCLE;
+    case ActivityType.ON_FOOT:
+      return AppActivityType.WALKING;
+    default:
+      return AppActivityType.WALKING;
+      ;
   }
 }

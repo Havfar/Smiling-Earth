@@ -201,8 +201,3 @@ double sumActivityGroupEmission(List<ActivityInterface> activities) {
   }
   return emissions;
 }
-
-double getEmissions(Activity activity) {
-  int duration = activity.getTotalDurationInMinutes();
-  return duration * 0.123;
-}

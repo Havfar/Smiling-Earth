@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/teams/teams_cubit.dart';
+import 'package:smiling_earth_frontend/pages/not_implemented.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/teams_widget.dart';
 
@@ -51,7 +52,10 @@ class BuildMyTeams extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   TextButton(
-                      onPressed: () => print("new"),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotImplementedPage())),
                       child: Text("Create a new team"))
                 ],
               ),

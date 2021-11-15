@@ -61,7 +61,12 @@ class ChallengeWidget extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     margin: EdgeInsets.only(top: 5, right: 10),
                     child: TextButton(
-                      onPressed: () => print("joined"),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PreviewChallengesPage(
+                                id: this.challenge.id!, teamId: this.teamsId)),
+                      ),
                       child:
                           Text("Join", style: TextStyle(color: Colors.white)),
                       style: TextButton.styleFrom(

@@ -289,7 +289,6 @@ class BuildPostsFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 100000,
       child: BlocBuilder<PostCubit, PostState>(builder: (context, state) {
         if (state is PostRetrived) {
           return SingleChildScrollView(
@@ -302,6 +301,16 @@ class BuildPostsFeed extends StatelessWidget {
                       clickable: true, liked: false, post: state.posts[index]);
                 }),
           );
+        } else if (state is PostError) {
+          return Center(
+              child: Container(
+                  width: 300,
+                  height: 300,
+                  child: Text(
+                    'Could not connect to the server 😢.\nPlease restart the app or try again later ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  )));
         }
         return Center(
           child: CircularProgressIndicator(),

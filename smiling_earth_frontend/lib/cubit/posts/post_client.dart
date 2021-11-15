@@ -6,25 +6,34 @@ import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dart';
 
+class PostCubitMessage {
+  final List<PostDto> posts;
+  final int statusCode;
+
+  PostCubitMessage(this.posts, this.statusCode);
+}
+
 class PostClient {
   final _url = WebConfig.baseUrl;
 
-  Future<List<PostDto>> getPosts() async {
+  Future<PostCubitMessage> getPosts() async {
     String endpoint = '/posts/';
     final token = await UserSecureStorage.getToken();
+    final uri = Uri.parse(_url + endpoint);
     try {
-      final uri = Uri.parse(_url + endpoint);
       final response =
           await http.get(uri, headers: {"Authorization": "Token " + token!});
+      if (response.statusCode != 200) {
+        throw Exception('Could not fetch posts');
+      }
       final json =
           jsonDecode(utf8.decode(response.bodyBytes))["results"] as List;
       final posts = json.map((postJson) {
         return PostDto.fromJson(postJson);
       }).toList();
-
-      return posts;
+      return PostCubitMessage(posts, response.statusCode);
     } catch (e) {
-      throw e;
+      return PostCubitMessage([], -1);
     }
   }
 

@@ -269,7 +269,6 @@ class ActivityDto {
   }
 
   Activity toActivtiy() {
-    print('start: $startTime');
     return new Activity(
         title: this.title,
         startDate: DateTime.tryParse(startTime),
