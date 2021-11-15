@@ -84,16 +84,6 @@ class _HomeState extends State<HomePage> {
                       ],
                     ),
                     BuildChart(),
-                    // TextButton.icon(
-                    //   onPressed: () => SettingsDatabaseManager.instance.delete(),
-                    //   label: Text("delete settings"),
-                    //   icon: Icon(Icons.delete),
-                    // ),
-                    // TextButton.icon(
-                    //     onPressed: () async =>
-                    //         await NotificationService().showNotifications(),
-                    //     label: Text("show notification"),
-                    //     icon: Icon(Icons.notification_add)),
                     BuildEmissionEstimation(),
                   ],
                 ),

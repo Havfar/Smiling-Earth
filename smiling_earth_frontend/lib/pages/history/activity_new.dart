@@ -39,8 +39,8 @@ class NewActivityState extends State<NewActivity> {
   String title = "";
   DateTime date = DateTime.now();
   String dateInt = "0";
-  late String durationHours;
-  late String durationMinutes;
+  late String durationHours = '0';
+  late String durationMinutes = '0';
   List<DropdownSelectElement> items = _createList();
   List<DropdownSelectElement> tags = _createTags();
   DropdownSelectElement type = new DropdownSelectElement(
@@ -137,7 +137,7 @@ class NewActivityState extends State<NewActivity> {
         iconSize: 24,
         elevation: 16,
         style: const TextStyle(color: Colors.deepPurple),
-        onSaved: (value) => setState(() => tag = value!),
+        // onSaved: (value) => setState(() => tag = value!),
         onChanged: (DropdownSelectElement? newValue) {
           setState(() {
             type = newValue!;
@@ -190,7 +190,7 @@ class NewActivityState extends State<NewActivity> {
               return 'Must be a positive number';
             }
           },
-          onSaved: (value) => setState(() => durationHours = value!),
+          onChanged: (value) => setState(() => durationHours = value!),
         ),
       );
 
@@ -215,7 +215,7 @@ class NewActivityState extends State<NewActivity> {
               return 'Must be a positive number';
             }
           },
-          onSaved: (value) => setState(() => durationMinutes = value!),
+          onChanged: (value) => setState(() => durationMinutes = value!),
         ),
       );
 
@@ -227,7 +227,7 @@ class NewActivityState extends State<NewActivity> {
             // FocusScope.of(context).unfocus();
 
             if (isValid) {
-              formKey.currentState!.save();
+              // formKey.currentState!.save();
 
               final message = 'Activity Created';
               final snackBar = SnackBar(
@@ -238,6 +238,7 @@ class NewActivityState extends State<NewActivity> {
                 backgroundColor: Colors.green,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              print('TAG $tag');
               Activity act = new Activity(
                   title: title,
                   startDate: date,
@@ -245,7 +246,7 @@ class NewActivityState extends State<NewActivity> {
                       hours: int.tryParse(durationHours)!,
                       minutes: int.tryParse(durationMinutes)!)),
                   type: type.indexValue,
-                  tag: tag.title != '' ? tag.title : null);
+                  tag: tag.title == '' ? null : tag.title);
 
               ActivityDatabaseManager.instance.add(act);
               Navigator.of(context)

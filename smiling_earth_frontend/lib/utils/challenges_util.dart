@@ -38,7 +38,7 @@ class ChallengesUtil {
         return calculateTotalTimeInActivityType(type);
 
       case ChallengeType.ACTIVITY_TAG:
-        var type = 'commute';
+        var type = 'Commute';
         return calculateTotalTimeInActivityTag(type);
 
       default:

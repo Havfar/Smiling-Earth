@@ -4,6 +4,7 @@ import 'package:skeleton_text/skeleton_text.dart';
 import 'package:smiling_earth_frontend/cubit/challenge/challenge_cubit.dart';
 import 'package:smiling_earth_frontend/models/challenge.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
+import 'package:smiling_earth_frontend/utils/services/background_services.dart';
 import 'package:smiling_earth_frontend/utils/string_utils.dart';
 import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
@@ -15,6 +16,24 @@ class ChallengesPage extends StatelessWidget {
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.green),
           backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  await challengesUtil.updateChallenges();
+                  AlertDialog(
+                    title: const Text('Syncing you challenges progress? '),
+                    content: const Text(
+                        'The progress get automatically updated once a day. If you want to update more often press this button'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+                icon: Icon(Icons.sync))
+          ],
         ),
         drawer: NavigationDrawerWidget(),
         body: Container(

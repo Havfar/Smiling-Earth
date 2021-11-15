@@ -52,59 +52,35 @@ void callbackDispatcher() {
   });
 }
 
-// void callbackDispatcherTest() {
-//   print("Native called background task: $backgroundTask");
-//   EnergyDatabaseManager.instance.add(new EnergyActivity(
-//     title: "Energy",
-//     date: DateTime.now(),
-//     heatLoad: 1.86,
-//     heatLoadForecast: 1.86,
-//   ));
-//   return;
-// }
-
 initializeWorkManagerAndPushNotification() {
   print('starting background service');
 
   Workmanager().initialize(
     callbackDispatcher,
     isInDebugMode: false,
-  ); //to true if still in testing lev turn it to false whenever you are launching the app
+  );
   Workmanager().registerPeriodicTask(
     "1", fetchEnergyUsageTask,
     frequency: Duration(hours: 1), //when should it check the link
-    initialDelay:
-        Duration(minutes: 3), //duration before showing the notification
-    // constraints: Constraints(
-    //   networkType: NetworkType.connected,
-    // ),
+    initialDelay: Duration(minutes: 3),
   );
 
   Workmanager().registerPeriodicTask(
-    "2", updateEmissionTask,
-    frequency: Duration(hours: 6), //when should it check the link
-    initialDelay:
-        Duration(minutes: 5), //duration before showing the notification
-    // constraints: Constraints(
-    //   networkType: NetworkType.connected,
-    // ),
+    "2",
+    updateEmissionTask,
+    frequency: Duration(hours: 6),
+    initialDelay: Duration(minutes: 5),
   );
 
   Workmanager().registerPeriodicTask(
     "3", updateChallengeProgressTask,
     frequency: Duration(hours: 4), //when should it check the link
-    initialDelay: Duration(hours: 1), //duration before showing the notification
-    // constraints: Constraints(
-    //   networkType: NetworkType.connected,
-    // ),
+    initialDelay: Duration(hours: 1),
   );
 
   Workmanager().registerPeriodicTask(
     "4", sendLocalUpdate,
     frequency: Duration(days: 1), //when should it check the link
-    initialDelay: Duration(hours: 2), //duration before showing the notification
-    // constraints: Constraints(
-    //   networkType: NetworkType.connected,
-    // ),
+    initialDelay: Duration(hours: 2),
   );
 }
