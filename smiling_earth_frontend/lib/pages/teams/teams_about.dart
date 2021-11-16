@@ -77,7 +77,10 @@ class TeamAbout extends StatelessWidget {
                     SizedBox(height: 20),
                     _BuildTeamSettings(state.teams),
                     SizedBox(height: 20),
-                    _BuildMembersSettings(),
+                    _BuildMembersSettings(
+                        membersCount: state.teams.membersCount == null
+                            ? 0
+                            : state.teams.membersCount!),
                     SizedBox(height: 20),
                     _BuildRivalriesSettings(),
                     SizedBox(height: 20),
@@ -262,8 +265,10 @@ class _BuildRivalriesSettings extends StatelessWidget {
 }
 
 class _BuildMembersSettings extends StatelessWidget {
+  final int membersCount;
   const _BuildMembersSettings({
     Key? key,
+    required this.membersCount,
   }) : super(key: key);
 
   @override
@@ -281,7 +286,7 @@ class _BuildMembersSettings extends StatelessWidget {
               border: Border(bottom: BorderSide(color: Colors.grey.shade200))),
           child: ListTile(
             trailing: Icon(Icons.chevron_right),
-            title: Text('Members (12) '),
+            title: Text('Members ($membersCount) '),
             onTap: () => (Navigator.of(context).push(PageRouteBuilder(
               pageBuilder: (BuildContext context, Animation<double> animation,
                       Animation<double> secondaryAnimation) =>

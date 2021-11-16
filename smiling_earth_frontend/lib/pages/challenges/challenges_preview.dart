@@ -78,6 +78,9 @@ class _BuildJoinButton extends StatelessWidget {
             if (state is JoiningChallenge) {
               return CircularProgressIndicator();
             } else if (state is ChallengeJoined) {
+              if (isTeamChallenge) {
+                return Text('You have now joined the challenge');
+              }
               return Column(
                 children: [
                   Text('You have now joined the challenge'),
@@ -88,7 +91,7 @@ class _BuildJoinButton extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => DetailedChallengesPage(
                                       challengeId: this.challengeId,
-                                      teamId: null,
+                                      teamId: this.teamId,
                                     ))); // push it back in
                       },
                       child: Text('Go to Challenge'))
@@ -139,19 +142,14 @@ class _BuildHeader extends StatelessWidget {
                   backgroundColor: Colors.blueAccent,
                   emoji: this.challenge.symbol),
               SizedBox(width: 20),
-              Text(this.challenge.title,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              Container(
+                width: 200,
+                child: Text(this.challenge.title,
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              ),
             ],
           ),
-          SizedBox(height: 20),
-          Row(children: [
-            Icon(Icons.calendar_today_outlined),
-            Text("17. oct - 17.may")
-          ]),
-          Row(children: [
-            Icon(Icons.flag_outlined),
-            Text("Commute 20 days by using a zero emissions vehicle")
-          ]),
           SizedBox(height: 20),
           Text(this.challenge.description),
           SizedBox(height: 20),
