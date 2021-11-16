@@ -61,28 +61,6 @@ class _HomeState extends State<HomePage> {
                 child: Column(
                   children: [
                     BuildHeader(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                            onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                      title:
-                                          const Text('What does this mean? '),
-                                      content: const Text(
-                                          'This charts represents the how much CO2 you have emitted based on the activity the app has registrated. On top you can see how much kalories you have burned and time spent on walking or cycling. Next you see how much money you saved on walking instead of driving. The final column shows how much energy you have used on heating your home.'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'OK'),
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    )),
-                            icon: Icon(Icons.help))
-                      ],
-                    ),
                     BuildChart(),
                     BuildEmissionEstimation(),
                   ],
@@ -192,39 +170,63 @@ class BuildChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double emissionGoal = 4 * 30; //4 kg co2 per day *30 days
-    return Container(
-      child: Column(children: [
-        FutureBuilder<ChartData>(
-          future: getChartDataByMonth(DateTime.now()),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Center(
-                child: SmilingEarthEmissionChart(
-                    hideTitle: false,
-                    energyEmission: snapshot.data!.energy,
-                    transportEmission: snapshot.data!.transport,
-                    goal: emissionGoal),
-              );
-            }
-            return SkeletonAnimation(
-                // borderRadius: BorderRadius.circular(10.0),
-                shimmerColor: Colors.white38,
-                shimmerDuration: 4000,
-                child: Column(
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: SmilingEarthChartSkeleton()),
-                    Text("Loading..",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+    return Stack(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+                onPressed: () => showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: const Text('What does this mean? '),
+                          content: const Text(
+                              'This charts represents the how much CO2 you have emitted based on the activity the app has registrated. On top you can see how much kalories you have burned and time spent on walking or cycling. Next you see how much money you saved on walking instead of driving. The final column shows how much energy you have used on heating your home.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                            ),
+                          ],
                         )),
-                  ],
-                ));
-          },
+                icon: Icon(Icons.help))
+          ],
         ),
-      ]),
+        Container(
+          child: Column(children: [
+            FutureBuilder<ChartData>(
+              future: getChartDataByMonth(DateTime.now()),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Center(
+                    child: SmilingEarthEmissionChart(
+                        hideTitle: false,
+                        energyEmission: snapshot.data!.energy,
+                        transportEmission: snapshot.data!.transport,
+                        goal: emissionGoal),
+                  );
+                }
+                return SkeletonAnimation(
+                    // borderRadius: BorderRadius.circular(10.0),
+                    shimmerColor: Colors.white38,
+                    shimmerDuration: 4000,
+                    child: Column(
+                      children: [
+                        Center(
+                            // margin: EdgeInsets.only(top: 10),
+                            child: SmilingEarthChartSkeleton()),
+                        Text("Loading..",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            )),
+                      ],
+                    ));
+              },
+            ),
+          ]),
+        ),
+      ],
     );
   }
 }

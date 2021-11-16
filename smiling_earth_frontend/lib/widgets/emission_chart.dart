@@ -176,12 +176,12 @@ class SmilingEarthChartSkeleton extends StatelessWidget {
       child: CustomPaint(
           foregroundPainter: EmissionChart(0, 0),
           child: Container(
-            height: 300,
-            width: 300,
+            height: 250,
+            width: 250,
             child: Center(
                 child: Image(
-                    height: 160,
-                    width: 160,
+                    height: 150,
+                    width: 150,
                     image: AssetImage('assets/img/smiling-earth/earth.png'))),
           )),
     );

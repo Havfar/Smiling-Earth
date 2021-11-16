@@ -69,10 +69,7 @@ class _WalkEmissionEstimatePageState extends State<WalkEmissionEstimatePage> {
       ),
       body: Container(
         child: ListView(
-          children: [
-            // BuildHeaderToolbar(),
-            BuildWalkingEstimation()
-          ],
+          children: [BuildWalkingEstimation()],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -190,7 +187,7 @@ class _BuildWalkingEstimationState extends State<BuildWalkingEstimation> {
         ),
         ListTile(
           leading: Text('☀️', style: TextStyle(fontSize: 22)),
-          title: Text('Days to finance you solar roof: '),
+          title: Text('Days to finance a solar roof: '),
           trailing: Text(
               _calculateDaysLeftForSolarRoof((1 - _sliderValue) * 100)
                   .round()
