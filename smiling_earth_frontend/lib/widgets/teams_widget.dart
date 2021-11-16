@@ -22,7 +22,7 @@ class TeamWidget extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => this.showJoinButton
                       ? TeamPreview(id: team.id)
-                      : TeamsDetailedPage(id: team.id)));
+                      : TeamsDetailedPage(id: team.id!)));
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -56,7 +56,7 @@ class TeamWidget extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => this.showJoinButton
                                       ? TeamPreview(id: team.id)
-                                      : TeamsDetailedPage(id: team.id))),
+                                      : TeamsDetailedPage(id: team.id!))),
                           child: Text("Join",
                               style: TextStyle(color: Colors.white)),
                           style: TextButton.styleFrom(
@@ -70,8 +70,8 @@ class TeamWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text(this.team.memeberCount.toString() +
-                      " people has joined the team")
+                  Text(this.team.membersCount.toString() +
+                      " users has joined the team")
                 ],
               )
             ],

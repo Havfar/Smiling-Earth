@@ -208,7 +208,7 @@ class ActivityDatabaseManager {
     var activitiesQuery = await db.query(
       'activities',
       orderBy: 'id',
-      where: 'tag=' + tag,
+      where: 'tag= "$tag"',
     );
     double duration = 0;
 

@@ -13,7 +13,7 @@ import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class TeamsDetailedPage extends StatelessWidget {
-  final int? id;
+  final int id;
   TeamsDetailedPage({required this.id});
 
   void _onTap(BuildContext context, int index) {
@@ -31,7 +31,7 @@ class TeamsDetailedPage extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamPosts(id: id),
+              TeamPosts(teamId: id),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -65,7 +65,7 @@ class TeamsDetailedPage extends StatelessWidget {
       body: Container(
           child: ListView(children: [
         BlocProvider(
-          create: (context) => DetailedTeamCubit()..getTeams(this.id!),
+          create: (context) => DetailedTeamCubit()..getTeams(this.id),
           child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
             builder: (context, state) {
               if (state is RetrievedTeam) {
@@ -74,7 +74,7 @@ class TeamsDetailedPage extends StatelessWidget {
                     BuildPageHeader(team: state.teams),
                     BlocProvider(
                       create: (context) =>
-                          DetailedTeamCubit()..getTeamEmission(this.id!),
+                          DetailedTeamCubit()..getTeamEmission(this.id),
                       child: BuildChart(state.teams),
                     ),
                   ],
@@ -94,13 +94,13 @@ class TeamsDetailedPage extends StatelessWidget {
         // SizedBox(height: 15),
 
         BlocProvider(
-          create: (context) => DetailedTeamCubit()..getTeamMembers(this.id!),
+          create: (context) => DetailedTeamCubit()..getTeamMembers(this.id),
           child: BuildTeamScoreList(),
         ),
         SizedBox(height: 15),
         BlocProvider(
-          create: (context) => RivalsCubit()..getRivals(this.id!),
-          child: BuildRivalryLeaderboard(this.id!),
+          create: (context) => RivalsCubit()..getRivals(this.id),
+          child: BuildRivalryLeaderboard(this.id),
         ),
         SizedBox(height: 15),
         // BuildTeamStats()
@@ -388,7 +388,9 @@ class BuildChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double goal = 1000.0;
+    final int membersCount = team.membersCount == null ? 1 : team.membersCount!;
+    print('team: ${team.membersCount}');
+    final double goal = 4 * 30 * membersCount.toDouble();
     return Container(
       margin: EdgeInsets.only(left: 15),
       child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
@@ -409,7 +411,7 @@ class BuildChart extends StatelessWidget {
                     hideTitle: true,
                     energyEmission: state.energyEmission.toDouble(),
                     transportEmission: state.transportEmission.toDouble(),
-                    goal: 100),
+                    goal: goal),
               )
             ]);
           }

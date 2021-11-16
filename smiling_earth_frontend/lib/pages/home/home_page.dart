@@ -260,7 +260,8 @@ class _BuildFeedState extends State<BuildFeed> {
           TextButton.icon(
               onPressed: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NewPostPage()),
+                    MaterialPageRoute(
+                        builder: (context) => NewPostPage(teamId: null)),
                   ),
               icon: Icon(Icons.add),
               label: Text("Add"))

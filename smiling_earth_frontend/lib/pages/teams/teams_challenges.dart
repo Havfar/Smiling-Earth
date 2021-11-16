@@ -10,7 +10,7 @@ import 'package:smiling_earth_frontend/widgets/challenge_widget.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class TeamChallenges extends StatelessWidget {
-  final int? teamId;
+  final int teamId;
   TeamChallenges({required this.teamId});
 
   void _onTap(BuildContext context, int index) {
@@ -28,7 +28,7 @@ class TeamChallenges extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamPosts(id: teamId),
+              TeamPosts(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -63,17 +63,17 @@ class TeamChallenges extends StatelessWidget {
         children: [
           BlocProvider(
             create: (context) =>
-                ChallengeCubit()..getCompletedTeamChallenges(teamId!),
+                ChallengeCubit()..getCompletedTeamChallenges(teamId),
             child: BuildCompletedChallenges(),
           ),
           BlocProvider(
             create: (context) =>
-                ChallengeCubit()..getJoinedTeamChallenges(teamId!),
-            child: BuildJoinedChallenges(teamId!),
+                ChallengeCubit()..getJoinedTeamChallenges(teamId),
+            child: BuildJoinedChallenges(teamId),
           ),
           BlocProvider(
-            create: (context) => ChallengeCubit()..getTeamChallenges(teamId!),
-            child: _BuildChallenges(teamId: teamId!),
+            create: (context) => ChallengeCubit()..getTeamChallenges(teamId),
+            child: _BuildChallenges(teamId: teamId),
           ),
         ],
       ),

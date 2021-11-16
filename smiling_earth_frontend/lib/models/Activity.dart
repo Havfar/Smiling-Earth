@@ -45,7 +45,7 @@ class Activity extends ActivityInterface {
   }
 
   static int getDurationHours(Activity activity) {
-    return activity.endDate!.difference(activity.startDate!).inHours;
+    return activity.endDate!.difference(activity.startDate!).inHours.abs();
   }
 
   static String formatDatetime(DateTime? time) {
@@ -163,11 +163,11 @@ class Activity extends ActivityInterface {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      // 'id': id,
       'title': title,
       'start_date': startDate!.toIso8601String(),
       'end_date': endDate!.toIso8601String(),
-      'tag': null,
+      'tag': tag,
       'type': type,
     };
   }
@@ -208,6 +208,10 @@ class Activity extends ActivityInterface {
       default:
         return Icons.error;
     }
+  }
+
+  int getTotalDurationInHours() {
+    return this.startDate!.difference(this.endDate!).inHours.abs();
   }
 
   int getTotalDurationInMinutes() {
@@ -303,7 +307,7 @@ class EnergyActivity extends ActivityInterface {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      // 'id': id,
       'date': date!.toIso8601String(),
       'heat_load': heatLoad,
       'heat_load_forecast': heatLoadForecast

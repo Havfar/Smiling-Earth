@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
 import 'package:smiling_earth_frontend/widgets/dropdown_select.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
+
+import 'history_page.dart';
 
 class EditActivity extends StatefulWidget {
   final Activity activity;
@@ -49,13 +50,22 @@ class _EditActivityState extends State<EditActivity> {
   List<DropdownSelectElement> items = _createList();
   List<DropdownSelectElement> tags = _createTags();
 
-  DropdownSelectElement type = new DropdownSelectElement(
-      title: getActivityNameByActivityType(AppActivityType.IN_CAR),
-      icon: getIconByActivityType(AppActivityType.IN_CAR),
-      indexValue: 0);
+  late DropdownSelectElement type;
 
-  DropdownSelectElement tag = new DropdownSelectElement(
-      title: '', icon: getActivityTagsIcon(''), indexValue: 0);
+  late DropdownSelectElement tag;
+
+  @override
+  void initState() {
+    date = widget.activity.startDate == null
+        ? DateTime.now()
+        : widget.activity.startDate!;
+    durationHours = widget.activity.getTotalDurationInHours().toString();
+    durationMinute =
+        (widget.activity.getTotalDurationInMinutes() % 60).toString();
+    type = items.first;
+    tag = items.first;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -203,7 +213,7 @@ class _EditActivityState extends State<EditActivity> {
         onSaved: (value) => setState(() => tag = value!),
         onChanged: (DropdownSelectElement? newValue) {
           setState(() {
-            type = newValue!;
+            tag = newValue!;
           });
         },
         items: tags.map<DropdownMenuItem<DropdownSelectElement>>(
@@ -229,13 +239,12 @@ class _EditActivityState extends State<EditActivity> {
         firstDate: DateTime(2020),
         lastDate: DateTime(2022),
         initialDate: new DateTime.now(),
-        onDateSaved: (value) =>
-            setState(() => dateInt = value.millisecondsSinceEpoch.toString()),
+        onDateSaved: (value) => setState(() => date = value),
       );
 
   Widget buildDurationHour() => Expanded(
         child: TextFormField(
-          initialValue: Activity.getDurationHours(widget.activity).toString(),
+          initialValue: durationHours,
           decoration: InputDecoration(
             labelText: 'Hours',
             border: OutlineInputBorder(),
@@ -254,13 +263,13 @@ class _EditActivityState extends State<EditActivity> {
               return 'Must be a positive number';
             }
           },
-          onSaved: (value) => setState(() => durationHours = value!),
+          onChanged: (value) => setState(() => durationHours = value),
         ),
       );
 
   Widget buildDurationMinutes() => Expanded(
         child: TextFormField(
-          initialValue: Activity.getDurationMinutes(widget.activity).toString(),
+          initialValue: durationMinute,
           decoration: InputDecoration(
             labelText: 'Minutes',
             border: OutlineInputBorder(),
@@ -279,7 +288,7 @@ class _EditActivityState extends State<EditActivity> {
               return 'Must be a positive number';
             }
           },
-          onSaved: (value) => setState(() => durationMinute = value!),
+          onChanged: (value) => setState(() => durationMinute = value),
         ),
       );
 
@@ -290,8 +299,6 @@ class _EditActivityState extends State<EditActivity> {
             final isValid = formKey.currentState!.validate();
 
             if (isValid) {
-              // formKey.currentState!.save();
-
               final message = 'Activity Updated';
               final snackBar = SnackBar(
                 content: Text(
@@ -300,14 +307,19 @@ class _EditActivityState extends State<EditActivity> {
                 ),
                 backgroundColor: Colors.green,
               );
+              int hours = durationHours == '' ? 0 : int.parse(durationHours);
+              int minutes =
+                  durationMinute == '' ? 0 : int.parse(durationMinute);
               Activity act = new Activity(
                   title: title != '' ? title : widget.activity.title,
-                  startDate: widget.activity.startDate,
-                  endDate: widget.activity.endDate,
+                  startDate: date,
+                  endDate: date.add(Duration(hours: hours, minutes: minutes)),
                   type: type.indexValue,
                   id: widget.activity.id,
                   tag: tag.title != '' ? tag.title : null);
 
+              print('tag: ${tag.title}');
+              print('type: $type');
               ActivityDatabaseManager.instance.update(act);
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Navigator.of(context)

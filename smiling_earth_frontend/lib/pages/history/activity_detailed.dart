@@ -202,6 +202,8 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'Detailed: ${AppActivityType.values[this.widget.activity.type].toString()}');
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

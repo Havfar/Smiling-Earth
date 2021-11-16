@@ -56,7 +56,7 @@ class Settings {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
+      // 'id': this.id,
       'preferred_transport': this.preferredTransport,
       'building_year': this.building_year,
       'last_renocation_year': this.last_renocation_year,

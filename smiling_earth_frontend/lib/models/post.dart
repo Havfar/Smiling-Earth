@@ -19,6 +19,7 @@ class PostDto {
   final int commentsCount;
   final ActivityDto? activity;
   final ChallengeDto? challenge;
+  final int? teamId;
 
   PostDto(
       {required this.likesCount,
@@ -28,23 +29,35 @@ class PostDto {
       required this.content,
       required this.timestamp,
       this.activity,
-      this.challenge});
+      this.challenge,
+      this.teamId});
 
-  Map<String, dynamic> toJson() => {"content": this.content};
+  Map<String, dynamic> toJson() {
+    // if (teamId != null) {
+    //   return {"content": this.content, "team_id": this.teamId};
+    // } else {
+    //   return {
+    //     "content": this.content,
+    //   };
+    // }
+    return {"content": this.content, "team_id": this.teamId};
+  }
 
   factory PostDto.fromJson(Map<String, dynamic> json) => new PostDto(
-      id: json['id'],
-      user: UserProfileDto.fromJson(json['user']),
-      content: json['content'],
-      timestamp: json['timestamp'],
-      likesCount: json['likes_count'],
-      commentsCount: json['comments_count'],
-      activity: json['activity'] != null
-          ? ActivityDto.fromJson(json['activity'])
-          : null,
-      challenge: json['challenge'] != null
-          ? ChallengeDto.fromJson(json['challenge'])
-          : null);
+        id: json['id'],
+        user: UserProfileDto.fromJson(json['user']),
+        content: json['content'],
+        timestamp: json['timestamp'],
+        likesCount: json['likes_count'],
+        commentsCount: json['comments_count'],
+        activity: json['activity'] != null
+            ? ActivityDto.fromJson(json['activity'])
+            : null,
+        challenge: json['challenge'] != null
+            ? ChallengeDto.fromJson(json['challenge'])
+            : null,
+        teamId: json['team'] != null ? json['team'] : null,
+      );
 
   String getDateWithDayOfWeek() {
     DateTime date = DateTime.parse(timestamp);
@@ -61,6 +74,7 @@ class DetailedPostDto {
   final List<CommentDto> comments;
   final ActivityDto? activity;
   final ChallengeDto? challenge;
+  final int? teamId;
 
   DetailedPostDto(
       {required this.likes,
@@ -70,7 +84,8 @@ class DetailedPostDto {
       required this.content,
       required this.timestamp,
       this.activity,
-      this.challenge});
+      this.challenge,
+      this.teamId});
 
   List<LikeDto> toLikesList(Map<String, dynamic> json) {
     List<LikeDto> likes = [];
@@ -113,7 +128,8 @@ class DetailedPostDto {
             : null,
         challenge: json['challenge'] != null
             ? ChallengeDto.fromJson(json['challenge'])
-            : null);
+            : null,
+        teamId: json['team'] != null ? json['team'] : null);
   }
 }
 

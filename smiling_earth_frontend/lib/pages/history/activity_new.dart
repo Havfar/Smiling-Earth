@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
-import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/button_widget.dart';
 import 'package:smiling_earth_frontend/widgets/dropdown_select.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
+
+import 'history_page.dart';
 
 class NewActivity extends StatefulWidget {
   @override
@@ -43,13 +44,15 @@ class NewActivityState extends State<NewActivity> {
   late String durationMinutes = '0';
   List<DropdownSelectElement> items = _createList();
   List<DropdownSelectElement> tags = _createTags();
-  DropdownSelectElement type = new DropdownSelectElement(
-      title: getActivityNameByActivityType(AppActivityType.IN_CAR),
-      icon: getIconByActivityType(AppActivityType.IN_CAR),
-      indexValue: 0);
+  late DropdownSelectElement type;
 
-  DropdownSelectElement tag = new DropdownSelectElement(
-      title: '', icon: getActivityTagsIcon(''), indexValue: 0);
+  late DropdownSelectElement tag;
+  @override
+  void initState() {
+    type = items.first;
+    tag = items.first;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -99,7 +102,7 @@ class NewActivityState extends State<NewActivity> {
           }
         },
         maxLength: 30,
-        onSaved: (value) => setState(() => title = value!),
+        onChanged: (value) => setState(() => title = value),
       );
 
   Widget buildActivityType() => DropdownButtonFormField<DropdownSelectElement>(
@@ -140,7 +143,8 @@ class NewActivityState extends State<NewActivity> {
         // onSaved: (value) => setState(() => tag = value!),
         onChanged: (DropdownSelectElement? newValue) {
           setState(() {
-            type = newValue!;
+            print('newValue ${newValue!.title}');
+            tag = newValue;
           });
         },
         items: tags.map<DropdownMenuItem<DropdownSelectElement>>(
@@ -190,7 +194,7 @@ class NewActivityState extends State<NewActivity> {
               return 'Must be a positive number';
             }
           },
-          onChanged: (value) => setState(() => durationHours = value!),
+          onChanged: (value) => setState(() => durationHours = value),
         ),
       );
 
@@ -215,7 +219,7 @@ class NewActivityState extends State<NewActivity> {
               return 'Must be a positive number';
             }
           },
-          onChanged: (value) => setState(() => durationMinutes = value!),
+          onChanged: (value) => setState(() => durationMinutes = value),
         ),
       );
 
@@ -239,12 +243,14 @@ class NewActivityState extends State<NewActivity> {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
               print('TAG $tag');
+              int hours = durationHours == '' ? 0 : int.parse(durationHours);
+              int minutes =
+                  durationMinutes == '' ? 0 : int.parse(durationMinutes);
+
               Activity act = new Activity(
                   title: title,
                   startDate: date,
-                  endDate: date.add(Duration(
-                      hours: int.tryParse(durationHours)!,
-                      minutes: int.tryParse(durationMinutes)!)),
+                  endDate: date.add(Duration(hours: hours, minutes: minutes)),
                   type: type.indexValue,
                   tag: tag.title == '' ? null : tag.title);
 

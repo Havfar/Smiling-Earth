@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/posts/post_cubit.dart';
+import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_detailed.dart';
@@ -8,8 +9,8 @@ import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
 class TeamPosts extends StatelessWidget {
-  final int? id;
-  TeamPosts({required this.id});
+  final int teamId;
+  TeamPosts({required this.teamId});
 
   void _onTap(BuildContext context, int index) {
     switch (index) {
@@ -18,7 +19,7 @@ class TeamPosts extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamsDetailedPage(id: id),
+              TeamsDetailedPage(id: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -26,7 +27,7 @@ class TeamPosts extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamPosts(id: id),
+              TeamPosts(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -34,7 +35,7 @@ class TeamPosts extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamChallenges(teamId: id),
+              TeamChallenges(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -42,7 +43,7 @@ class TeamPosts extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamAbout(teamId: id),
+              TeamAbout(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -57,10 +58,26 @@ class TeamPosts extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.green),
       ),
       drawer: NavigationDrawerWidget(),
-      body: Column(
+      body: ListView(
         children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(
+              "Team posts",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            TextButton.icon(
+                onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewPostPage(
+                                teamId: teamId,
+                              )),
+                    ),
+                icon: Icon(Icons.add),
+                label: Text("Add"))
+          ]),
           BlocProvider<PostCubit>(
-              create: (context) => PostCubit()..getTeamPosts(id!),
+              create: (context) => PostCubit()..getTeamPosts(teamId),
               child: BuildFeed()),
         ],
       ),
@@ -102,16 +119,16 @@ class BuildFeed extends StatelessWidget {
       // height: 100000,
       child: BlocBuilder<PostCubit, PostState>(builder: (context, state) {
         if (state is PostRetrived) {
-          return SingleChildScrollView(
-            child: ListView.builder(
-                itemCount: state.posts.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return PostWidget(
-                      clickable: true, liked: false, post: state.posts[index]);
-                }),
-          );
+          if (state.posts.isEmpty) {
+            return Center(child: Text('No posts created yet'));
+          }
+          return Column(
+              children: state.posts
+                  .map((post) =>
+                      PostWidget(clickable: true, liked: false, post: post))
+                  .toList());
+        } else if (state is PostError) {
+          return Center(child: Text('Could not connect to the server'));
         }
         return Center(
           child: Text("Loading"),

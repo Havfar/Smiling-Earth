@@ -90,7 +90,7 @@ class _BuildPreview extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TeamsDetailedPage(id: team.id)),
+                        builder: (context) => TeamsDetailedPage(id: team.id!)),
                   ); // push it back in
                 },
                 child: Text('Go to team'));

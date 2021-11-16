@@ -17,7 +17,7 @@ import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class TeamAbout extends StatelessWidget {
-  final int? teamId;
+  final int teamId;
   TeamAbout({required this.teamId});
 
   void _onTap(BuildContext context, int index) {
@@ -35,7 +35,7 @@ class TeamAbout extends StatelessWidget {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
-              TeamPosts(id: teamId),
+              TeamPosts(teamId: teamId),
           transitionDuration: Duration.zero,
         ));
         break;
@@ -68,7 +68,7 @@ class TeamAbout extends StatelessWidget {
       drawer: NavigationDrawerWidget(),
       body: ListView(children: [
         BlocProvider(
-          create: (context) => DetailedTeamCubit()..getTeams(teamId!),
+          create: (context) => DetailedTeamCubit()..getTeams(teamId),
           child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
             builder: (context, state) {
               if (state is RetrievedTeam) {
@@ -81,7 +81,7 @@ class TeamAbout extends StatelessWidget {
                     SizedBox(height: 20),
                     _BuildRivalriesSettings(),
                     SizedBox(height: 20),
-                    _BuildChallengesSettings(teamId!)
+                    _BuildChallengesSettings(teamId)
                   ],
                 );
               }

@@ -4,16 +4,16 @@ import 'package:smiling_earth_frontend/models/user.dart';
 class TeamsDto {
   final int? id;
   final String name;
-  final int? memeberCount;
+  final int? membersCount;
   final double? emissions;
   final String symbol;
 
-  TeamsDto(this.id, this.name, this.memeberCount, this.emissions, this.symbol);
+  TeamsDto(this.id, this.name, this.membersCount, this.emissions, this.symbol);
 
   factory TeamsDto.fromJson(Map<String, dynamic> json) => new TeamsDto(
       json['id'],
       json['name'],
-      json['memeber_count'],
+      json['members_count'],
       json['emissions'],
       json['symbol']);
 }
@@ -25,18 +25,21 @@ class TeamDetailedDto {
   final String? description;
   final String? location;
   final SimpleEmissionDto emissions;
+  final int? membersCount;
 
   TeamDetailedDto(this.id, this.name, this.symbol, this.description,
-      this.location, this.emissions);
+      this.location, this.emissions, this.membersCount);
 
   factory TeamDetailedDto.fromJson(Map<String, dynamic> json) =>
       new TeamDetailedDto(
-          json['id'],
-          json['name'],
-          json['symbol'],
-          json['description'],
-          json['location'],
-          SimpleEmissionDto.fromJson(json['emissions']));
+        json['id'],
+        json['name'],
+        json['symbol'],
+        json['description'],
+        json['location'],
+        SimpleEmissionDto.fromJson(json['emissions']),
+        json['members_count'],
+      );
 }
 
 class TeamMemberDto {

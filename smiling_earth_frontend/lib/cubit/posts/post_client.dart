@@ -182,21 +182,23 @@ class PostClient {
   Future<PostDto> newPost(PostDto post) async {
     String endpoint = '/posts/';
     final token = await UserSecureStorage.getToken();
-    try {
-      final uri = Uri.parse(_url + endpoint);
-      final response = await http.post(uri,
-          headers: {"Authorization": "Token " + token!}, body: post.toJson());
+    print('POST: ${post.toJson()}');
+    final uri = Uri.parse(_url + endpoint);
+    final response = await http.post(uri,
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Token " + token!,
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(post.toJson()));
 
-      // if(response.statusCode = 200){
+    // if(response.statusCode = 200){
 
-      // }
-      final json = jsonDecode(utf8.decode(response.bodyBytes));
+    // }
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
 
-      final newPost = PostDto.fromJson(json);
-      return newPost;
-    } catch (e) {
-      throw e;
-    }
+    final newPost = PostDto.fromJson(json);
+    return newPost;
   }
 
   Future<PostDto> newPostWithActivity(ActivityDto newActivity) async {

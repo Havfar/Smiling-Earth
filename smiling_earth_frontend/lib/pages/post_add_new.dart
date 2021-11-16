@@ -3,6 +3,10 @@ import 'package:smiling_earth_frontend/models/post.dart';
 import 'package:smiling_earth_frontend/pages/new_post_publish_page.dart';
 
 class NewPostPage extends StatelessWidget {
+  final int? teamId;
+
+  const NewPostPage({Key? key, required this.teamId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _controller = TextEditingController();
@@ -49,7 +53,8 @@ class NewPostPage extends StatelessWidget {
                                 content: _controller.value.text,
                                 likesCount: 0,
                                 user: null,
-                                timestamp: ''))),
+                                timestamp: '',
+                                teamId: teamId))),
                       ),
                   child: Text("Preview Post"))
             ],
