@@ -69,7 +69,7 @@ class _BuildPreview extends StatelessWidget {
                   width: 20,
                 ),
                 Container(
-                  width: 250,
+                  width: 200,
                   child: Text(this.team.name,
                       style: TextStyle(
                         fontSize: 18,

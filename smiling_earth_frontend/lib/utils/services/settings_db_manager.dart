@@ -56,7 +56,7 @@ class Settings {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'id': this.id,
+      'id': this.id,
       'preferred_transport': this.preferredTransport,
       'building_year': this.building_year,
       'last_renocation_year': this.last_renocation_year,
@@ -141,7 +141,7 @@ class SettingsDatabaseManager {
   }
 
   Future<int> add(Settings settings) async {
-    print('inserte new settings ' + settings.toString());
+    print('inserte new settings id: ${settings.id}');
     Database db = await instance.database;
     await db.delete('settings', where: 'id=0');
     return await db.insert('settings', settings.toMap());
@@ -160,7 +160,7 @@ class SettingsDatabaseManager {
   }
 
   Future<int> update(Settings newSettings) async {
-    print('updating');
+    print('updating ');
     Database db = await instance.database;
     var oldSettings = await get();
 

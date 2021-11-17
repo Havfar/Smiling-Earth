@@ -10,6 +10,28 @@ import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dar
 class UserClient {
   final _url = WebConfig.baseUrl;
 
+  Future<bool> follow(int userId) async {
+    String endpoint = '/follow/$userId/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.post(uri, headers: {"Authorization": "Token " + token!});
+
+    return response.statusCode == 200;
+  }
+
+  Future<bool> unfollow(int userId) async {
+    String endpoint = '/unfollow/$userId/';
+    final token = await UserSecureStorage.getToken();
+
+    final uri = Uri.parse(_url + endpoint);
+    final response =
+        await http.post(uri, headers: {"Authorization": "Token " + token!});
+
+    return response.statusCode == 200;
+  }
+
   Future<List<FollowerDto>> getFollowers() async {
     String endpoint = '/followers/';
     final token = await UserSecureStorage.getToken();

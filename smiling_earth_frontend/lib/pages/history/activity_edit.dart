@@ -63,7 +63,7 @@ class _EditActivityState extends State<EditActivity> {
     durationMinute =
         (widget.activity.getTotalDurationInMinutes() % 60).toString();
     type = items.first;
-    tag = items.first;
+    tag = tags.first;
     super.initState();
   }
 

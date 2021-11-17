@@ -86,15 +86,18 @@ class BuildProfileHeader extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(state.profile.getName(),
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500)),
-                      Text('200 kg CO2 /day',
+                      Container(
+                        width: 200,
+                        child: Text(state.profile.getName(),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500)),
+                      ),
+                      Text('3.8 kg CO2 / day',
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.green)),
-                      Container(width: 250, child: Text(state.profile.bio))
+                      Container(width: 200, child: Text(state.profile.bio))
                     ],
                   ),
                 ],

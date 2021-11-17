@@ -8,6 +8,7 @@ import 'package:smiling_earth_frontend/models/teams.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_about.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_challenges.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_posts.dart';
+import 'package:smiling_earth_frontend/utils/string_utils.dart';
 import 'package:smiling_earth_frontend/widgets/circle_icon.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
@@ -87,11 +88,10 @@ class TeamsDetailedPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 15),
-        // BlocProvider(
-        //   create: (context) => PledgeCubit()..getTeamPledge(this.id!),
-        //   child: BuildPledges(),
-        // ),
-        // SizedBox(height: 15),
+        BlocProvider(
+          create: (context) => PledgeCubit()..getTeamPledge(this.id!),
+          child: BuildPledges(),
+        ),
 
         BlocProvider(
           create: (context) => DetailedTeamCubit()..getTeamMembers(this.id),
@@ -434,26 +434,49 @@ class BuildPledges extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("We pledges to:",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              )),
           SizedBox(height: 10),
           BlocBuilder<PledgeCubit, PledgeState>(builder: (context, state) {
             if (state is RetrievedPledges) {
-              return Row(
-                  children: state.pledges
-                      .map((pledge) => Container(
-                          margin: EdgeInsets.only(right: 10),
-                          child: Column(children: [
-                            CircleIcon(
-                                onTap: null,
-                                backgroundColor: Colors.amberAccent,
-                                emoji: pledge.icon),
-                            Text(pledge.title),
-                          ])))
-                      .toList());
+              if (state.pledges.isEmpty) {
+                return Container();
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("We pledges to:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  Row(
+                      children: state.pledges
+                          .map((pledge) => Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: Column(children: [
+                                CircleIcon(
+                                    onTap: () => showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              title: Text(pledge.title),
+                                              content: Text(pledge.description),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'close'),
+                                                  child: const Text('close'),
+                                                ),
+                                              ],
+                                            )),
+                                    backgroundColor: Colors.amberAccent,
+                                    emoji: pledge.icon),
+                                Text(truncate(pledge.title, 8)),
+                              ])))
+                          .toList()),
+                  SizedBox(height: 15),
+                ],
+              );
             }
             return Text("Loading");
           }),

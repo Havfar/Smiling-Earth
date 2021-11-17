@@ -252,7 +252,9 @@ class ActivityDatabaseManager {
 
   Future<int> remove(int id) async {
     Database db = await instance.database;
-    return await db.delete('activities', where: 'id = ?', whereArgs: [id]);
+    int count = await db.delete('activities', where: 'id = ?', whereArgs: [id]);
+    print('count $count. id: $id');
+    return count;
   }
 
   Future<int> update(Activity activity) async {

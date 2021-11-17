@@ -21,7 +21,13 @@ class NotificationsPage extends StatelessWidget {
         drawer: NavigationDrawerWidget(),
         body: ListView(
           children: [
-            Text('notifcation'),
+            Container(
+              margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+              child: Text(
+                'Notifcation',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            ),
             BlocProvider(
               create: (context) => NotificationsCubit()..getNotificaitons(),
               child: BlocBuilder<NotificationsCubit, NotificationsState>(
