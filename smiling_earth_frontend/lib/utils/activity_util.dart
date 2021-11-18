@@ -78,6 +78,15 @@ IconData getTransporationIconByActivityType(AppActivityType type) {
     case AppActivityType.ON_ELECTRIC_SCOOTER:
       return Icons.electric_scooter;
 
+    case AppActivityType.ON_FOOT:
+      return Icons.directions_walk;
+
+    case AppActivityType.WALKING:
+      return Icons.directions_walk;
+
+    case AppActivityType.RUNNING:
+      return Icons.directions_run;
+
     default:
       return Icons.error;
   }

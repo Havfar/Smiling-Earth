@@ -30,11 +30,10 @@ class _TransportationRegistrationPageState
                   Text(
                     'Transportation',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                   ),
                   Text(
                     'What means of transportation do you use on a regular basis?',
-                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
                   ),
                   SizedBox(
@@ -64,7 +63,7 @@ class _TransportationRegistrationPageState
         ),
       ),
       bottomNavigationBar: PageIndicator(
-        index: 2,
+        index: 4,
         previousPage: MaterialPageRoute(
           builder: (context) => HouseRegistrationPage(),
         ),

@@ -297,19 +297,7 @@ class ChallengeJoinedWidget extends StatelessWidget {
                         //   style: TextStyle(
                         //       fontSize: 12, fontWeight: FontWeight.w300),
                         // ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              width: 250,
-                              height: 10,
-                              // margin: EdgeInsets.only(top: 10),
-                              child: LinearProgressIndicator(
-                                  value: challenge.calulateProgress()),
-                            ),
-                          ),
-                        ),
+                        getProgressBar(),
                       ],
                     ),
                   ],
@@ -320,5 +308,23 @@ class ChallengeJoinedWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Container getProgressBar() {
+    if (teamId == null) {
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            width: 250,
+            height: 10,
+            // margin: EdgeInsets.only(top: 10),
+            child: LinearProgressIndicator(value: challenge.calulateProgress()),
+          ),
+        ),
+      );
+    }
+    return Container(child: SizedBox(height: 10));
   }
 }

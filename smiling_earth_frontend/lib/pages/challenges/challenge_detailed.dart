@@ -207,11 +207,19 @@ class _BuildLeaderboard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Leader board',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Leaderboard',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  )),
+              _buildHelpButton(
+                isTeamChallenge: this.isTeamChallenge,
+              )
+            ],
+          ),
           Container(
             decoration: BoxDecoration(
                 border: Border(bottom: BorderSide(color: Colors.black12))),
@@ -244,5 +252,36 @@ class _BuildLeaderboard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _buildHelpButton extends StatelessWidget {
+  final bool isTeamChallenge;
+  const _buildHelpButton({
+    Key? key,
+    required this.isTeamChallenge,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (isTeamChallenge) {
+      return Container(
+          child: IconButton(
+              onPressed: () => showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        title: const Text('This component is not finished '),
+                        content: const Text(
+                            'Below you would an overview of how your team is doing in this challenge compared to the rivaling team. Unnfortunatly, this was not completed in time'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      )),
+              icon: Icon(Icons.help)));
+    }
+    return Container();
   }
 }

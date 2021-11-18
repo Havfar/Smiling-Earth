@@ -49,11 +49,10 @@ class _HomeState extends State<HomePage> {
           ]),
       drawer: NavigationDrawerWidget(),
       body: Container(
-        height: 800,
         margin: EdgeInsets.all(10),
         child: ListView(
           children: [
-            SizedBox(height: 25),
+            SizedBox(height: 10),
             Card(
               margin: EdgeInsets.only(left: 2, right: 2),
               child: Container(

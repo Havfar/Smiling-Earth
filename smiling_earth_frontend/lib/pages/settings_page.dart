@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smiling_earth_frontend/pages/fluttermoji.dart';
 import 'package:smiling_earth_frontend/pages/pledges/edit_my_pledges.dart';
+import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
@@ -41,11 +42,19 @@ class SettingsPage extends StatelessWidget {
                         )),
                       ),
                       ListTile(
-                        title: Text('Edit Pledges'),
+                        title: Text('Edit my Pledges'),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => (PledgeSettings()),
+                        )),
+                      ),
+                      ListTile(
+                        title: Text('Reset the registration'),
+                        trailing: Icon(Icons.chevron_right),
+                        onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => WelcomePage(),
                         )),
                       ),
                       SizedBox(height: 30),

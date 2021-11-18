@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:smiling_earth_frontend/bloc/login/bloc/bloc_login_bloc.dart';
 import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
+import 'package:smiling_earth_frontend/pages/duel/duel_list.dart';
 import 'package:smiling_earth_frontend/pages/find_people_page.dart';
 import 'package:smiling_earth_frontend/pages/history/history_page.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/pages/leaderboards_page.dart';
-import 'package:smiling_earth_frontend/pages/registration/welcome.dart';
 import 'package:smiling_earth_frontend/pages/settings_page.dart';
 import 'package:smiling_earth_frontend/pages/teams/teams_page.dart';
 import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
@@ -32,23 +32,16 @@ class NavigationDrawerWidget extends StatelessWidget {
               padding: padding,
               child: Column(
                 children: [
-                  const SizedBox(height: 12),
                   buildMenuItem(
                     text: 'Home',
                     icon: Icons.home,
                     onClicked: () => selectedItem(context, 0),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   buildMenuItem(
                     text: 'History',
                     icon: Icons.update,
                     onClicked: () => selectedItem(context, 1),
-                  ),
-                  const SizedBox(height: 12),
-                  buildMenuItem(
-                    text: 'registration',
-                    icon: Icons.account_circle,
-                    onClicked: () => selectedItem(context, 2),
                   ),
                   // const SizedBox(height: 12),
                   // buildMenuItem(
@@ -56,38 +49,39 @@ class NavigationDrawerWidget extends StatelessWidget {
                   //   icon: Icons.notifications,
                   //   onClicked: () => selectedItem(context, 3),
                   // ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   buildMenuItem(
                     text: 'Settings',
                     icon: Icons.settings,
                     onClicked: () => selectedItem(context, 4),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   Divider(color: Colors.white70),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
                   buildMenuItem(
                     text: 'Find users',
                     icon: Icons.people,
                     onClicked: () => selectedItem(context, 5),
                   ),
-                  // buildMenuItem(
-                  //   text: 'fluttermoji',
-                  //   icon: Icons.people,
-                  //   onClicked: () => selectedItem(context, 3),
-                  // ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
                   buildMenuItem(
                     text: 'Challenges',
                     icon: Icons.emoji_events,
                     onClicked: () => selectedItem(context, 6),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   buildMenuItem(
                     text: 'Teams',
                     icon: Icons.groups,
                     onClicked: () => selectedItem(context, 7),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
+                  buildMenuItem(
+                    text: 'Duels',
+                    icon: Icons.compare_arrows,
+                    onClicked: () => selectedItem(context, 2),
+                  ),
+                  const SizedBox(height: 20),
                   SignOut(),
                 ],
               ),
@@ -200,7 +194,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => WelcomePage(),
+          builder: (context) => DuelsPage(),
         ));
         break;
       case 3:

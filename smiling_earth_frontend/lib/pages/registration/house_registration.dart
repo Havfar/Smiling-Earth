@@ -37,8 +37,13 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                   child: Column(
                     children: <Widget>[
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('🏠'),
+                          Text(
+                            'House Information 🏠',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
                           Text(
                               'The type of energy you use for heating and the efficiency of your heating system determine 80% of your carbon footprint from energy consumption. The building year and the year of last renovation of the house, also affect the house emissions'),
                         ],

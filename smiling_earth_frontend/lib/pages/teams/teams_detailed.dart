@@ -89,7 +89,7 @@ class TeamsDetailedPage extends StatelessWidget {
         ),
         SizedBox(height: 15),
         BlocProvider(
-          create: (context) => PledgeCubit()..getTeamPledge(this.id!),
+          create: (context) => PledgeCubit()..getTeamPledge(this.id),
           child: BuildPledges(),
         ),
 

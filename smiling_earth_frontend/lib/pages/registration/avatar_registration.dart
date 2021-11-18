@@ -45,7 +45,7 @@ class _AvatarRegistrationPageState extends State<AvatarRegistrationPage> {
         bottomNavigationBar: sendtPledgeRequest
             ? null
             : PageIndicator(
-                index: 3,
+                index: 2,
                 previousPage: MaterialPageRoute(
                     builder: (context) => UserInformationRegistration()),
                 nextPage: MaterialPageRoute(

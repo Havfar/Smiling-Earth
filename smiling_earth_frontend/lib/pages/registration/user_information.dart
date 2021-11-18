@@ -34,7 +34,12 @@ class _UserInformationRegistrationState
           child: Center(
               child: ListView(
             children: [
-              Text('User Information'),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Text('User Information 👤',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              ),
               BlocProvider(
                 create: (context) => ProfileCubit()..getMyProfile(),
                 child: BlocBuilder<ProfileCubit, ProfileState>(
@@ -83,7 +88,7 @@ class _UserInformationRegistrationState
                               TextFormField(
                                 decoration: InputDecoration(
                                   labelText:
-                                      'What City do you live in? (optional)',
+                                      'What city do you live in? (optional)',
                                   border: OutlineInputBorder(),
                                 ),
                                 onChanged: (value) => setState(() {

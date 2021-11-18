@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smiling_earth_frontend/pages/registration/climate_action.dart';
+import 'package:smiling_earth_frontend/pages/registration/team_registration.dart';
 import 'package:smiling_earth_frontend/pages/registration/transportation_registration.dart';
 import 'package:smiling_earth_frontend/utils/services/settings_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/page_indicator.dart';
@@ -27,7 +27,10 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
               child: ListView(
             children: [
               SwitchListTile(
-                title: Text('Do you own a car? 🚙'),
+                title: Text(
+                  'Do you own a car? 🚙',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
                 value: _ownsCar,
                 onChanged: (bool value) {
                   setState(() {
@@ -69,7 +72,7 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
-                        maxLength: 2,
+                        maxLength: 6,
                         enabled: _ownsCar,
                         onChanged: (value) => setState(() {
                           int? valueInt = int.tryParse(value);
@@ -130,11 +133,11 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
           )),
         ),
         bottomNavigationBar: PageIndicator(
-            index: 3,
+            index: 5,
             previousPage: MaterialPageRoute(
                 builder: (context) => TransportationRegistrationPage()),
             nextPage: MaterialPageRoute(
-              builder: (context) => ClimateActionPage(),
+              builder: (context) => TeamRegistrationPage(),
             ),
             formSumbissionFunction: () => submitCarInformation(context)),
       );
@@ -164,12 +167,12 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
           const SnackBar(content: Text('Processing Data')),
         );
 
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ClimateActionPage()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => TeamRegistrationPage()));
       }
     } else {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => ClimateActionPage()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => TeamRegistrationPage()));
     }
   }
 }

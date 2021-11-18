@@ -70,10 +70,24 @@ class PageIndicator extends StatelessWidget {
                 color: index == 3 ? Colors.blue.shade400 : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(20))),
         Container(
+            margin: EdgeInsets.only(right: _margin),
             height: _size,
             width: _size,
             decoration: BoxDecoration(
                 color: index == 4 ? Colors.blue.shade400 : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20))),
+        Container(
+            margin: EdgeInsets.only(right: _margin),
+            height: _size,
+            width: _size,
+            decoration: BoxDecoration(
+                color: index == 5 ? Colors.blue.shade400 : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20))),
+        Container(
+            height: _size,
+            width: _size,
+            decoration: BoxDecoration(
+                color: index == 6 ? Colors.blue.shade400 : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(20))),
         SizedBox(width: 30),
         _getTextButton(context, 'Next', nextPage, formSumbissionFunction),

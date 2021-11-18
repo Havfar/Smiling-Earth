@@ -19,8 +19,6 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        // appBar: AppBar(),
-        // drawer: NavigationDrawerWidget(),
         body: Container(
           margin: EdgeInsets.only(top: 20),
           child: ListView(
@@ -36,7 +34,38 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
                     }
                     return Column(
                       children: [
-                        _BuildHeader(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '  Make a pledge',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                TextButton(
+                                    onPressed: () => setState(() {
+                                          sendtPledgeRequest = true;
+                                        }),
+                                    child: Text('I want to do this later'))
+                              ],
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text(
+                                'Tell the world how you will help mitigate climate change. Commit to one or more pledges below!',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
                         GridView.count(
                           shrinkWrap: true,
                           primary: false,
@@ -53,10 +82,6 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
                                   ))
                               .toList(),
                         ),
-                        ElevatedButton(
-                            onPressed: () =>
-                                PledgeCubit()..makePledge(selectedPledges),
-                            child: Text('submit'))
                       ],
                     );
                   } else if (state is ErrorRetrievingPledges) {
@@ -73,7 +98,7 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
         bottomNavigationBar: sendtPledgeRequest
             ? null
             : PageIndicator(
-                index: 4,
+                index: 6,
                 previousPage: MaterialPageRoute(
                     builder: (context) => ClimateActionPage()),
                 nextPage:
@@ -98,41 +123,15 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
   }
 
   void submitPledges(BuildContext context) {
-    PledgeCubit()..makePledge(selectedPledges);
+    if (selectedPledges.isNotEmpty) {
+      PledgeCubit()..makePledge(selectedPledges);
+    }
     setState(() {
       sendtPledgeRequest = true;
     });
     // var route = MaterialPageRoute(builder: (context) => FinishedPage());
 
     // Navigator.of(context).push(route);
-  }
-}
-
-class _BuildHeader extends StatelessWidget {
-  const _BuildHeader({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          '  Make a pledge',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 10),
-          child: Text(
-            'Tell the world how you will help mitigate climate change. Commit to one or more pledges below!',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-      ],
-    );
   }
 }
 
