@@ -34,8 +34,8 @@ class PageIndicator extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final double _size = 15;
-    final double _margin = 10;
+    final double _size = 8;
+    final double _margin = 8;
     return Container(
       margin: EdgeInsets.only(bottom: 30),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -84,10 +84,31 @@ class PageIndicator extends StatelessWidget {
                 color: index == 5 ? Colors.blue.shade400 : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(20))),
         Container(
+            margin: EdgeInsets.only(right: _margin),
             height: _size,
             width: _size,
             decoration: BoxDecoration(
                 color: index == 6 ? Colors.blue.shade400 : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20))),
+        Container(
+            margin: EdgeInsets.only(right: _margin),
+            height: _size,
+            width: _size,
+            decoration: BoxDecoration(
+                color: index == 7 ? Colors.blue.shade400 : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20))),
+        Container(
+            margin: EdgeInsets.only(right: _margin),
+            height: _size,
+            width: _size,
+            decoration: BoxDecoration(
+                color: index == 8 ? Colors.blue.shade400 : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20))),
+        Container(
+            height: _size,
+            width: _size,
+            decoration: BoxDecoration(
+                color: index == 9 ? Colors.blue.shade400 : Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(20))),
         SizedBox(width: 30),
         _getTextButton(context, 'Next', nextPage, formSumbissionFunction),

@@ -37,10 +37,13 @@ class TeamWidget extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    Text(
-                      this.team.name,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    Container(
+                      width: 200,
+                      child: Text(
+                        this.team.name,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ],
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:smiling_earth_frontend/cubit/activity/activity_cubit.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
+import 'package:smiling_earth_frontend/pages/home/home_page.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/widgets/user_name_widget.dart';
 
@@ -49,7 +50,20 @@ class BuildActivityCard extends StatelessWidget {
       child: BlocBuilder<ActivityCubit, ActivityState>(
         builder: (context, state) {
           if (state is ActivityPosted) {
-            return Text("Post created: " + state.post.id.toString());
+            return Center(
+                child: Column(
+              children: [
+                SizedBox(height: 50),
+                Text("Post created!",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                SizedBox(height: 30),
+                ElevatedButton(
+                    onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomePage())),
+                    child: Text('Go to home screen'))
+              ],
+            ));
           } else if (state is CreatingActivity) {
             return Text("Loading");
           } else if (state is Error) {
@@ -105,14 +119,14 @@ class BuildActivityCard extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text(Activity.formatDuration(widget.activity)),
+                                SizedBox(height: 5),
                                 Text(
-                                    '☁️ Emitted: ${widget.activity.getEmission().round()} kgCO2}'),
+                                    '☁️ Emitted: ${widget.activity.getEmission().round()} kgCO2'),
                                 Text(
                                     '🔥 Burned: ${widget.activity.getCalories().round()} kcals'),
                                 Text(
                                     '💰 Saved: ${widget.activity.getMoneySaved().round()} kr '),
-                                SizedBox(height: 5),
-                                Text(Activity.formatDuration(widget.activity))
                               ],
                             )
                           ],

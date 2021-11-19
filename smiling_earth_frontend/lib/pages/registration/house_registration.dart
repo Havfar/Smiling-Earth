@@ -42,7 +42,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                           Text(
                             'House Information 🏠',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
+                                fontSize: 20, fontWeight: FontWeight.w500),
                           ),
                           Text(
                               'The type of energy you use for heating and the efficiency of your heating system determine 80% of your carbon footprint from energy consumption. The building year and the year of last renovation of the house, also affect the house emissions'),
@@ -69,7 +69,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                       SizedBox(height: 30),
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: 'Year of last renovation',
+                          labelText: 'Year of last renovation (optional)',
                           border: OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
@@ -145,7 +145,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
           )),
         ),
         bottomNavigationBar: PageIndicator(
-            index: 3,
+            index: 5,
             previousPage: MaterialPageRoute(
                 builder: (context) => AvatarRegistrationPage()),
             nextPage: MaterialPageRoute(

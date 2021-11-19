@@ -71,7 +71,7 @@ class BuildJoinedChallenges extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Joined challenges",
+          teamId == null ? "Joined Challenges" : "Joined Team Challenges",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),

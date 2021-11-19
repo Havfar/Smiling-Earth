@@ -54,7 +54,7 @@ class _BuildDetailed extends StatelessWidget {
             ],
           );
         }
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

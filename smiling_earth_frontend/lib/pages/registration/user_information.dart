@@ -45,12 +45,6 @@ class _UserInformationRegistrationState
                 child: BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
                     if (state is ProfileRetrived) {
-                      // if (_first_name != state.profile.firstName) {
-                      //   setState(() {
-                      //     _first_name = state.profile.firstName;
-                      //     _last_name = state.profile.lastName;
-                      //   });
-                      // }
                       return Form(
                         key: _formKey,
                         child: Container(
@@ -135,7 +129,7 @@ class _UserInformationRegistrationState
           )),
         ),
         bottomNavigationBar: PageIndicator(
-            index: 1,
+            index: 3,
             previousPage: null,
             nextPage: MaterialPageRoute(
               builder: (context) => AvatarRegistrationPage(),

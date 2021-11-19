@@ -182,7 +182,6 @@ class PostClient {
   Future<PostDto> newPost(PostDto post) async {
     String endpoint = '/posts/';
     final token = await UserSecureStorage.getToken();
-    print('POST: ${post.toJson()}');
     final uri = Uri.parse(_url + endpoint);
     final response = await http.post(uri,
         headers: {
@@ -201,21 +200,26 @@ class PostClient {
     return newPost;
   }
 
-  Future<PostDto> newPostWithActivity(ActivityDto newActivity) async {
+  Future<bool> newPostWithActivity(ActivityDto newActivity) async {
     String endpoint = '/posts/';
     final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
-      final response = await http.post(uri, headers: {
-        "Authorization": "Token " + token!
-      }, body: {
-        "content": "Completed an activity",
-        "activity": newActivity.id.toString()
-      });
+      print('error1 $uri');
+      final response = await http.post(uri,
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Token ' + token!,
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Charset': 'utf-8'
+          },
+          body: jsonEncode({
+            "content": "Completed an activity",
+            "activity": newActivity.id.toString(),
+            "team_id": null
+          }));
       final json = jsonDecode(response.body);
-
-      final newPost = PostDto.fromJson(json);
-      return newPost;
+      return response.statusCode == 201;
     } catch (e) {
       throw e;
     }

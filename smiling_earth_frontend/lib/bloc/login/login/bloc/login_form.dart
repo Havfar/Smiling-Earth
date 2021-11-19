@@ -15,7 +15,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     _onLoginButtonPressed() {
       BlocProvider.of<LoginBloc>(context).add(LoginButtonPressed(
-        username: _usernameController.text,
+        username: _usernameController.text.toLowerCase(),
         password: _passwordController.text,
       ));
     }

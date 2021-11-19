@@ -49,7 +49,7 @@ class Activity extends ActivityInterface {
   }
 
   static String formatDatetime(DateTime? time) {
-    return DateFormat('hh:mm').format(time!);
+    return DateFormat('HH:mm').format(time!);
   }
 
   static String formatDuration(Activity activity) {

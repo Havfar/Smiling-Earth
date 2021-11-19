@@ -117,7 +117,7 @@ class _BuildChallenges extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "New challenges",
+          "New Team Challenges",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         SizedBox(height: 10),
@@ -128,7 +128,8 @@ class _BuildChallenges extends StatelessWidget {
                 return Container(
                   margin: EdgeInsets.only(top: 30),
                   child: Center(
-                      child: Text("You have joined all the challenges! 🏆💪")),
+                      child: Text(
+                          "The team have joined all the challenges! 🏆💪")),
                 );
               }
               return Column(

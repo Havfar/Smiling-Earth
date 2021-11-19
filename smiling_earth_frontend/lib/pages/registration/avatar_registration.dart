@@ -26,14 +26,14 @@ class _AvatarRegistrationPageState extends State<AvatarRegistrationPage> {
         body: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: FluttermojiCircleAvatar(
-                radius: 100,
+                radius: 80,
               ),
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30),
+                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 30),
               child: FluttermojiCustomizer(
                 outerTitleText: 'Create your avatar',
                 //scaffoldHeight: 400,
@@ -45,7 +45,7 @@ class _AvatarRegistrationPageState extends State<AvatarRegistrationPage> {
         bottomNavigationBar: sendtPledgeRequest
             ? null
             : PageIndicator(
-                index: 2,
+                index: 4,
                 previousPage: MaterialPageRoute(
                     builder: (context) => UserInformationRegistration()),
                 nextPage: MaterialPageRoute(

@@ -175,7 +175,7 @@ class _EditActivityState extends State<EditActivity> {
       );
 
   Widget buildActivityType() => DropdownButtonFormField<DropdownSelectElement>(
-        value: items[widget.activity.type.toInt()],
+        value: items.first,
         icon: const Icon(Icons.arrow_downward),
         iconSize: 24,
         elevation: 16,

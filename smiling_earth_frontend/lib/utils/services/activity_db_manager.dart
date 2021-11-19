@@ -59,31 +59,37 @@ class ActivityDatabaseManager {
       bool isInitized = false;
       for (var activityJson in activitiesQuery) {
         Activity nextActivity = Activity.fromMap(activityJson);
+        print(activityJson);
+        activitiesList.add(nextActivity);
 
-        if (!isInitized) {
-          newActivity = nextActivity;
-          isInitized = true;
-        } else {
-          if (nextActivity.type == newActivity.type) {
-            Duration difference =
-                nextActivity.startDate!.difference(newActivity.endDate!);
-            if (difference.inMinutes > 5) {
-              if (newActivity.getTotalDurationInMinutes() > 2) {
-                activitiesList.add(newActivity);
-              }
-              newActivity = nextActivity;
-            } else {
-              newActivity.endDate = nextActivity.startDate;
-            }
-          } else {
-            if (newActivity.getTotalDurationInMinutes() > 2) {
-              activitiesList.add(newActivity);
-            }
-            newActivity = nextActivity;
-          }
-        }
+        // if (!isInitized) {
+        //   newActivity = nextActivity;
+        //   isInitized = true;
+        // } else {
+        //   if (newActivity.getTotalDurationInMinutes() > 2) {
+        //     activitiesList.add(nextActivity);
+        //   }
+        //   // if (nextActivity.type == newActivity.type) {
+        //   //   Duration difference =
+        //   //       nextActivity.startDate!.difference(newActivity.endDate!);
+        //   //   if (difference.inMinutes > 5) {
+        //   //     //Recorded activities with duration less than two minutes will not show in the list
+        //   //     if (newActivity.getTotalDurationInMinutes() > 2) {
+        //   //       activitiesList.add(newActivity);
+        //   //     }
+        //   //     newActivity = nextActivity;
+        //   //   } else {
+        //   //     newActivity.endDate = nextActivity.startDate;
+        //   //   }
+        //   // } else {
+        //   //   if (newActivity.getTotalDurationInMinutes() > 2) {
+        //   //     activitiesList.add(newActivity);
+        //   //   }
+        //   //   newActivity = nextActivity;
+        //   // }
+        // }
       }
-      activitiesList.add(newActivity);
+      // activitiesList.add(newActivity);
     }
 
     return activitiesList;
@@ -254,6 +260,16 @@ class ActivityDatabaseManager {
     Database db = await instance.database;
     int count = await db.delete('activities', where: 'id = ?', whereArgs: [id]);
     print('count $count. id: $id');
+    return count;
+  }
+
+  Future<int> batchRemove(List<Activity> items) async {
+    int count = 0;
+    for (var item in items) {
+      if (item.id != null) {
+        count += await remove(item.id!);
+      }
+    }
     return count;
   }
 

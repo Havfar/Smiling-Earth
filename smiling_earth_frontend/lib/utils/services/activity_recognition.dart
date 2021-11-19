@@ -97,8 +97,8 @@ void _onData(ActivityEvent activityEvent) async {
       await ActivityDatabaseManager.instance.add(Activity(
           title: generateTitle(latestActivity),
           type: convertToAppActivity(latestActivity.type).index,
-          startDate: activityEvent.timeStamp,
-          endDate: latestActivity.timeStamp));
+          startDate: latestActivity.timeStamp,
+          endDate: activityEvent.timeStamp));
     }
     latestActivity = activityEvent;
   }

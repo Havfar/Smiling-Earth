@@ -48,76 +48,190 @@ class HistoryPage extends StatelessWidget {
       );
 }
 
-class BuildActivityListWidget extends StatelessWidget {
+class BuildActivityListWidget extends StatefulWidget {
   const BuildActivityListWidget({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<BuildActivityListWidget> createState() =>
+      _BuildActivityListWidgetState();
+}
+
+class _BuildActivityListWidgetState extends State<BuildActivityListWidget> {
+  bool selectable = false;
+  List<Activity> selectedActivities = [];
+
+  void _toggleSelectable() {
+    print('toggle');
+    setState(() {
+      selectedActivities = [];
+      selectable = !selectable;
+    });
+  }
+
+  bool _isSelected(Activity activity) {
+    return selectedActivities.map((item) => item.id).contains(activity.id);
+
+    // return selectedActivities.contains(activity);
+  }
+
+  void addOrRemovetoSelected(Activity activity) {
+    if (_isSelected(activity)) {
+      print('remove');
+
+      setState(() {
+        selectedActivities.removeWhere((item) => item.id == activity.id);
+      });
+    } else {
+      print('add');
+
+      setState(() {
+        selectedActivities.add(activity);
+      });
+    }
+  }
+
+  Future<void> _mergeActivites() async {
+    String title = selectedActivities.first.title;
+    var startDate = selectedActivities.first.startDate;
+    var endDate = selectedActivities.first.endDate;
+    var type = selectedActivities.first.type;
+    for (var activity in selectedActivities) {
+      if (activity.startDate!.compareTo(startDate!) < 0) {
+        startDate = activity.startDate;
+      }
+      print(activity.startDate!.compareTo(startDate!));
+      print(activity.endDate!.compareTo(endDate!));
+      if (activity.endDate!.compareTo(endDate) > 0) {
+        endDate = activity.endDate;
+      }
+    }
+    Activity merged = Activity(
+        title: title, startDate: startDate, endDate: endDate, type: type);
+    print('title: $title, start: $startDate, end: $endDate, type: $type');
+
+    await ActivityDatabaseManager.instance.batchRemove(selectedActivities);
+    await ActivityDatabaseManager.instance.add(merged);
+    _toggleSelectable();
+  }
+
+  Future<void> _deleteActivities() async {
+    print('delete');
+    await ActivityDatabaseManager.instance.batchRemove(selectedActivities);
+    _toggleSelectable();
+  }
+
+  Row getEditingTool() {
+    if (selectable) {
+      return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        TextButton(onPressed: () => _toggleSelectable(), child: Text("Cancle")),
+        SizedBox(width: 10),
+        TextButton(
+            onPressed:
+                selectedActivities.length > 1 ? () => _mergeActivites() : null,
+            child: Text("Merge")),
+        SizedBox(width: 10),
+        TextButton(
+            onPressed: selectedActivities.isNotEmpty
+                ? () => _deleteActivities()
+                : null,
+            child: Text("Delete"))
+      ]);
+    }
+    return Row(
+      children: [],
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<ActivityGroupedByDate>>(
-        future: _getActivtityGroup(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ActivityGroupedByDate>> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: Text('Loading...'));
-          }
-          return snapshot.data!.isEmpty
-              ? Center(child: Text('No Activities in List.'))
-              : Column(
-                  children: snapshot.data!
-                      .map((group) => Card(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: Column(children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                          BorderSide(color: Colors.black12))),
-                              padding: EdgeInsets.all(5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+    print('length: ${selectedActivities.length}');
+    return Column(
+      children: [
+        getEditingTool(),
+        FutureBuilder<List<ActivityGroupedByDate>>(
+            future: _getActivtityGroup(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ActivityGroupedByDate>> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: Text('Loading...'));
+              }
+              return snapshot.data!.isEmpty
+                  ? Center(child: Text('No Activities in List.'))
+                  : Column(
+                      children: snapshot.data!
+                          .map((group) => Column(
                                 children: [
-                                  Text(
-                                      DateFormat('EEEE, d MMM')
-                                          .format(group.date),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${group.emissions.roundToDouble()} kgCO2"),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      SmilingEarthIcon.getIcon(group.emissions),
-                                    ],
-                                  )
+                                  Card(
+                                      margin: EdgeInsets.only(bottom: 20),
+                                      child: Column(children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Colors.black12))),
+                                          padding: EdgeInsets.all(5),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  DateFormat('EEEE, d MMM')
+                                                      .format(group.date),
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                      "${group.emissions.roundToDouble()} kgCO2"),
+                                                  SizedBox(
+                                                    width: 15,
+                                                  ),
+                                                  SmilingEarthIcon.getIcon(
+                                                      group.emissions),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Row(children: [
+                                          Expanded(
+                                            child: Column(
+                                              children: group.activities
+                                                  .map((activity) {
+                                                if (activity
+                                                    is EnergyActivity) {
+                                                  return _BuildEnergyListTile(
+                                                      activity: activity);
+                                                } else {
+                                                  Activity act =
+                                                      activity as Activity;
+                                                  return _BuildActivityListTile(
+                                                    selected: _isSelected(act),
+                                                    activity: act,
+                                                    onLongPress: () =>
+                                                        _toggleSelectable(),
+                                                    selectable: selectable,
+                                                    onSelected: () =>
+                                                        addOrRemovetoSelected(
+                                                            act),
+                                                  );
+                                                }
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ])
+                                      ])),
                                 ],
-                              ),
-                            ),
-                            Row(children: [
-                              Expanded(
-                                child: Column(
-                                  children: group.activities.map((activity) {
-                                    if (activity is EnergyActivity) {
-                                      return _BuildEnergyListTile(
-                                          activity: activity);
-                                    } else {
-                                      return _BuildActivityListTile(
-                                          activity: activity as Activity);
-                                    }
-                                  }).toList(),
-                                ),
-                              ),
-                            ])
-                          ])))
-                      .toList(),
-                );
-        });
+                              ))
+                          .toList(),
+                    );
+            }),
+      ],
+    );
   }
 }
 
@@ -125,13 +239,35 @@ class _BuildActivityListTile extends StatelessWidget {
   const _BuildActivityListTile({
     Key? key,
     required this.activity,
+    required this.selectable,
+    required this.onLongPress,
+    required this.onSelected,
+    required this.selected,
   }) : super(key: key);
 
   final Activity activity;
+  final bool selectable;
+  final bool selected;
+  final void Function() onLongPress;
+  final void Function() onSelected;
 
   @override
   Widget build(BuildContext context) {
+    if (selectable) {
+      return ListTile(
+          selected: selected,
+          onLongPress: onLongPress,
+          onTap: onSelected,
+          leading: Icon(selected
+              ? Icons.radio_button_checked
+              : Icons.radio_button_unchecked),
+          title: Text(activity.title),
+          subtitle: Text(Activity.formatActivityForListTile(activity)),
+          trailing: Text(
+              "${activity.getEmission().roundToDouble().toString()} kgCO2"));
+    }
     return ListTile(
+        onLongPress: onLongPress,
         onTap: () {
           Navigator.push(
             context,
@@ -163,7 +299,6 @@ class _BuildEnergyListTile extends StatelessWidget {
     return ListTile(
         leading: Icon(Icons.bolt),
         title: Text(activity.title),
-        // subtitle: Text(Activity.formatActivityForListTile(activity)),
         trailing: Text("${roundOffToXDecimal(activity.getEmission())} kgCO2"));
   }
 }

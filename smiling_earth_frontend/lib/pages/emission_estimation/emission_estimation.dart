@@ -118,6 +118,15 @@ class _BuildSolarEstimationState extends State<BuildSolarEstimation> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text(
+          'Purchasing a Solar Roof',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
+        Text(
+          '* Estimated based on your daily recorded energy usaged',
+          style: TextStyle(fontSize: 12),
+        ),
+        SizedBox(height: 20),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           SolarPanelButton(
             panelSize: 3.0,

@@ -39,7 +39,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   buildMenuItem(
-                    text: 'History',
+                    text: 'Activities',
                     icon: Icons.update,
                     onClicked: () => selectedItem(context, 1),
                   ),

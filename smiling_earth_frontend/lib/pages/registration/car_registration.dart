@@ -29,7 +29,7 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
               SwitchListTile(
                 title: Text(
                   'Do you own a car? 🚙',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 value: _ownsCar,
                 onChanged: (bool value) {
@@ -133,7 +133,7 @@ class _CarRegistrationPageState extends State<CarRegistrationPage> {
           )),
         ),
         bottomNavigationBar: PageIndicator(
-            index: 5,
+            index: 7,
             previousPage: MaterialPageRoute(
                 builder: (context) => TransportationRegistrationPage()),
             nextPage: MaterialPageRoute(

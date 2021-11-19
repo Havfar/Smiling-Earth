@@ -16,9 +16,7 @@ class ActivityCreated extends ActivityState {
 class CreatingPost extends ActivityState {}
 
 class ActivityPosted extends ActivityState {
-  final PostDto post;
-
-  ActivityPosted(this.post);
+  ActivityPosted();
 }
 
 class Error extends ActivityState {

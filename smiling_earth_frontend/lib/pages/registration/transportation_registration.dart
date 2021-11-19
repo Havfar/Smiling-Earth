@@ -16,8 +16,6 @@ class _TransportationRegistrationPageState
   final List<AppActivityType> selected = [];
   @override
   Widget build(BuildContext context) => Scaffold(
-      // appBar: AppBar(),
-      // drawer: NavigationDrawerWidget(),
       body: Container(
         margin: EdgeInsets.only(top: 50),
         child: ListView(
@@ -63,7 +61,7 @@ class _TransportationRegistrationPageState
         ),
       ),
       bottomNavigationBar: PageIndicator(
-        index: 4,
+        index: 6,
         previousPage: MaterialPageRoute(
           builder: (context) => HouseRegistrationPage(),
         ),

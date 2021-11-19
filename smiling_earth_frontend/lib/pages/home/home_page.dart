@@ -255,7 +255,7 @@ class _BuildFeedState extends State<BuildFeed> {
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            "See what other users are doing",
+            "See what other users are doing ⬇️",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           TextButton.icon(

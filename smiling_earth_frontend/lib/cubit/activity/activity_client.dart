@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:smiling_earth_frontend/config/web_config.dart';
 import 'package:smiling_earth_frontend/models/activity.dart';
@@ -8,7 +6,7 @@ import 'package:smiling_earth_frontend/utils/services/secure_storage_service.dar
 class ActivityClient {
   final _url = WebConfig.baseUrl;
 
-  Future<ActivityDto> newActivity(ActivityDto activityDto) async {
+  Future<bool> newActivity(ActivityDto activityDto) async {
     final token = await UserSecureStorage.getToken();
 
     String endpoint = '/activities/';
@@ -18,9 +16,7 @@ class ActivityClient {
           headers: {"Authorization": "Token " + token!},
           body: activityDto.toJson());
 
-      final json = jsonDecode(response.body);
-
-      return ActivityDto.fromJson(json);
+      return response.statusCode == 201;
     } catch (e) {
       throw e;
     }

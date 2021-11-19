@@ -111,7 +111,15 @@ class BuildElectricCarEstimation extends StatelessWidget {
             return Center(child: Text('Loading...'));
           }
           if (snapshot.data! == 0) {
-            return Text('No car rides detected');
+            return Container(
+                margin: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.all(20),
+                child: Center(
+                    child: Text(
+                        'No car rides recorded. \nCome back later after the app has detected you have driven a car or add an activity manually on the acitvities page.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600))));
           }
           return Column(
             children: <Widget>[
@@ -126,7 +134,8 @@ class BuildElectricCarEstimation extends StatelessWidget {
                 showPersonalMessage: false,
                 isTeam: false,
               ),
-              Text('See how much you can save by changing to an electric car'),
+              Text('See how much you can save by changing to an electric car',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
               SmilingEarthEmissionChart(
                   hideTitle: true,
                   energyEmission: 10,
