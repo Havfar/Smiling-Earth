@@ -8,16 +8,22 @@ import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/services/energy_db_manager.dart';
 import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
 import 'package:smiling_earth_frontend/utils/string_utils.dart';
+import 'package:smiling_earth_frontend/widgets/help_widget.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 
 class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.green),
-        ),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.green),
+            actions: [
+              HelpWidget(
+                  title: 'Recorded Activity',
+                  content:
+                      'You can view, edit, add, and publish your recorded activity on this page. By long-pressing on an item in the list, you can select items to be merged or deleted. If you tap on one of the items, you preview a detailed view of the activity with the option of editing or publishing the activity to your network.')
+            ]),
         drawer: NavigationDrawerWidget(),
         body: Center(
           child: Container(
@@ -63,7 +69,6 @@ class _BuildActivityListWidgetState extends State<BuildActivityListWidget> {
   List<Activity> selectedActivities = [];
 
   void _toggleSelectable() {
-    print('toggle');
     setState(() {
       selectedActivities = [];
       selectable = !selectable;
@@ -72,20 +77,14 @@ class _BuildActivityListWidgetState extends State<BuildActivityListWidget> {
 
   bool _isSelected(Activity activity) {
     return selectedActivities.map((item) => item.id).contains(activity.id);
-
-    // return selectedActivities.contains(activity);
   }
 
   void addOrRemovetoSelected(Activity activity) {
     if (_isSelected(activity)) {
-      print('remove');
-
       setState(() {
         selectedActivities.removeWhere((item) => item.id == activity.id);
       });
     } else {
-      print('add');
-
       setState(() {
         selectedActivities.add(activity);
       });
@@ -101,15 +100,13 @@ class _BuildActivityListWidgetState extends State<BuildActivityListWidget> {
       if (activity.startDate!.compareTo(startDate!) < 0) {
         startDate = activity.startDate;
       }
-      print(activity.startDate!.compareTo(startDate!));
-      print(activity.endDate!.compareTo(endDate!));
-      if (activity.endDate!.compareTo(endDate) > 0) {
+      if (activity.endDate!.compareTo(endDate!) > 0) {
         endDate = activity.endDate;
       }
     }
     Activity merged = Activity(
         title: title, startDate: startDate, endDate: endDate, type: type);
-    print('title: $title, start: $startDate, end: $endDate, type: $type');
+    // print('title: $title, start: $startDate, end: $endDate, type: $type');
 
     await ActivityDatabaseManager.instance.batchRemove(selectedActivities);
     await ActivityDatabaseManager.instance.add(merged);
@@ -117,7 +114,7 @@ class _BuildActivityListWidgetState extends State<BuildActivityListWidget> {
   }
 
   Future<void> _deleteActivities() async {
-    print('delete');
+    // print('delete');
     await ActivityDatabaseManager.instance.batchRemove(selectedActivities);
     _toggleSelectable();
   }
@@ -146,7 +143,6 @@ class _BuildActivityListWidgetState extends State<BuildActivityListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('length: ${selectedActivities.length}');
     return Column(
       children: [
         getEditingTool(),

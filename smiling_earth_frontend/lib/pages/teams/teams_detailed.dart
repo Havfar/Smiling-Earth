@@ -389,8 +389,7 @@ class BuildChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int membersCount = team.membersCount == null ? 1 : team.membersCount!;
-    print('team: ${team.membersCount}');
-    final double goal = 4 * 30 * membersCount.toDouble();
+    final double goal = 4 * 7 * membersCount.toDouble();
     return Container(
       margin: EdgeInsets.only(left: 15),
       child: BlocBuilder<DetailedTeamCubit, DetailedTeamState>(
@@ -399,7 +398,7 @@ class BuildChart extends StatelessWidget {
             return Column(children: [
               Row(
                 children: [
-                  Text("Emissions",
+                  Text("Combined Team Emissions",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,

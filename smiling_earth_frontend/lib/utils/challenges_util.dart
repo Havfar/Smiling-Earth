@@ -11,7 +11,6 @@ class ChallengesUtil {
     for (var challenge in challenges) {
       updateChallengeProgress(challenge.challenge);
     }
-    print('Completed updating challenges');
   }
 
   Future<void> updateChallengeProgress(ChallengeDto challenge) async {
@@ -32,9 +31,7 @@ class ChallengesUtil {
         }
         return calculateTotalTimeInActivityGroup(types);
       case ChallengeType.ACTIVITY_TYPE:
-        print(challenge.challengeTypeFeature);
         var type = AppActivityType.values[challenge.challengeTypeFeature[0]];
-        print(type);
         return calculateTotalTimeInActivityType(type);
 
       case ChallengeType.ACTIVITY_TAG:

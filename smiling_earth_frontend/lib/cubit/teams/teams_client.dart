@@ -71,7 +71,10 @@ class TeamsClient {
     final response =
         await http.get(uri, headers: {"Authorization": "Token " + token!});
     final json = jsonDecode(utf8.decode(response.bodyBytes));
-    List<double> emissions = [json['transport'], json['energy']];
+    List<double> emissions = [
+      double.parse(json['transport'].toString()),
+      double.parse(json['energy'].toString())
+    ];
     return emissions;
   }
 

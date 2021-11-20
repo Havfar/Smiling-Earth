@@ -80,8 +80,6 @@ class _MyPledgeWidgetState extends State<MyPledgeWidget> {
                           child: IconButton(
                               padding: EdgeInsets.all(0.0),
                               onPressed: () {
-                                // print('alrigth');
-                                // PledgeClient().deleteUserPledge(widget.pledge.id!);
                                 BlocProvider.of<PledgeCubit>(context)
                                     .deletePledge(widget.pledge.id!);
                               },

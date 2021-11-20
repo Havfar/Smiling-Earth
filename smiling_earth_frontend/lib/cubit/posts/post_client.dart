@@ -205,7 +205,6 @@ class PostClient {
     final token = await UserSecureStorage.getToken();
     try {
       final uri = Uri.parse(_url + endpoint);
-      print('error1 $uri');
       final response = await http.post(uri,
           headers: {
             'Accept': 'application/json',

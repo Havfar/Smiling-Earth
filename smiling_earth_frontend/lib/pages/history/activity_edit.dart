@@ -318,8 +318,6 @@ class _EditActivityState extends State<EditActivity> {
                   id: widget.activity.id,
                   tag: tag.title != '' ? tag.title : null);
 
-              print('tag: ${tag.title}');
-              print('type: $type');
               ActivityDatabaseManager.instance.update(act);
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Navigator.of(context)

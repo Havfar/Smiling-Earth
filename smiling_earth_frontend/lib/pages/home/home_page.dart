@@ -16,6 +16,7 @@ import 'package:smiling_earth_frontend/pages/post_add_new.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 import 'package:smiling_earth_frontend/widgets/emission_chart.dart';
 import 'package:smiling_earth_frontend/widgets/emission_header.dart';
+import 'package:smiling_earth_frontend/widgets/help_widget.dart';
 import 'package:smiling_earth_frontend/widgets/navigation_drawer_widget.dart';
 import 'package:smiling_earth_frontend/widgets/post_widget.dart';
 
@@ -168,27 +169,16 @@ class BuildChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double emissionGoal = 4 * 30; //4 kg co2 per day *30 days
+    double emissionGoal = 4 * 7; //4 kg co2 per day *30 days
     return Stack(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconButton(
-                onPressed: () => showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                          title: const Text('What does this mean? '),
-                          content: const Text(
-                              'This charts represents the how much CO2 you have emitted based on the activity the app has registrated. On top you can see how much kalories you have burned and time spent on walking or cycling. Next you see how much money you saved on walking instead of driving. The final column shows how much energy you have used on heating your home.'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        )),
-                icon: Icon(Icons.help))
+            HelpWidget(
+                title: 'What does this mean? ',
+                content:
+                    'This chart represents how much CO2 you have emitted based on your recorded activities. The earth is smiling if you keep an average CO2 emission lower than 4.0 kg. On the top, you can see how many calories you have burned, time spent on walking or cycling, how much money you saved on walking instead of driving, and how much energy you have used on heating your home.')
           ],
         ),
         Container(

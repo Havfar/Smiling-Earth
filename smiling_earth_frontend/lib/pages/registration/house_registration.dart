@@ -45,7 +45,7 @@ class _HouseRegistrationPageState extends State<HouseRegistrationPage> {
                                 fontSize: 20, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                              'The type of energy you use for heating and the efficiency of your heating system determine 80% of your carbon footprint from energy consumption. The building year and the year of last renovation of the house, also affect the house emissions'),
+                              'The type of energy you use for heating and the efficiency of your heating system determine 80% of your carbon footprint from energy consumption. The building year and the year of the last renovation of the house also affect the house emissions'),
                         ],
                       ),
                       SizedBox(height: 30),

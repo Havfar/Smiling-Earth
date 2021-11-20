@@ -154,7 +154,7 @@ class BuildTitle extends StatelessWidget {
     }
     return Column(
       children: [
-        Text("So far this month you have emitted ",
+        Text("So far this week you have emitted ",
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,

@@ -31,7 +31,7 @@ class TrackingInformationPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "The app tracks your movement and automatically detect wheter you walk, cycle or drive a car. If the app detects that you are driving, the CO2 emission from the drive is calcualted.\n\nAdditionally you can manually add activites that you have done, and edit the activites if they are incorrect.",
+                      "The app tracks your movement and automatically detects whether you walk, cycle, or drive a car. If the app detects that you are driving, the CO2 emission from the drive is calculated. \n\nAdditionally, you can manually add activities that you have done and edit the activities if they are incorrect.",
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
@@ -44,7 +44,7 @@ class TrackingInformationPage extends StatelessWidget {
                           TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      "The app also checks the outside temperature where you live, and calculates how much energy is needed to heat your home, and the CO2 emitted from producing the heat.",
+                      "The app also checks the outside temperature where you live and calculates how much energy is needed to heat your home and the CO2 emitted from producing the heat.",
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w400),

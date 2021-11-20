@@ -7,9 +7,10 @@ import 'package:smiling_earth_frontend/models/activity.dart';
 import 'package:smiling_earth_frontend/utils/activity_util.dart';
 import 'package:smiling_earth_frontend/utils/services/activity_db_manager.dart';
 
-ActivityEvent latestActivity = ActivityEvent.empty();
+ActivityEvent previousActivity = ActivityEvent.empty();
 ActivityRecognition activityRecognition = ActivityRecognition.instance;
 late Stream<ActivityEvent> activityStream;
+DateTime timer = DateTime.now();
 
 Future<void> startActivityMonitor() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,73 +35,39 @@ void _startTracking() {
 }
 
 void _onData(ActivityEvent activityEvent) async {
-  print(activityEvent.type);
+  // print(activityEvent.type);
 
-  // if (activityEvent.type != latestActivity.type) {
-
-  // if (![
-  //   ActivityType.INVALID.index,
-  //   ActivityType.STILL.index,
-  //   ActivityType.TILTING.index,
-  //   ActivityType.UNKNOWN.index,
-  // ].contains(activityEvent.type.index)) {
-  //   if (latestActivity.type == ActivityType.UNKNOWN ||
-  //       latestActivity.type == ActivityType.STILL) {
-
-  //     await DatabaseHelper.instance.add(Activity(
-  //         title: generateTitle(activityEvent),
-  //         type: activityEvent.type.index,
-  //         startDate: activityEvent.timeStamp,
-  //         endDate: activityEvent.timeStamp));
-  //     latestActivity = activityEvent;
-  //   } else {
-
-  //     if (latestActivity.type != activityEvent.type) {
-  //
-
-  //       await DatabaseHelper.instance.add(Activity(
-  //           title: generateTitle(latestActivity),
-  //           type: latestActivity.type.index,
-  //           startDate: latestActivity.timeStamp,
-  //           endDate: activityEvent.timeStamp));
-
-  //       latestActivity = activityEvent;
-  //     }
-  //   }
-  // }
-
-  // if (activityEvent.type == ActivityType.STILL) {
-  //   if (latestActivity.type == ActivityType.ON_FOOT) {
-  //     await DatabaseHelper.instance.add(Activity(
-  //         title: generateTitle(latestActivity),
-  //         type: latestActivity.type.index,
-  //         startDate: latestActivity.timeStamp,
-  //         endDate: activityEvent.timeStamp));
-  //   } else if (latestActivity.type == ActivityType.ON_BICYCLE) {
-  //     await DatabaseHelper.instance.add(Activity(
-  //         title: generateTitle(latestActivity),
-  //         type: latestActivity.type.index,
-  //         startDate: latestActivity.timeStamp,
-  //         endDate: activityEvent.timeStamp));
-  //   }
-  //   latestActivity = activityEvent;
-  // }
-
-  if (latestActivity.type != activityEvent.type) {
+  if (previousActivity.type != activityEvent.type) {
     print("Activity changed");
+    if (activityEvent.timeStamp.difference(timer).inMinutes > 2) {
+      print('over two minutes');
+      if (![
+        ActivityType.INVALID.index,
+        ActivityType.STILL.index,
+        ActivityType.TILTING.index,
+        ActivityType.UNKNOWN.index,
+      ].contains(previousActivity.type.index)) {
+        // if(latestActivity.timeStamp.)
+
+        await ActivityDatabaseManager.instance.add(Activity(
+            title: generateTitle(previousActivity),
+            type: convertToAppActivity(previousActivity.type).index,
+            startDate: previousActivity.timeStamp,
+            endDate: activityEvent.timeStamp));
+      }
+      previousActivity = activityEvent;
+    }
+  } else {
     if (![
       ActivityType.INVALID.index,
       ActivityType.STILL.index,
       ActivityType.TILTING.index,
       ActivityType.UNKNOWN.index,
-    ].contains(latestActivity.type.index)) {
-      await ActivityDatabaseManager.instance.add(Activity(
-          title: generateTitle(latestActivity),
-          type: convertToAppActivity(latestActivity.type).index,
-          startDate: latestActivity.timeStamp,
-          endDate: activityEvent.timeStamp));
+    ].contains(previousActivity.type.index)) {
+      // Reset timer
+      print('Timer Reset');
+      timer = DateTime.now();
     }
-    latestActivity = activityEvent;
   }
 }
 
@@ -163,6 +130,5 @@ AppActivityType convertToAppActivity(ActivityType type) {
       return AppActivityType.WALKING;
     default:
       return AppActivityType.WALKING;
-      ;
   }
 }

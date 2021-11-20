@@ -140,11 +140,9 @@ class NewActivityState extends State<NewActivity> {
         iconSize: 24,
         elevation: 16,
         style: const TextStyle(color: Colors.deepPurple),
-        // onSaved: (value) => setState(() => tag = value!),
         onChanged: (DropdownSelectElement? newValue) {
           setState(() {
-            print('newValue ${newValue!.title}');
-            tag = newValue;
+            tag = newValue!;
           });
         },
         items: tags.map<DropdownMenuItem<DropdownSelectElement>>(
@@ -242,7 +240,6 @@ class NewActivityState extends State<NewActivity> {
                 backgroundColor: Colors.green,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              print('TAG $tag');
               int hours = durationHours == '' ? 0 : int.parse(durationHours);
               int minutes =
                   durationMinutes == '' ? 0 : int.parse(durationMinutes);

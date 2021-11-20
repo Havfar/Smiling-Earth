@@ -41,7 +41,8 @@ class Activity extends ActivityInterface {
   }
 
   static int getDurationMinutes(Activity activity) {
-    return activity.endDate!.difference(activity.startDate!).inMinutes % 60;
+    return activity.endDate!.difference(activity.startDate!).inMinutes.abs() %
+        60;
   }
 
   static int getDurationHours(Activity activity) {
@@ -126,11 +127,7 @@ class Activity extends ActivityInterface {
   static String formatActivityForListTile(Activity activity) {
     int hours = getDurationHours(activity);
     int minutes = getDurationMinutes(activity);
-
-    String startTime = activity.startDate!.hour.toString() +
-        ":" +
-        activity.startDate!.minute.toString();
-
+    String startTime = Activity.formatDatetime(activity.startDate);
     String duration = hours == 0
         ? minutes.toString() + "min"
         : hours.toString() + "hours " + minutes.toString() + "min";
