@@ -331,7 +331,7 @@ class BuildRivalryLeaderboard extends StatelessWidget {
                                           title: const Text(
                                               'What does this mean? '),
                                           content: const Text(
-                                              'This charts show how you team is doing compared to you rivaling teams. The rivaling teams can be administrated in the  about page.'),
+                                              'This leaderboard shows how your team is doing compared to their rivaling teams. The rivaling teams can be administrated on the about page.'),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>

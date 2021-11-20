@@ -58,9 +58,9 @@ class ActivityDatabaseManager {
 
       bool isInitized = false;
       for (var activityJson in activitiesQuery) {
-        print(activityJson);
+        // print(activityJson);
         Activity nextActivity = Activity.fromMap(activityJson);
-        if (nextActivity.getTotalDurationInMinutes() > 2) {
+        if (nextActivity.getTotalDurationInMinutes() > 5) {
           activitiesList.add(nextActivity);
         }
 

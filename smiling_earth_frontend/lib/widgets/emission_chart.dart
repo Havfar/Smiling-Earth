@@ -126,13 +126,13 @@ class SmilingEarthEmissionChart extends StatelessWidget {
   }
 
   AssetImage _getSmilingEarth(double percentage) {
-    if (percentage > 0.9) {
+    if (percentage > 2) {
       return AssetImage('assets/img/smiling-earth/earth5.png');
-    } else if (percentage > 0.7) {
+    } else if (percentage > 1.5) {
       return AssetImage('assets/img/smiling-earth/earth4.png');
-    } else if (percentage > 0.5) {
+    } else if (percentage > 1) {
       return AssetImage('assets/img/smiling-earth/earth3.png');
-    } else if (percentage > 0.3) {
+    } else if (percentage > 0.8) {
       return AssetImage('assets/img/smiling-earth/earth2.png');
     } else {
       return AssetImage('assets/img/smiling-earth/earth1.png');

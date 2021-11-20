@@ -134,12 +134,19 @@ class BuildElectricCarEstimation extends StatelessWidget {
                 showPersonalMessage: false,
                 isTeam: false,
               ),
-              Text('See how much you can save by changing to an electric car',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                      'See how much you can save by changing to an electric car',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                ),
+              ),
               SmilingEarthEmissionChart(
                   hideTitle: true,
-                  energyEmission: 10,
-                  transportEmission: 20,
+                  energyEmission: 3,
+                  transportEmission: 0,
                   goal: 100),
               ListTile(
                 leading: Text('🌳', style: TextStyle(fontSize: 22)),
@@ -159,7 +166,13 @@ class BuildElectricCarEstimation extends StatelessWidget {
                         .roundToDouble()
                         .toString() +
                     ' kr'),
-              )
+              ),
+              SizedBox(height: 20),
+              Center(
+                  child: Container(
+                      width: 150,
+                      child:
+                          Text('Estimation  based on the recorded activites*')))
             ],
           );
         });

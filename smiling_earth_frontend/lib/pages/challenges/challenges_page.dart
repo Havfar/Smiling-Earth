@@ -19,18 +19,23 @@ class ChallengesPage extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () async {
-                  await challengesUtil.updateChallenges();
-                  AlertDialog(
-                    title: const Text('Syncing you challenges progress? '),
-                    content: const Text(
-                        'The progress get automatically updated once a day. If you want to update more often press this button'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  );
+                  showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => (AlertDialog(
+                            title:
+                                const Text('Syncing your challenges progress?'),
+                            content: const Text(
+                                'The progress get automatically updated once a day. If you want to update more often press this button. \nReload the page after pressing OK'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () async {
+                                  await challengesUtil.updateChallenges();
+                                  Navigator.pop(context, 'OK');
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          )));
                 },
                 icon: Icon(Icons.sync))
           ],

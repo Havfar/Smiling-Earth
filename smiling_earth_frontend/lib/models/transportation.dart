@@ -4,7 +4,8 @@ class Transportation {
   static final double gasolineEmission = 2.392; // kgCO2e/L
   static final double dieselEmission = 2.640; // kgCO2e/L
   static final double electricEmission = 0;
-  static final double airtravelEmission = 2.5; // kgCO2e/min
+  static final double airtravelEmission =
+      1.5; // kgCO2e/min https://www.carbonindependent.org/22.html
   static final double citySpeed = 30; // km\h
   static final double highwaySpeed = 80; // km\h
   static final double fuelCostPerLiter = 14;

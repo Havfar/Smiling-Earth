@@ -86,7 +86,7 @@ class _CyclingEmissionEstimatePageState
               label: 'Solar panel',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.directions_bike),
+              icon: Icon(Icons.directions_walk),
               label: 'Walk',
             ),
             BottomNavigationBarItem(
@@ -140,7 +140,7 @@ class _BuildCyclingEstimationState extends State<BuildCyclingEstimation> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(Icons.directions_walk),
+                    Icon(Icons.directions_bike),
                     Text(
                       (_sliderValue * 100).roundToDouble().toString() + ' km',
                       textAlign: TextAlign.center,

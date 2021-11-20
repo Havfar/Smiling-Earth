@@ -272,7 +272,7 @@ class _buildHelpButton extends StatelessWidget {
                   builder: (BuildContext context) => AlertDialog(
                         title: const Text('This component is not finished '),
                         content: const Text(
-                            'Below you would an overview of how your team is doing in this challenge compared to the rivaling team. Unnfortunatly, this was not completed in time'),
+                            'Below you find an overview of how your team is doing in this challenge compared to the rivaling teams. Unfortunately, this was not completed in time'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () => Navigator.pop(context, 'OK'),

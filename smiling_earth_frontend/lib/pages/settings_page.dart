@@ -32,7 +32,7 @@ class SettingsPage extends StatelessWidget {
                     children: [
                       SizedBox(height: 5),
                       ListTile(
-                        title: Text('Edit Avatar'),
+                        title: Text('Edit your Avatar'),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(
@@ -42,7 +42,7 @@ class SettingsPage extends StatelessWidget {
                         )),
                       ),
                       ListTile(
-                        title: Text('Edit my Pledges'),
+                        title: Text('Edit your Pledges'),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(
@@ -50,7 +50,8 @@ class SettingsPage extends StatelessWidget {
                         )),
                       ),
                       ListTile(
-                        title: Text('Reset the registration'),
+                        title:
+                            Text('Complete the user registration over again'),
                         trailing: Icon(Icons.chevron_right),
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(

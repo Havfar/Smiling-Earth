@@ -31,7 +31,7 @@ class BenefitsInformationPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "There are many benefits of choosing the greener option.\n In addition to helping save the planet and reach the 2-degree goal of the United Nations, you can save money and gain health benefits if you choose to walk or cycle instead of driving.",
+                      "There are many benefits of choosing the greener option.\n In addition to helping to save the planet and reach the 2-degree goal of the United Nations, you can save money and gain health benefits if you choose to walk or cycle instead of driving.",
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
