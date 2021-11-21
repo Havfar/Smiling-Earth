@@ -140,7 +140,7 @@ class BuildPledges extends StatelessWidget {
                           .toList());
                 }
                 return Container(
-                  height: 80,
+                  height: 100,
                   width: double.infinity,
                   child: ListView(
                       scrollDirection: Axis.horizontal,

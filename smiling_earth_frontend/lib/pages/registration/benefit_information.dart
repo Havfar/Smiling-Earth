@@ -9,7 +9,7 @@ class BenefitsInformationPage extends StatelessWidget {
         body: Container(
           margin: EdgeInsets.only(top: 150),
           child: Center(
-              child: Column(
+              child: ListView(
             children: [
               Text(
                 'Benefits',

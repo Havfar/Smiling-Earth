@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:smiling_earth_frontend/pages/home/home_page.dart';
-import 'package:smiling_earth_frontend/utils/services/activity_recognition.dart';
-import 'package:smiling_earth_frontend/utils/services/background_services.dart';
 import 'package:smiling_earth_frontend/utils/smiling_earth_icon_utils.dart';
 
 class FinishedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    initializeWorkManagerAndPushNotification();
-    startActivityMonitor();
+    // initializeWorkManagerAndPushNotification();
+    // startActivityMonitor();
     return Container(
       margin: EdgeInsets.only(top: 100),
       child: Center(

@@ -13,9 +13,10 @@ class UpdateEmissionsUtil {
     double energyEmission =
         await EnergyDatabaseManager.instance.getTotalHeatLoad();
     var transportEmissionDto =
-        new EmissionDto(0, transportEmission, true, 2021, 11, 43);
+        new EmissionDto(0, transportEmission, true, 2021, 11, 47);
+
     var energyEmissionDto =
-        new EmissionDto(0, energyEmission, false, 2021, 11, 43);
+        new EmissionDto(0, energyEmission, false, 2021, 11, 47);
     await _client.updateEmissions(transportEmissionDto, energyEmissionDto);
     print('Emission updating completed');
   }

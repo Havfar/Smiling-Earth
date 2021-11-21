@@ -62,20 +62,20 @@ initializeWorkManagerAndPushNotification() {
   Workmanager().registerPeriodicTask(
     "1", fetchEnergyUsageTask,
     frequency: Duration(hours: 1), //when should it check the link
-    initialDelay: Duration(minutes: 3),
+    initialDelay: Duration(minutes: 10),
   );
 
   Workmanager().registerPeriodicTask(
     "2",
     updateEmissionTask,
     frequency: Duration(hours: 6),
-    initialDelay: Duration(minutes: 5),
+    initialDelay: Duration(hours: 1),
   );
 
   Workmanager().registerPeriodicTask(
     "3", updateChallengeProgressTask,
     frequency: Duration(hours: 4), //when should it check the link
-    initialDelay: Duration(hours: 1),
+    initialDelay: Duration(minutes: 90),
   );
 
   Workmanager().registerPeriodicTask(

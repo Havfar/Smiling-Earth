@@ -26,6 +26,8 @@ Future<void> main() async {
   Bloc.observer = SimpleBlocDelegate();
 
   final userRepository = UserRepository();
+  initializeWorkManagerAndPushNotification();
+  startActivityMonitor();
 
   runApp(BlocProvider<AuthenticationBloc>(
     create: (context) {
@@ -63,8 +65,8 @@ class App extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!) {
-                      initializeWorkManagerAndPushNotification();
-                      startActivityMonitor();
+                      // initializeWorkManagerAndPushNotification();
+                      // startActivityMonitor();
                       return HomePage();
                     } else {
                       return WelcomePage();

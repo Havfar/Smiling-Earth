@@ -56,6 +56,8 @@ void _onData(ActivityEvent activityEvent) async {
             endDate: activityEvent.timeStamp));
       }
       previousActivity = activityEvent;
+      print('Timer Reset');
+      timer = DateTime.now();
     }
   } else {
     if (![

@@ -86,8 +86,6 @@ class _PledgeRegistrationPageState extends State<PledgeRegistrationPage> {
                     );
                   } else if (state is ErrorRetrievingPledges) {
                     return Text(' Error: ');
-                  } else if (state is PledgesMade) {
-                    return Text('yuhu');
                   }
                   return Center(child: Text('Loading..'));
                 })),
@@ -248,7 +246,10 @@ class PledgeWidget extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(pledge.description)
+                      Text(
+                        pledge.description,
+                        style: TextStyle(fontSize: 9),
+                      ),
                     ],
                   ),
                   Icon(Icons.check_circle, color: Colors.green)

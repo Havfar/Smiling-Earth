@@ -7,9 +7,9 @@ class TrackingInformationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Container(
-          margin: EdgeInsets.only(top: 150),
+          margin: EdgeInsets.only(top: 50),
           child: Center(
-              child: Column(
+              child: ListView(
             children: [
               Text(
                 'Tracking',

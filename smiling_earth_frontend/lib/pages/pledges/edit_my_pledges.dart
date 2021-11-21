@@ -60,9 +60,7 @@ class BuildMyPledges extends StatelessWidget {
               );
             } else if (state is ErrorRetrievingPledges) {
               return Text(' Error: ');
-            } else if (state is PledgesMade) {
-              return Text('yuhu');
-            }
+            } else if (state is PledgesMade) {}
             return Center(child: Text('Loading..'));
           })),
         ),
@@ -97,7 +95,9 @@ class _EditPledgesPageState extends State<EditPledgesPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Other'),
+                        Text('Select other',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
                         Text('Select the pledges you want to make and hit Add'),
                       ],
                     ),

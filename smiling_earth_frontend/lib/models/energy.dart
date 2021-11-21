@@ -154,7 +154,7 @@ class Heat {
   }
 
   static double getHeatingCO2ByLoad(double heatload) {
-    return heatload * Energy.co2Factor * 24;
+    return heatload * Energy.co2Factor;
   }
 }
 
