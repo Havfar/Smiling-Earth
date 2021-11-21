@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smiling_earth_frontend/cubit/notifications/notification_client.dart';
 import 'package:smiling_earth_frontend/cubit/notifications/notifications_cubit.dart';
 import 'package:smiling_earth_frontend/models/notifications.dart';
-import 'package:smiling_earth_frontend/pages/challenges/challenge_detailed.dart';
+import 'package:smiling_earth_frontend/pages/challenges/challenges_page.dart';
 import 'package:smiling_earth_frontend/pages/post_detailed.dart';
 import 'package:smiling_earth_frontend/pages/user/follower_page.dart';
 import 'package:smiling_earth_frontend/widgets/circle_avatar.dart';
@@ -114,10 +114,7 @@ class _buildNotification extends StatelessWidget {
           onTap: () {
             client.notificationRead(notification.id!);
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => DetailedChallengesPage(
-                challengeId: notification.challenge!,
-                teamId: null,
-              ),
+              builder: (context) => ChallengesPage(),
             ));
           },
         );
